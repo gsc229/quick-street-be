@@ -1,13 +1,21 @@
 const express = require('express');
 const colors = require('colors');
 const dotenv = require('dotenv');
+// Route files
+const vendors = require('./routes/vendors');
 
-dotenv.config({ path: './config/config.env' })
+const app = express();
 
-const server = express();
+// Load env vars
+dotenv.config({ path: './config/config.env' });
 
-server.use(express.json());
+
+// Body Parser
+app.use(express.json());
+
+// Mount Routers
+app.use('/api/v1.0/vendors', vendors);
 
 const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, console.log(`\n *** LISTENING ON PORT ${PORT} ***\n`.yellow.bold));
+app.listen(PORT, console.log(`\n *** LISTENING ON PORT ${PORT} ***\n`.yellow.bold));

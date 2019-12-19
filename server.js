@@ -39,6 +39,12 @@ app.use('/api/v1.0/vendors', vendors);
 
 app.use(errorHandler);
 
+app.get('/test', (req, res) => {
+  res.send(
+    '<h1>Server Status</h1><h2>Server running succesfully.</h2><p>Deployment is all good, continue working.. nothing to see here.</p>'
+  );
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(

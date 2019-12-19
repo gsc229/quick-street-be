@@ -1,0 +1,59 @@
+[
+  {
+    "_id": "5d713995b721c3bb38c1f5d0",
+    "email": "dwight@theoffice.com",
+    "password": "dwight123",
+    "phone": "555-555-5555",
+    "zipcode": "18641",
+    "business_name": "Dwight's Beets",
+    "description": "Root vegies",
+    "vendor_category": [
+      "Vegetables"
+    ],
+    "address": "100 Terminal Rd, Avoca, PA 18641",
+    "bulletin": "I'll be at the Scranton Farmers' Market all this week!"
+  },
+  {
+    "_id": "5d713a66ec8f2b88b8f830b8",
+    "email": "michael@theoffice.com",
+    "password": "michael123",
+    "phone": "555-555-5555",
+    "zipcode": "18641",
+    "business_name": "Michael's Paper",
+    "description": "Paper you can eat.",
+    "vendor_category": [
+      "Baked goods",
+      "Other"
+    ],
+    "address": "725 Main St, Avoca, PA 18641",
+    "bulletin": "I'll be at the Scranton Farmers' Market all this week!"
+  },
+  {
+    "_id": "5d725a037b292f5f8ceff787",
+    "email": "jim@theoffice.com",
+    "password": "jim123",
+    "phone": "555-555-5555",
+    "zipcode": "18641",
+    "business_name": "Jim's Sarcastic Cookies",
+    "description": "Sweet delicious cookies",
+    "vendor_category": [
+      "Baked goods"
+    ],
+    "address": "1022 Main St, Avoca, PA 18641",
+    "bulletin": "I'll be at the Scranton Farmers' Market all this week!"
+  },
+  {
+    "_id": "5d725a1b7b292f5f8ceff788",
+    "email": "pam@theoffice.com",
+    "password": "pam123",
+    "phone": "555-555-5555",
+    "zipcode": "18641",
+    "business_name": "Pam's Sweet Jam",
+    "description": "All types of jams is Pams jam!",
+    "vendor_category": [
+      "Spreads"
+    ],
+    "address": "4949 Birney Ave, Moosic, PA 18507",
+    "bulletin": "I'll be at the Scranton Farmers' Market all this week!"
+  }
+]

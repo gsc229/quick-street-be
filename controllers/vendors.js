@@ -1,5 +1,5 @@
 const Vendor = require('../models/Vendors');
-const ErrorResponse = require('../utils/errorResponse');
+const ErrorResponse = require('../utils/errorResponse'); // allows custom error responses
 const asyncHandler = require('../middleware/async');
 
 exports.getAllVendors = asyncHandler(async (req, res, next) => {
@@ -13,7 +13,7 @@ exports.getAllVendors = asyncHandler(async (req, res, next) => {
 });
 
 exports.getVendor = asyncHandler(async (req, res, next) => {
-    const vendor = await Vendor.findById(req.params.id)
+    const vendor = await Vendor.findById(req.params.id);
 
     if(!vendor) {
         return next(
@@ -24,20 +24,28 @@ exports.getVendor = asyncHandler(async (req, res, next) => {
 });
 
 exports.createVendor = asyncHandler(async (req, res, next) => {
-    const vendor = await Vendor.create(req.body)
+    const vendor = await Vendor.create(req.body);
 
     res.status(201).json({ success: true, data: vendor });
 });
 
 exports.updateVendor = asyncHandler(async (req, res, next) => {
-    let vendor = await Vendor.findById(req.params.id);
+    try {
+        const vendor = await Vendor.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        });
 
-    if(!vendor) {
-        return next(
-            new ErrorResponse(`Vendor not found with id of ${req.params.id}`, 404)
-        );
+        if(!vendor) {
+            return next(
+                new ErrorResponse(`Vendor not found with the id of ${req.params.id}`, 404)
+            );
+        }
+
+        res.status(200).json({ success: true, data: vendor });
+    } catch (err) {
+        next(err);
     }
-    res.status(200).json({ success: true, data: vendor });
 });
 
 exports.deleteVendor = asyncHandler(async (req, res, next) => {

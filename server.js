@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
 const colors = require('colors');
+const fileupload = require('express-fileupload');
 const connectDB = require('./config/db');
 
 // Load env vars
@@ -32,6 +33,10 @@ app.use(helmet());
 
 // Enable CORS
 app.use(cors());
+
+// File uploading
+
+app.use(fileupload())
 
 // Mount Routers
 app.use('/api/v1.0/vendors', vendors);

@@ -79,4 +79,20 @@ exports.avatarPhotoUpload = asyncHandler(async (req, res, next) => {
     // Create a custom filename base off of vendor id
     file.name = `photo_${vendor._id}${path.parse(file.name).ext}`
 
+    file.mv(`${process.env.AVATAR_UPLOAD_PATH}/${file.name}`, async err => {
+        if (err) {
+            console.error(err);
+            return next(new ErrorResponse(`Problem with file upload`, 500));
+        }
+
+
+        await Vendors.findByIdAndUpdate(req.params.id, { photo: file.name });
+
+        res.status(200).json({
+            success: true,
+            data: file.name
+        });
+
+    })
+
 })

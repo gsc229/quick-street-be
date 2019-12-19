@@ -21,8 +21,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server",
-    "start": "NODE_ENV=production node"
+    "start": "NODE_ENV=production node",
+    "dev": "nodemon server"
   },
   "repository": {
     "type": "git",

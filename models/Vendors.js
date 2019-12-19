@@ -2,11 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const Vendor_Schema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true
-  },
+
   email: {
     type: String,
     required: true,
@@ -23,10 +19,10 @@ const Vendor_Schema = new mongoose.Schema({
     minlength: 6
   },
   phone: {
-    type: Number
+    type: String
   },
   zipcode: {
-    type: Number
+    type: String
   },
   business_name: {
     type: String,
@@ -36,19 +32,31 @@ const Vendor_Schema = new mongoose.Schema({
     type: String
   },
   avatar: {
-    type: Blob
+    type: String,
+    default: 'no-photo.jpg'
   },
   vendor_banner: {
-    type: Blob
+    type: String,
+    default: 'no-photo.jpg'
   },
   vendor_category: {
-    type: String
+    type: [String],
+    enum: [
+      "Vegetables",
+      "Fruits",
+      "Breads",
+      "Baked goods",
+      "Beverages",
+      "Spreads",
+      "Other"
+    ]
   },
   created_at: {
     type: Date
   },
   address: {
-    type: String
+    type: String,
+    required: [true, 'Please add an address']
   },
   //vendor location
   location: {
@@ -69,39 +77,16 @@ const Vendor_Schema = new mongoose.Schema({
     country: String
   },
   //Vendor bulletin
-  bulletins: {
-    created_at: {
-      type: Date
-    }
-  },
-  //Vendor Products
-  products: {
-    name: {
-      type: String
-    },
-    description: {
-      type: String
-    },
-    category: {
-      type: String
-    },
-    dietary: {
-      type: String
-    },
-    price: {
-      type: Number
-    },
-    image: {
-      type: Blob
-    },
-    created_at: {
-      type: Date
-    }
+  bulletin: String,
+  created_at: {
+    type: Date,
+    default: Date.now
   }
+
 });
 
 // Encrypt password using bcrypt
-UserSchema.pre('save', async function(next) {
+UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     next();
   }
@@ -111,7 +96,7 @@ UserSchema.pre('save', async function(next) {
 });
 
 // Match user entered password to hashed password in database
-UserSchema.methods.matchPassword = async function(enteredPassword) {
+UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 

@@ -105,6 +105,8 @@ Vendor_Schema.pre('save', function (next) {
   next();
 });
 
+//Geocode & create location field
+
 // Match user entered password to hashed password in database
 Vendor_Schema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);

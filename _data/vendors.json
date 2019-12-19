@@ -11,7 +11,7 @@
       "Vegetables"
     ],
     "address": "100 Terminal Rd, Avoca, PA 18641",
-    "bulletin": "I'll be at the Scranton Famers Market all this week!"
+    "bulletin": "I'll be at the Scranton Farmers' Market all this week!"
   },
   {
     "_id": "5d713a66ec8f2b88b8f830b8",
@@ -26,7 +26,7 @@
       "Other"
     ],
     "address": "725 Main St, Avoca, PA 18641",
-    "bulletin": "I'll be at the Scranton Famers Market all this week!"
+    "bulletin": "I'll be at the Scranton Farmers' Market all this week!"
   },
   {
     "_id": "5d725a037b292f5f8ceff787",
@@ -40,7 +40,7 @@
       "Baked goods"
     ],
     "address": "1022 Main St, Avoca, PA 18641",
-    "bulletin": "I'll be at the Scranton Famers Market all this week!"
+    "bulletin": "I'll be at the Scranton Farmers' Market all this week!"
   },
   {
     "_id": "5d725a1b7b292f5f8ceff788",
@@ -54,6 +54,6 @@
       "Spreads"
     ],
     "address": "4949 Birney Ave, Moosic, PA 18507",
-    "bulletin": "I'll be at the Scranton Famers Market all this week!"
+    "bulletin": "I'll be at the Scranton Farmers' Market all this week!"
   }
 ]

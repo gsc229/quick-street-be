@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const slugify = require('slugify');
 
 const Vendor_Schema = new mongoose.Schema({
 
@@ -28,6 +29,7 @@ const Vendor_Schema = new mongoose.Schema({
     type: String,
     unique: true
   },
+  slug: String,
   description: {
     type: String
   },
@@ -93,6 +95,12 @@ Vendor_Schema.pre('save', async function (next) {
 
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+});
+
+// Create a 'slug' based on business_name for fontend to make routes
+Vendor_Schema.pre('save', function (next) {
+  this.slug = slugify(this.business_name, { lower: true });
+  next();
 });
 
 // Match user entered password to hashed password in database

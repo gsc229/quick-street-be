@@ -1,11 +1,17 @@
 const mongoose = require('mongoose');
-const validater = require('validater');
+const bcrypt = require('bcryptjs');
 
-const VendorSchema = new mongoose.Schema({
+const Vendor_Schema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
   email: {
     type: String,
     required: true,
     unique: true,
+    lowercase: true,
     match: [
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
       'Please add a valid email'
@@ -44,6 +50,30 @@ const VendorSchema = new mongoose.Schema({
   address: {
     type: String
   },
+  //vendor location
+  location: {
+    // GeoJSON Point
+    type: {
+      type: String,
+      enum: ['Point']
+    },
+    coordinates: {
+      type: [Number],
+      index: '2dsphere'
+    },
+    formattedAddress: String,
+    street: String,
+    city: String,
+    state: String,
+    zipcode: String,
+    country: String
+  },
+  //Vendor bulletin
+  bulletins: {
+    created_at: {
+      type: Date
+    }
+  },
   //Vendor Products
   products: {
     name: {
@@ -67,30 +97,7 @@ const VendorSchema = new mongoose.Schema({
     created_at: {
       type: Date
     }
-  },
-  //Vendor location
-  location: {
-    street: {
-      type: String
-    },
-    city: {
-      type: String
-    },
-    state: {
-      type: String
-    },
-    country: {
-      type: String
-    },
-    coordinates: {
-      type: String
-    }
-  },
-  bulletins: {
-    created_at: {
-      type: Date
-    }
   }
 });
 
-module.exports = mongoose.model('Vendors', VendorSchema);
+module.exports = mongoose.model('Vendors', Vendor_Schema);

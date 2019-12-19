@@ -1,5 +1,4 @@
 const express = require('express');
-const router = express.Router();
 const {
     getAllVendors,
     getVendor,
@@ -7,6 +6,10 @@ const {
     updateVendor,
     deleteVendor
 } = require('../controllers/vendors');
+
+const Vendor = require('../models/Vendors');
+
+const router = express.Router();
 
 router.route('/').get(getAllVendors).post(createVendor);
 

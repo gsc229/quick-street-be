@@ -78,6 +78,7 @@ const Vendor_Schema = new mongoose.Schema({
     zipcode: String,
     country: String
   },
+
   //Vendor bulletin
   bulletin: String,
   created_at: {
@@ -89,6 +90,7 @@ const Vendor_Schema = new mongoose.Schema({
 
 // Encrypt password using bcrypt
 Vendor_Schema.pre('save', async function (next) {
+
   if (!this.isModified('password')) {
     next();
   }

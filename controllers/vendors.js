@@ -94,7 +94,7 @@ exports.avatarPhotoUpload = asyncHandler(async (req, res, next) => {
         }
 
 
-        await Vendor.findByIdAndUpdate(req.params.id, { photo: file.name });
+        await Vendor.findByIdAndUpdate(req.params.id, { avatar: file.name });
 
         res.status(200).json({
             success: true,

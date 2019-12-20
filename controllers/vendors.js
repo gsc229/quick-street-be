@@ -74,4 +74,6 @@ exports.getVendorsInRadius = asyncHandler(async (req, res, next) => {
     const lng = loc[0].latitude;
 
     // Calc radius using radians
+    // Divide dist by radius of Earth = 3,663 mi
+    
 });

@@ -4,7 +4,8 @@ const {
     getVendor,
     createVendor,
     updateVendor,
-    deleteVendor
+    deleteVendor,
+    avatarPhotoUpload
 } = require('../controllers/vendors');
 
 const Vendor = require('../models/Vendors');
@@ -15,5 +16,6 @@ router.route('/').get(getAllVendors).post(createVendor);
 
 router.route('/:id').get(getVendor).put(updateVendor).delete(deleteVendor);
 
+router.route('/:id/avatar').put(avatarPhotoUpload);
 
 module.exports = router;

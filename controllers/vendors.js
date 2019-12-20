@@ -1,4 +1,4 @@
-const Vendor = require('../models/Vendors');
+const Vendor = require('../models/Vendor');
 const ErrorResponse = require('../utils/errorResponse'); // allows custom error responses
 const asyncHandler = require('../middleware/async'); // keeps code DRY
 const path = require('path');
@@ -7,7 +7,10 @@ const geocoder = require('../utils/geocoder');
 exports.getAllVendors = asyncHandler(async (req, res, next) => {
         const vendors = await Vendor.find();
 
-        res.status(200).json({ success: true, data: vendors })
+        res.status(200).json({ 
+            success: true, 
+            count: vendors.length, 
+            data: vendors })
 
         res.status(400).json({ success: false })
 
@@ -62,6 +65,8 @@ exports.deleteVendor = asyncHandler(async (req, res, next) => {
 
     res.status(200).json({ success: true, data: {} });
 });
+
+
 exports.avatarPhotoUpload = asyncHandler(async (req, res, next) => {
     const vendor = await Vendor.findById(req.params.id);
     console.log(req.files);
@@ -112,16 +117,27 @@ exports.avatarPhotoUpload = asyncHandler(async (req, res, next) => {
 }) 
 // @desc    Get vendors within a radius
 // @route   GET /api/v1.0/vendors/raduis/:zipcode/:distance
-// @access 
+// @access  Private
 exports.getVendorsInRadius = asyncHandler(async (req, res, next) => {
-    const { zipcode, distance } = rew.params;
+    console.log('req params', req.params);
+    const { zipcode, distance } = req.params;
 
     // Get lat/lng from geocoder
     const loc = await geocoder.geocode(zipcode);
     const lat = loc[0].latitude;
-    const lng = loc[0].latitude;
+    const lng = loc[0].longitude;
 
     // Calc radius using radians
-    // Divide dist by radius of Earth = 3,663 mi
-    
+    // Divide dist by radius of Earth = 3,663 mi / 6,378.1
+    const radius = distance / 3963;
+
+    const vendors = await Vendor.find({ 
+        location: { $geoWithin: { $centerSphere: [[ lng, lat ], radius] } }
+    });
+
+    res.status(200).json({ 
+        success: true, 
+        count: vendors.length, 
+        data: vendors 
+    });
 });

@@ -50,7 +50,7 @@ exports.deleteVendor = asyncHandler(async (req, res, next) => {
 
 exports.avatarPhotoUpload = asyncHandler(async (req, res, next) => {
     const vendor = await Vendors.findById(req.params.id);
-
+    console.log(req.files);
     if (!vendor) {
         return next(
             new ErrorResponse(`Vendor not found with id of ${req.params.id}`, 404)

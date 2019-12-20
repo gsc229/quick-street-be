@@ -24,7 +24,8 @@ const Vendor_Schema = new mongoose.Schema({
     type: String
   },
   zipcode: {
-    type: String
+    type: String,
+    //required: [true, 'Please add a zipcode']
   },
   business_name: {
     type: String,
@@ -58,8 +59,7 @@ const Vendor_Schema = new mongoose.Schema({
     type: Date
   },
   address: {
-    type: String,
-    required: [true, 'Please add an address']
+    type: String
   },
   //vendor location
   location: {

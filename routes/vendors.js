@@ -5,12 +5,13 @@ const {
     createVendor,
     updateVendor,
     deleteVendor,
-    avatarPhotoUpload
+    avatarPhotoUpload,
+    getVendorsInRadius
 } = require('../controllers/vendors');
 
-const Vendor = require('../models/Vendors');
-
 const router = express.Router();
+
+router.route('/radius/:zipcode/:distance').get(getVendorsInRadius);
 
 router.route('/').get(getAllVendors).post(createVendor);
 

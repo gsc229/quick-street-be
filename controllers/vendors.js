@@ -1,6 +1,7 @@
 const Vendor = require('../models/Vendors');
 const ErrorResponse = require('../utils/errorResponse'); // allows custom error responses
 const asyncHandler = require('../middleware/async'); // keeps code DRY
+const path = require('path');
 
 exports.getAllVendors = asyncHandler(async (req, res, next) => {
     const vendors = await Vendor.find();
@@ -56,7 +57,7 @@ exports.deleteVendor = asyncHandler(async (req, res, next) => {
 });
 
 exports.avatarPhotoUpload = asyncHandler(async (req, res, next) => {
-    const vendor = await Vendors.findById(req.params.id);
+    const vendor = await Vendor.findById(req.params.id);
     console.log(req.files);
     if (!vendor) {
         return next(
@@ -68,7 +69,7 @@ exports.avatarPhotoUpload = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`Please upload a file`, 404));
     }
 
-    const file = req.file;
+    const file = req.files.file;
 
     //Check to make sure the image is a photo
     if (!file.mimetype.startsWith('image')) {
@@ -93,7 +94,7 @@ exports.avatarPhotoUpload = asyncHandler(async (req, res, next) => {
         }
 
 
-        await Vendors.findByIdAndUpdate(req.params.id, { photo: file.name });
+        await Vendor.findByIdAndUpdate(req.params.id, { photo: file.name });
 
         res.status(200).json({
             success: true,

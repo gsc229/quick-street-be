@@ -4,10 +4,13 @@ const slugify = require('slugify');
 const geocoder = require('../utils/geocoder');
 
 const Vendor_Schema = new mongoose.Schema({
-
+  username: {
+    type: String,
+    required: [true, 'Please add a name']
+  },
   email: {
     type: String,
-    required: true,
+    required: [true, 'Please add an email'],
     unique: true,
     lowercase: true,
     match: [
@@ -45,13 +48,13 @@ const Vendor_Schema = new mongoose.Schema({
   vendor_category: {
     type: [String],
     enum: [
-      "Vegetables",
-      "Fruits",
-      "Breads",
-      "Baked goods",
-      "Beverages",
-      "Spreads",
-      "Other"
+      'Vegetables',
+      'Fruits',
+      'Breads',
+      'Baked goods',
+      'Beverages',
+      'Spreads',
+      'Other'
     ]
   },
   created_at: {
@@ -86,12 +89,10 @@ const Vendor_Schema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
-
 });
 
 // Encrypt password using bcrypt
-Vendor_Schema.pre('save', async function (next) {
-
+Vendor_Schema.pre('save', async function(next) {
   if (!this.isModified('password')) {
     next();
   }
@@ -101,7 +102,7 @@ Vendor_Schema.pre('save', async function (next) {
 });
 
 // Create a 'slug' based on business_name for fontend to make routes
-Vendor_Schema.pre('save', function (next) {
+Vendor_Schema.pre('save', function(next) {
   this.slug = slugify(this.business_name, { lower: true });
   next();
 });
@@ -117,16 +118,16 @@ Vendor_Schema.pre('save', async function(next) {
     city: loc[0].city,
     state: loc[0].stateCode,
     zipcode: loc[0].zipcode,
-    country: loc[0].countryCode,
-  }
+    country: loc[0].countryCode
+  };
 
   //Do not save address in the DB
   this.address = undefined;
   next();
-})
+});
 
 // Match user entered password to hashed password in database
-Vendor_Schema.methods.matchPassword = async function (enteredPassword) {
+Vendor_Schema.methods.matchPassword = async function(enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 

@@ -4,10 +4,6 @@ const slugify = require('slugify');
 const geocoder = require('../utils/geocoder');
 
 const Vendor_Schema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: [true, 'Please add a name']
-  },
   email: {
     type: String,
     required: [true, 'Please add an email'],
@@ -28,7 +24,8 @@ const Vendor_Schema = new mongoose.Schema({
     type: String
   },
   zipcode: {
-    type: String
+    type: String,
+    required: [true, 'Please add a zipcode']
   },
   business_name: {
     type: String,

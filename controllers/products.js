@@ -14,7 +14,10 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
             vendor: req.params.vendorId
         })
     } else {
-        query = Product.find();
+        query = Product.find().populate({
+            path: 'vendor',
+            select: 'business_name description'
+        });
     }
 
     const products = await query;
@@ -23,5 +26,27 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
         success: true,
         count: products.length,
         data: products
+    });
+});
+
+// @desc    Get a single products
+// @route   GET /api/v1.0/products/:id
+// @access  Public
+exports.getProduct = asyncHandler(async (req, res, next) => {
+   const product = await Product.findById(req.params.id).populate({
+       path: 'vendor',
+       select: 'business_name description'
+   });
+
+   if(!product) {
+       return next(new ErrorResponse(`No product with the id of ${req.params.id}`),
+       404
+       );
+   }
+
+    res.status(200).json({
+        success: true,
+        count: product.length,
+        data: product
     });
 });

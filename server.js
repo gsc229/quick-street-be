@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
@@ -41,6 +42,9 @@ app.use(fileupload())
 
 // Mount Routers
 app.use('/api/v1.0/vendors', vendors);
+
+// Make public a static folder (you can access the photos through the URL in browser)
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(errorHandler);
 

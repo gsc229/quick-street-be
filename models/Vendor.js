@@ -130,4 +130,4 @@ Vendor_Schema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-module.exports = mongoose.model('Vendors', Vendor_Schema);
+module.exports = mongoose.model('Vendor', Vendor_Schema);

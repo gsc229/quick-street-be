@@ -22,12 +22,13 @@ exports.getVendor = asyncHandler(async (req, res, next) => {
 });
 
 exports.createVendor = asyncHandler(async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, address } = req.body;
 
-  const vendor = await vendor.create({
+  const vendor = await Vendor.create({
     username,
     email,
-    password
+    password,
+    address
   });
 
   res.status(201).json({ success: true, data: vendor });

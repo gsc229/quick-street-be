@@ -9,7 +9,15 @@ const {
     getVendorsInRadius
 } = require('../controllers/vendors');
 
+
+// Include other resource routers 
+const productRouter = require('./products');
+
+
 const router = express.Router();
+
+// Re-route into other resource route
+router.use('/:vendorId/products', productRouter);
 
 router.route('/radius/:zipcode/:distance').get(getVendorsInRadius);
 

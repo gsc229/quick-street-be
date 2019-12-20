@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
 const colors = require('colors');
+const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db');
 
 // Load env vars
@@ -35,6 +36,8 @@ app.use(cors());
 
 // Mount Routers
 app.use('/api/v1.0/vendors', vendors);
+
+app.use(errorHandler);
 
 app.get('/test', (req, res) => {
   res.send(

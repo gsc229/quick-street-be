@@ -3,11 +3,13 @@ const mongoose = require('mongoose');
 const colors = require('colors');
 const dotenv = require('dotenv');
 
-
+//Load env vars
 dotenv.config({ path: './config/config.env' });
 
+//Load models
 const Vendors = require('./models/Vendors');
 
+// Connect to DB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -15,6 +17,7 @@ mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true
 });
 
+// Read JSON files
 const vendors = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/vendors.json`, 'utf-8')
 );
@@ -23,7 +26,9 @@ const vendors = JSON.parse(
 const importData = async () => {
   try {
     await Vendors.create(vendors);
-    console.log('Data Imported'.green.inverse);
+
+    console.log('Data Imported...'.green.inverse);
+    process.exit();
   } catch (err) {
     console.error(err);
   }
@@ -33,7 +38,9 @@ const importData = async () => {
 const deleteData = async () => {
   try {
     await Vendors.deleteMany();
+    
     console.log('Data Destroyed...'.red.inverse);
+    process.exit();
   } catch (err) {
     console.error(err);
   }

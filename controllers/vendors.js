@@ -1,4 +1,5 @@
 const Vendor = require('../models/Vendors');
+const auth = require('../middleware/auth');
 const ErrorResponse = require('../utils/errorResponse'); // allows custom error responses
 const asyncHandler = require('../middleware/async'); // keeps code DRY
 
@@ -22,16 +23,16 @@ exports.getVendor = asyncHandler(async (req, res, next) => {
 });
 
 exports.createVendor = asyncHandler(async (req, res, next) => {
-  const { username, email, password, address } = req.body;
+  const { email, password, address, business_name } = req.body;
 
   const vendor = await Vendor.create({
-    username,
     email,
     password,
-    address
+    address,
+    business_name
   });
-
-  res.status(201).json({ success: true, data: vendor });
+  const token = await vendor.getSignedJwtToken();
+  res.status(201).send({ vendor, token });
 });
 
 exports.updateVendor = asyncHandler(async (req, res, next) => {

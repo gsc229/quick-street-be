@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const slugify = require('slugify');
 const geocoder = require('../utils/geocoder');
 
@@ -24,8 +25,7 @@ const Vendor_Schema = new mongoose.Schema({
     type: String
   },
   zipcode: {
-    type: String,
-    required: [true, 'Please add a zipcode']
+    type: String
   },
   business_name: {
     type: String,
@@ -98,6 +98,13 @@ Vendor_Schema.pre('save', async function(next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
+
+// Sign JWT and return
+Vendor_Schema.methods.getSignedJwtToken = function() {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE
+  });
+};
 
 // Create a 'slug' based on business_name for fontend to make routes
 Vendor_Schema.pre('save', function(next) {

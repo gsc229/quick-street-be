@@ -25,6 +25,6 @@ router.route('/').get(getAllVendors).post(createVendor);
 
 router.route('/:id').get(getVendor).put(updateVendor).delete(deleteVendor);
 
-router.route('/:id/avatar').put(avatarPhotoUpload);
+
 
 module.exports = router;

@@ -20,19 +20,19 @@ const Product_Schema = new mongoose.Schema({
         type: Number,
         required: [true, 'Please add a price for this product']
     },
-    product_image: {
-        type: String,
-        default: 'no-photo.jpg'
-      },
-      createdAt: {
-          type: Date,
-          default: Date.now
-      },
-      vendor: {
-          type: mongoose.Schema.ObjectId,
-          ref: 'Vendor',
-          required: true
-      }
+    product_images: {
+        type: [String],
+        default: ['no-photos.jpeg']
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    vendor: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Vendor',
+        required: true
+    }
 });
 
 module.exports = mongoose.model('Product', Product_Schema);

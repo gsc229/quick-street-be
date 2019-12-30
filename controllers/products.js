@@ -1,4 +1,5 @@
 const Product = require('../models/Product');
+const Vendor = require('../models/Vendor');
 const ErrorResponse = require('../utils/errorResponse'); // allows custom error responses
 const asyncHandler = require('../middleware/async'); // keeps code DRY
 
@@ -29,7 +30,7 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Get a single products
+// @desc    Get a single product
 // @route   GET /api/v1.0/products/:id
 // @access  Public
 exports.getProduct = asyncHandler(async (req, res, next) => {
@@ -50,3 +51,27 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
         data: product
     });
 });
+
+// @desc    Create a new product
+// @route   POST /api/v1.0/vendors/:vendorId/products
+// @access  Private
+exports.addProduct = asyncHandler(async (req, res, next) => {
+
+    req.body.vendor = req.params.vendorId;
+    console.log('Creating new product from vendorId:', req.body.vendor);
+    const vendor = await Vendor.findById(req.params.vendorId)
+    if (!vendor) {
+        return next(
+            new ErrorResponse(`No vendor with the id of ${req.params.vendorId}`),
+            404
+        );
+    }
+
+    const product = await Product.create(req.body);
+
+    res.status(200).json({
+        success: true,
+        data: product
+    })
+
+})

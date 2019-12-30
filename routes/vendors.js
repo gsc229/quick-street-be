@@ -5,7 +5,6 @@ const {
     createVendor,
     updateVendor,
     deleteVendor,
-    avatarPhotoUpload,
     getVendorsInRadius
 } = require('../controllers/vendors');
 

@@ -137,6 +137,15 @@ Vendor_Schema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
+// Cascade delete other objects related to vendor
+Vendor_Schema.pre('remove', async function (next) {
+  console.log(`Products being deleted from vendor ${this._id}`)
+  await this.model('Product').deleteMany({
+    vendor: this._id
+  })
+  next();
+})
+
 // Reverse populate with virtuals 
 Vendor_Schema.virtual('products', {
   ref: 'Product',

@@ -87,6 +87,10 @@ const Vendor_Schema = new mongoose.Schema({
     default: Date.now
   }
 
+}, {
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+
 });
 
 // Encrypt password using bcrypt
@@ -132,5 +136,13 @@ Vendor_Schema.pre('save', async function (next) {
 Vendor_Schema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
+
+// Reverse populate with virtuals 
+Vendor_Schema.virtual('products', {
+  ref: 'Product',
+  localField: '_id',
+  foreignField: 'vendor',
+  justOne: false
+});
 
 module.exports = mongoose.model('Vendor', Vendor_Schema);

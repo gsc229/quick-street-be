@@ -13,7 +13,6 @@ const {
 // Include other resource routers 
 const productRouter = require('./products');
 
-
 const router = express.Router();
 
 // Re-route into other resource route
@@ -24,7 +23,5 @@ router.route('/radius/:zipcode/:distance').get(getVendorsInRadius);
 router.route('/').get(getAllVendors).post(createVendor);
 
 router.route('/:id').get(getVendor).put(updateVendor).delete(deleteVendor);
-
-
 
 module.exports = router;

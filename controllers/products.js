@@ -9,7 +9,7 @@ const asyncHandler = require('../middleware/async'); // keeps code DRY
 // @access  Public
 exports.getAllProducts = asyncHandler(async (req, res, next) => {
     let query;
-    if(req.params.vendorId) {
+    if (req.params.vendorId) {
         query = Product.find({
             vendor: req.params.vendorId
         })
@@ -33,16 +33,16 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1.0/products/:id
 // @access  Public
 exports.getProduct = asyncHandler(async (req, res, next) => {
-   const product = await Product.findById(req.params.id).populate({
-       path: 'vendor',
-       select: 'business_name description'
-   });
+    const product = await Product.findById(req.params.id).populate({
+        path: 'vendor',
+        select: 'business_name description'
+    });
 
-   if(!product) {
-       return next(new ErrorResponse(`No product with the id of ${req.params.id}`),
-       404
-       );
-   }
+    if (!product) {
+        return next(new ErrorResponse(`No product with the id of ${req.params.id}`),
+            404
+        );
+    }
 
     res.status(200).json({
         success: true,

@@ -58,13 +58,34 @@ exports.getAllVendors = asyncHandler(async (req, res, next) => {
 
     // Pagination
     const page = parseInt(req.query.page, 10) || 1;
-    const limit = parseInt(req.query.limit, 10) || 100;
-    const skip = (page - 1) * limit;
+    const limit = parseInt(req.query.limit, 10) || 25;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const total = await Vendor.countDocuments();
 
-    query = query.skip(skip).limit(limit);
+    query = query.skip(startIndex).limit(limit);
 
     // Executing/awaiting the query
     const vendors = await query;
+
+    // Pagination result
+    const pagination = {};
+
+    if (endIndex < total) {
+        pagination.next = {
+            page: page + 1,
+            limit
+        }
+    }
+
+    if (startIndex > 0) {
+        pagination.prev = {
+            page: page - 1,
+            limit
+        }
+    }
+
+
     console.log(`getAllVendors queryStr`, queryStr);
     if (!vendors) {
         res.status(400).json({ success: false })
@@ -72,8 +93,7 @@ exports.getAllVendors = asyncHandler(async (req, res, next) => {
     res.status(200).json({
         success: true,
         count: vendors.length,
-        page: page,
-        page_limit: limit,
+        pagination,
         data: vendors
     })
 });

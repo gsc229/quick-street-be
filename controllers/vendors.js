@@ -10,12 +10,54 @@ const geocoder = require('../utils/geocoder');
 // @access  Public
 exports.getAllVendors = asyncHandler(async (req, res, next) => {
     let query;
-    let queryStr = JSON.stringify(req.query);
 
+    // Making a copy of req.query to mutate the copy, b/c we'll still need the original req.query below
+    const reqQuery = { ...req.query };
+    console.log('reqQuery: ', reqQuery)
+    // If there's a select or sort field in the query, we need to remove it before we do SomeResource.find(JSON.parse(queryStr)), so we don't get an error. At this point reqQuery could look something like: 
+    /* 
+        {
+            vendor_category: { in: 'Spreads' },
+            'location.state': 'PA',
+            select: 'name,avatar'
+         }
+
+    */
+    const removeFields = ['select', 'sort'];
+
+    // Loop over removeFields and delete them from reqQuery if it has them
+    removeFields.forEach(param => delete reqQuery[param]);
+    console.log('select/sort removed reqQuery: ', reqQuery);
+
+    // After select and sort have been removed, stringify reqQuery and set it to another variable so we can use the .replace string method on it.  
+    let queryStr = JSON.stringify(reqQuery);
+
+    // Using string.replace() and some regEx to create Mongo "$" operators: greater than, greater than or equal to etc. in case we ever want to query things like prices with comparison operators.
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
+    // Finding the resource. Don't forget to parse the queryStr back into a JSON object for our database. 
     query = Vendor.find(JSON.parse(queryStr))
 
+
+    // Making use of our select field: (notice we are back to the original req.query.select)
+    if (req.query.select) {
+        //Currently req.query.select looks something like this --> select: 'name,avatar'. In order to use the mongoose .select method --> query.select('name avatar') we need to get from 'name,avatar' to 'name avatar'
+        let fields = req.query.select.split(',').join(' ');
+
+        query = query.select(fields);
+    }
+
+    // Sort something similar as the above select if statement.
+    if (req.query.sort) {
+        const sortBy = req.query.sort.split(',').join(' ');
+        query = query.sort(sortBy);
+    } else {
+        // default sort. '-' means sort Z-A
+        query = query.sort('-createdAt')
+    }
+
+
+    // Executing/awaiting the query
     const vendors = await query;
     console.log(`getAllVendors queryStr`, queryStr);
     if (!vendors) {
@@ -85,8 +127,6 @@ exports.deleteVendor = asyncHandler(async (req, res, next) => {
 
     res.status(200).json({ success: true, data: {} });
 });
-
-
 
 // @desc    Get vendors within a radius
 // @route   GET /api/v1.0/vendors/raduis/:zipcode/:distance

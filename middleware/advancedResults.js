@@ -1,37 +1,29 @@
 const advancedResults = (model, populate) => async (req, res, next) => {
   let query;
 
-  // Making a copy of req.query to mutate the copy, b/c we'll still need the original req.query below
+  // Making a copy of req.query 
   const reqQuery = { ...req.query };
-  console.log('reqQuery: ', reqQuery)
-  // If there are select, sort, page or limit fields in the query, we need to remove it before we do: SomeResource.find(JSON.parse(queryStr)), so we don't get an error. At this point reqQuery could look something like: 
-  /* 
-      {
-          vendor_category: { in: 'Spreads' },
-          'location.state': 'PA',
-          select: 'name,avatar'
-       }
+  console.log('advancedResults reqQuery: '.red, reqQuery)
 
-  */
   const removeFields = ['select', 'sort', 'limit', 'page'];
 
   // Loop over removeFields and delete them from reqQuery if it has them
   removeFields.forEach(param => delete reqQuery[param]);
-  console.log('select/sort removed reqQuery: ', reqQuery);
+  console.log('select/sort/page/limit removed reqQuery: ', reqQuery);
 
-  // After select, sort, page or limit fields have been removed, stringify reqQuery and set it to another variable so we can use the .replace string method on it.
+
   let queryStr = JSON.stringify(reqQuery);
+  console.log(`advancedResults queryStr: `.yellow, queryStr);
 
-  // Using string.replace() and some regEx to create Mongo "$" operators: greater than, greater than or equal to etc. in case we ever want to query things like prices with comparison operators. also making '$in' for enum fields.
   queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
-
-  // Finding the resource. Don't forget to parse the queryStr back into a JSON object for our database. 
+  console.log(`advancedResults queryStr.replace `.green, queryStr);
+  // Finding the resource. . 
   query = model.find(JSON.parse(queryStr));
 
 
-  // Making use of our select field: (notice we are using the original req.query.select)
+  // Making use of our select field:
   if (req.query.select) {
-    //Currently req.query.select looks something like this --> select: 'name,avatar'. In order to use the mongoose .select method --> query.select('name avatar') we need to get from 'name,avatar' to 'name avatar'
+
     let fields = req.query.select.split(',').join(' ');
 
     query = query.select(fields);
@@ -88,7 +80,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
     data: results
   }
 
-  console.log(`advancedResults queryStr: `, queryStr);
+
 
   next();
 

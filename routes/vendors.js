@@ -8,6 +8,10 @@ const {
     getVendorsInRadius
 } = require('../controllers/vendors');
 
+const Vendors = require('../models/Vendor');
+
+const advancedResults = require('../middleware/advancedResults');
+
 
 // Include other resource routers 
 const productRouter = require('./products');
@@ -19,7 +23,7 @@ router.use('/:vendorId/products', productRouter);
 
 router.route('/radius/:zipcode/:distance').get(getVendorsInRadius);
 
-router.route('/').get(getAllVendors).post(createVendor);
+router.route('/').get(advancedResults(Vendors), getAllVendors).post(createVendor);
 
 router.route('/:id').get(getVendor).put(updateVendor).delete(deleteVendor);
 

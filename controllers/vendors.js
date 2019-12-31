@@ -9,8 +9,15 @@ const geocoder = require('../utils/geocoder');
 // @route   GET /api/v1.0/vendors
 // @access  Public
 exports.getAllVendors = asyncHandler(async (req, res, next) => {
-    const vendors = await Vendor.find();
+    let query;
+    let queryStr = JSON.stringify(req.query);
 
+    queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
+
+    query = Vendor.find(JSON.parse(queryStr))
+
+    const vendors = await query;
+    console.log(`getAllVendors queryStr`, queryStr);
     if (!vendors) {
         res.status(400).json({ success: false })
     }
@@ -27,7 +34,7 @@ exports.getAllVendors = asyncHandler(async (req, res, next) => {
 exports.getVendor = asyncHandler(async (req, res, next) => {
     const vendor = await Vendor.findById(req.params.id).populate({
         path: 'products',
-        select: 'name price'
+        select: 'name price product_images'
     });
 
     if (!vendor) {

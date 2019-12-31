@@ -100,4 +100,29 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
         data: product
     })
 
+});
+
+// @desc    Delete product
+// @route   DELTE /api/v1.0/products/:id
+// @access  Private
+exports.deleteProduct = asyncHandler(async (req, res, next) => {
+    console.log('DELETE product:', req.params.id);
+    const product = await Product.findById(req.params.id)
+
+    if (!product) {
+        return next(
+            new ErrorResponse(`No vendor with the id of ${req.params.id}`),
+            404
+        );
+    }
+
+    await product.remove();
+
+    res.status(200).json({
+        success: true,
+        data: product
+    })
+
 })
+
+

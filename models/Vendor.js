@@ -93,6 +93,8 @@ const Vendor_Schema = new mongoose.Schema({
 
 });
 
+// ===== hooks ========
+
 // Encrypt password using bcrypt
 Vendor_Schema.pre('save', async function (next) {
 

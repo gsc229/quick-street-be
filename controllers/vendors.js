@@ -11,14 +11,14 @@ const geocoder = require('../utils/geocoder');
 exports.getAllVendors = asyncHandler(async (req, res, next) => {
     const vendors = await Vendor.find();
 
+    if (!vendors) {
+        res.status(400).json({ success: false })
+    }
     res.status(200).json({
         success: true,
         count: vendors.length,
         data: vendors
     })
-
-    res.status(400).json({ success: false })
-
 });
 
 // @desc    Get a single vendor
@@ -27,7 +27,7 @@ exports.getAllVendors = asyncHandler(async (req, res, next) => {
 exports.getVendor = asyncHandler(async (req, res, next) => {
     const vendor = await Vendor.findById(req.params.id).populate({
         path: 'products',
-        select: 'name price _id'
+        select: 'name price'
     });
 
     if (!vendor) {

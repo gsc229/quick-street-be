@@ -11,7 +11,6 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   removeFields.forEach(param => delete reqQuery[param]);
   console.log('select/sort/page/limit removed reqQuery: ', reqQuery);
 
-
   let queryStr = JSON.stringify(reqQuery);
   console.log(`advancedResults queryStr: `.yellow, queryStr);
 
@@ -19,7 +18,6 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   console.log(`advancedResults queryStr.replace `.green, queryStr);
   // Finding the resource. . 
   query = model.find(JSON.parse(queryStr));
-
 
   // Making use of our select field:
   if (req.query.select) {
@@ -47,7 +45,6 @@ const advancedResults = (model, populate) => async (req, res, next) => {
 
   query = query.skip(startIndex).limit(limit);
 
-
   if (populate) {
     query = query.populate(populate);
   }
@@ -72,15 +69,12 @@ const advancedResults = (model, populate) => async (req, res, next) => {
     }
   }
 
-
   res.advancedResults = {
     success: true,
     count: results.lenth,
     pagination,
     data: results
   }
-
-
 
   next();
 

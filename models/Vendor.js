@@ -149,11 +149,11 @@ Vendor_Schema.pre('remove', async function (next) {
 })
 
 // Reverse populate with virtuals 
-Vendor_Schema.virtual('products', {
+/* Vendor_Schema.virtual('products', {
   ref: 'Product',
   localField: '_id',
   foreignField: 'vendor',
   justOne: false
-});
+}); */
 
 module.exports = mongoose.model('Vendor', Vendor_Schema);

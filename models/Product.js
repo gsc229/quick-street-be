@@ -22,8 +22,9 @@ const Product_Schema = new mongoose.Schema({
     },
     product_images: {
         type: [String],
-        default: ['no-photos.jpeg']
-    },
+        default: ['quickstreet/lpqqwjjk6w27ijiqseod']
+    }
+    ,
     createdAt: {
         type: Date,
         default: Date.now

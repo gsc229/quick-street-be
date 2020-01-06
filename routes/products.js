@@ -2,7 +2,8 @@ const express = require('express');
 const {
     getAllProducts,
     getProduct,
-    addProduct
+    addProduct,
+    updateProduct
 } = require('../controllers/products');
 
 const Product = require('../models/Product');
@@ -14,6 +15,8 @@ router
     .get(getAllProducts)
     .post(addProduct);
 
-router.route('/:id').get(getProduct);
+router.route('/:id')
+    .get(getProduct)
+    .put(updateProduct);
 
 module.exports = router;

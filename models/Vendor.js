@@ -81,6 +81,7 @@ const Vendor_Schema = new mongoose.Schema(
       zipcode: String,
       country: String
     },
+  },
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
@@ -173,7 +174,7 @@ Vendor_Schema.pre('remove', async function (next) {
     vendor: this._id
   })
   next();
-})
+});
 /* Vendor_Schema.virtual('products', {
   ref: 'Product',
   localField: '_id',

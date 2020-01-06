@@ -48,3 +48,26 @@ exports.getPost = asyncHandler(async (req, res, next) => {
         data: post
     });
 });
+
+// @desc    Create a new post
+// @route   POST /api/v1.0/vendors/:vendorId/posts
+// @access  Private
+exports.addPost = asyncHandler(async (req, res, next) => {
+
+    req.body.vendor = req.params.vendorId;
+    console.log('Creating new post from vendorId:', req.body.vendor);
+    const vendor = await Vendor.findById(req.params.vendorId)
+    if (!vendor) {
+        return next(
+            new ErrorResponse(`No vendor with the id of ${req.params.vendorId}`),
+            404
+        );
+    }
+
+    const post = await Post.create(req.body);
+    res.status(200).json({
+        success: true,
+        data: post
+    })
+
+});

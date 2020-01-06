@@ -20,6 +20,14 @@ const Vendor_Schema = new mongoose.Schema({
     required: [true, 'Please add a password'],
     minlength: 6
   },
+  hours: {
+    type: String,
+    default: "n/a"
+  },
+  days_of_week: {
+    type: String,
+    default: "n/a"
+  },
   phone: {
     type: String
   },
@@ -105,7 +113,6 @@ Vendor_Schema.pre('save', async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
-
 
 
 // Create a 'slug' based on business_name for fontend to make routes

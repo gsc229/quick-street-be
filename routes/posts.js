@@ -2,7 +2,8 @@ const express = require('express');
 const {
     getAllPosts,
     getPost,
-    addPost
+    addPost,
+    updatePost
 } = require('../controllers/posts');
 
 const Posts = require('../models/Post');
@@ -15,6 +16,6 @@ router.route('/').get(advancedResults(Posts, {
     select: 'title description date'
 }), getAllPosts).post(addPost);
 
-router.route('/:id').get(getPost);
+router.route('/:id').get(getPost).put(updatePost);
 
 module.exports = router;

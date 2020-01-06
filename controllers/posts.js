@@ -71,3 +71,27 @@ exports.addPost = asyncHandler(async (req, res, next) => {
     })
 
 });
+
+// @desc    Update post
+// @route   PUT /api/v1.0/post/:id
+// @access  Private
+exports.updatePost = asyncHandler(async (req, res, next) => {
+    console.log('Updating post:', req.params.id);
+    let post = await Post.findById(req.params.id)
+
+    if (!post) {
+        return next(
+            new ErrorResponse(`No vendor with the id of ${req.params.id}`),
+            404
+        );
+    }
+    post = await Post.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+    })
+
+    res.status(200).json({
+        success: true,
+        data: post
+    });
+});

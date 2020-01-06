@@ -106,6 +106,27 @@ Vendor_Schema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
+
+
+// Create a 'slug' based on business_name for fontend to make routes
+Vendor_Schema.pre('save', function (next) {
+  this.slug = slugify(this.business_name, {
+    lower: true,
+    remove: /[*+~.()'"!:@]/g
+  });
+  next();
+});
+
+Vendor_Schema.pre('validate', async function (next) {
+
+  if (!this.isModified('password')) {
+    next();
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
 // Create a 'slug' based on business_name for fontend to make routes
 Vendor_Schema.pre('save', function (next) {
   this.slug = slugify(this.business_name, {

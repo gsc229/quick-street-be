@@ -11,6 +11,7 @@ const geocoder = require('../utils/geocoder');
 exports.getAllVendors = asyncHandler(async (req, res, next) => {
 
     res.status(200).json(res.advancedResults)
+
 });
 
 // @desc    Get a single vendor
@@ -52,6 +53,8 @@ exports.updateVendor = asyncHandler(async (req, res, next) => {
             new ErrorResponse(`Vendor not found with the id of ${req.params.id}`, 404)
         );
     }
+
+
     res.status(200).json({ success: true, data: vendor });
 });
 

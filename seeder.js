@@ -36,7 +36,7 @@ const importData = async () => {
     console.log('Data Imported...'.green.inverse);
     process.exit();
   } catch (err) {
-    console.error('import error',err);
+    console.error('import error', err);
   }
 }
 
@@ -45,7 +45,7 @@ const deleteData = async () => {
   try {
     await Vendor.deleteMany();
     await Product.deleteMany();
-    
+
     console.log('Data Destroyed...'.red.inverse);
     process.exit();
   } catch (err) {
@@ -58,3 +58,5 @@ if (process.argv[2] === '-i') {
 } else if (process.argv[2] === '-d') {
   deleteData();
 }
+
+

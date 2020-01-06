@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Bulletin_Schema = new mongoose.Schema({
+const Post_Schema = new mongoose.Schema({
     title: {
         type: String,
         trim: true,
@@ -20,4 +20,4 @@ const Bulletin_Schema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Bulletin', Bulletin_Schema);
+module.exports = mongoose.model('Post', Post_Schema);

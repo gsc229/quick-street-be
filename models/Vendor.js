@@ -20,6 +20,8 @@ const Vendor_Schema = new mongoose.Schema({
     required: [true, 'Please add a password'],
     minlength: 6
   },
+  hours: String,
+  days_of_week: String,
   phone: {
     type: String
   },

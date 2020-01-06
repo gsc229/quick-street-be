@@ -23,6 +23,7 @@ const vendors = require('./routes/vendors');
 const products = require('./routes/products');
 const productImages = require('./routes/productImages');
 
+const posts = require('./routes/posts');
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.use(fileupload())
 app.use('/api/v1.0/vendors', vendors);
 app.use('/api/v1.0/products', products);
 app.use('/api/v1.0/product-images', productImages);
+app.use('/api/v1.0/posts', posts);
 
 // Make public a static folder (you can access the photos through the URL in browser)
 app.use(express.static(path.join(__dirname, 'public')));

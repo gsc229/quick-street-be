@@ -14,20 +14,18 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
         query = Product.find({
             vendor: req.params.vendorId
         })
-    } else {
-        query = Product.find().populate({
-            path: 'vendor',
-            select: 'business_name description'
+        const products = await query;
+
+        res.status(200).json({
+            success: true,
+            count: products.length,
+            data: products
         });
+    } else {
+        res.status(200).json(res.advancedResults)
     }
 
-    const products = await query;
 
-    res.status(200).json({
-        success: true,
-        count: products.length,
-        data: products
-    });
 });
 
 // @desc    Get a single product

@@ -7,11 +7,15 @@ const {
     deleteProduct
 } = require('../controllers/products');
 
-const Product = require('../models/Product');
+const Products = require('../models/Product');
+const advancedResults = require('../middleware/advancedResults');
 
 const router = express.Router({ mergeParams: true }); //merging the URL files
 
-router.route('/').get(getAllProducts).post(addProduct);
+router.route('/').get(advancedResults(Products, {
+    path: 'vendor',
+    select: 'business_name description'
+}), getAllProducts).post(addProduct);
 
 router.route('/:id').get(getProduct).put(updateProduct).delete(deleteProduct);
 

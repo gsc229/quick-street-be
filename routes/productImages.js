@@ -9,6 +9,6 @@ const advancedResults = require('../middleware/advancedResults');
 
 const router = express.Router();
 
-router.route('/').get(getAllImages);
+router.route('/').get(advancedResults(ProductImages), getAllImages);
 
 module.exports = router;

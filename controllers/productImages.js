@@ -12,8 +12,19 @@ const asyncHandler = require('../middleware/async');
 // @access  Public
 exports.getAllImages = asyncHandler(async (req, res, next) => {
   let query;
-  console.log("HELLO!");
-  res.status(200).json({ message: "HELLO!" });
+  if (res.advancedResults) {
+    res.status(200).json(res.advancedResults);
+  } else {
+    query = ProductImage.find();
+
+    const images = await query;
+
+    res.status(200).json({
+      success: true,
+      count: images.length,
+      data: images
+    })
+  }
 
 
 })

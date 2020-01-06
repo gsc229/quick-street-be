@@ -1,0 +1,50 @@
+[
+    {
+        "title": "Closed for the holidays",
+        "description": "We are taking a break during the holiday season! We will be back in action on 1/06/20",
+        "date": "12-23-19",
+        "vendor": "5d713995b721c3bb38c1f5d0"
+    },
+    {
+        "title": "We're Back!",
+        "description": "We are back in business, send in your orders for those Beets!",
+        "date": "1-06-20",
+        "vendor": "5d713995b721c3bb38c1f5d0"
+    },
+    {
+        "title": "Checkout out this months flavors!",
+        "description": "Head on over to our new menu to check out January's new cookie recipes",
+        "date": "1-1-20",
+        "vendor": "5d725a037b292f5f8ceff787"
+    },
+    {
+        "title": "This Weekend at the Farmers Market",
+        "description": "We will be changing our booth location near the entrance",
+        "date": "1-5-20",
+        "vendor": "5d725a037b292f5f8ceff787"
+    },
+    {
+        "title": "Worlds Best Boss",
+        "description": "Just a post to say Im the worlds best boss",
+        "date": "11-15-19",
+        "vendor": "5d713a66ec8f2b88b8f830b8"
+    },
+    {
+        "title": "Sold out",
+        "description": "We're sold out of paper this week, check in with us next sunday",
+        "date": "1-6-20",
+        "vendor": "5d713a66ec8f2b88b8f830b8"
+    },
+    {
+        "title": "We're at a new Farmers Market",
+        "description": "Checkout the new address for the market we will be at this weekend",
+        "date": "12-14-19",
+        "vendor": "5d725a1b7b292f5f8ceff788"
+    },
+    {
+        "title": "Sale!",
+        "description": "We're having a holiday jam sale this week. Buy 2 and get 1 50% off",
+        "date": "12-10-19",
+        "vendor": "5d725a1b7b292f5f8ceff788"
+    }
+]

@@ -81,11 +81,11 @@ const Vendor_Schema = new mongoose.Schema({
   },
 
   //Vendor bulletin
-  bulletin: String,
-  created_at: {
-    type: Date,
-    default: Date.now
-  }
+  // bulletin: String,
+  // created_at: {
+  //   type: Date,
+  //   default: Date.now
+  // }
 
 }, {
   toJSON: { virtuals: true },

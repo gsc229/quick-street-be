@@ -7,7 +7,8 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './config/config.env' });
 
 //Load models
-const Vendors = require('./models/Vendors');
+const Vendor = require('./models/Vendor');
+const Product = require('./models/Product');
 
 // Connect to DB
 mongoose.connect(process.env.MONGO_URI, {
@@ -22,22 +23,28 @@ const vendors = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/vendors.json`, 'utf-8')
 );
 
+const products = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/products.json`, 'utf-8')
+);
+
 // Import into DB 
 const importData = async () => {
   try {
-    await Vendors.create(vendors);
+    await Vendor.create(vendors);
+    await Product.create(products);
 
     console.log('Data Imported...'.green.inverse);
     process.exit();
   } catch (err) {
-    console.error(err);
+    console.error('import error',err);
   }
 }
 
 // Delete data 
 const deleteData = async () => {
   try {
-    await Vendors.deleteMany();
+    await Vendor.deleteMany();
+    await Product.deleteMany();
     
     console.log('Data Destroyed...'.red.inverse);
     process.exit();

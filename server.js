@@ -1,11 +1,14 @@
+const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
 const colors = require('colors');
+const fileupload = require('express-fileupload');
 const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db');
+
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
@@ -17,6 +20,7 @@ const logger = require('./middleware/logger');
 
 // Route files
 const vendors = require('./routes/vendors');
+const products = require('./routes/products');
 
 const app = express();
 
@@ -34,8 +38,16 @@ app.use(helmet());
 // Enable CORS
 app.use(cors());
 
+// File uploading
+
+app.use(fileupload())
+
 // Mount Routers
 app.use('/api/v1.0/vendors', vendors);
+app.use('/api/v1.0/products', products);
+
+// Make public a static folder (you can access the photos through the URL in browser)
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(errorHandler);
 

@@ -17,7 +17,7 @@
             "Vegetarian"
         ],
         "price": 13,
-        "vendor": "5d725a1b7b292f5f8ceff788" 
+        "vendor": "5d725a1b7b292f5f8ceff788"
     },
     {
         "name": "Chocolate Chip Cookies",
@@ -28,7 +28,7 @@
             "Gluten Free"
         ],
         "price": 15,
-        "vendor": "5d725a037b292f5f8ceff787" 
+        "vendor": "5d725a037b292f5f8ceff787"
     },
     {
         "name": "Snickerdoodle Cookies",
@@ -39,7 +39,7 @@
             "Vegan"
         ],
         "price": 20,
-        "vendor": "5d725a037b292f5f8ceff787" 
+        "vendor": "5d725a037b292f5f8ceff787"
     },
     {
         "name": "Beet Soup",
@@ -52,7 +52,7 @@
             "Dairy Free"
         ],
         "price": 16,
-        "vendor": "5d713995b721c3bb38c1f5d0" 
+        "vendor": "5d713995b721c3bb38c1f5d0"
     },
     {
         "name": "Palmiers Paper Pastries",
@@ -62,6 +62,6 @@
             "Vegetarian"
         ],
         "price": 30,
-        "vendor": "5d713a66ec8f2b88b8f830b8" 
+        "vendor": "5d713a66ec8f2b88b8f830b8"
     }
 ]

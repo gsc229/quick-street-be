@@ -10,7 +10,7 @@ const asyncHandler = require('../middleware/async'); // keeps code DRY
 // @access  Public
 exports.getAllProducts = asyncHandler(async (req, res, next) => {
     let query;
-    if(req.params.vendorId) {
+    if (req.params.vendorId) {
         query = Product.find({
             vendor: req.params.vendorId
         })
@@ -30,20 +30,20 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Get a single products
+// @desc    Get a single product
 // @route   GET /api/v1.0/products/:id
 // @access  Public
 exports.getProduct = asyncHandler(async (req, res, next) => {
-   const product = await Product.findById(req.params.id).populate({
-       path: 'vendor',
-       select: 'business_name description'
-   });
+    const product = await Product.findById(req.params.id).populate({
+        path: 'vendor',
+        select: 'business_name description'
+    });
 
-   if(!product) {
-       return next(new ErrorResponse(`No product with the id of ${req.params.id}`),
-       404
-       );
-   }
+    if (!product) {
+        return next(new ErrorResponse(`No product with the id of ${req.params.id}`),
+            404
+        );
+    }
 
     res.status(200).json({
         success: true,
@@ -52,41 +52,41 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Add product
+// @desc    Create a new product
 // @route   POST /api/v1.0/vendors/:vendorId/products
 // @access  Private
 exports.addProduct = asyncHandler(async (req, res, next) => {
-    req.body.vendor = req.params.vendorId;
 
-    const vendor = await Vendor.findById(req.params.vendorId);
- 
-    if(!vendor) {
-        return next(new ErrorResponse(`No product with the id of ${req.params.vendorId}`),
-        404
+    req.body.vendor = req.params.vendorId;
+    console.log('Creating new product from vendorId:', req.body.vendor);
+    const vendor = await Vendor.findById(req.params.vendorId)
+    if (!vendor) {
+        return next(
+            new ErrorResponse(`No vendor with the id of ${req.params.vendorId}`),
+            404
         );
     }
 
     const product = await Product.create(req.body);
- 
-     res.status(200).json({
-         success: true,
-         data: product
-     });
- });
+    res.status(200).json({
+        success: true,
+        data: product
+    })
 
-
+}
 // @desc    Update product
-// @route   PUT /api/v1.0/vendors/:vendorId/products
+// @route   PUT /api/v1.0/products/:id
 // @access  Private
 exports.updateProduct = asyncHandler(async (req, res, next) => {
-    let product = await Product.findById(req.params.id);
- 
-    if(!product) {
-        return next(new ErrorResponse(`No product with the id of ${req.params.id}`),
-        404
+    console.log('Updating product:', req.params.id);
+    let product = await Product.findById(req.params.id)
+
+    if (!product) {
+        return next(
+            new ErrorResponse(`No vendor with the id of ${req.params.id}`),
+            404
         );
     }
-
     product = await Product.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true

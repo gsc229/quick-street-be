@@ -25,6 +25,11 @@ const Product_Image = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'Product',
     required: true
+  },
+  vendor: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Vendor',
+    required: true
   }
 
 });

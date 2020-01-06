@@ -174,7 +174,7 @@ Vendor_Schema.pre('remove', async function (next) {
     vendor: this._id
   })
   next();
-})
+});
 
 // Reverse populate with virtuals 
 /* Vendor_Schema.virtual('products', {

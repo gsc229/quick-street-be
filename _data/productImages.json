@@ -1,0 +1,138 @@
+[
+  {
+    "vendor": "5e0e7cf57aafb30017030e38",
+    "product": "5e0f6803a81643001752e995",
+    "public_id": "quickstreet/jeffc5kd69qe27jrlfxl",
+    "version": 1578344396,
+    "signature": "71b3e81f901705208b0e487f3586b488808fb014",
+    "width": 4928,
+    "height": 3264,
+    "format": "jpg",
+    "resource_type": "image",
+    "created_at": "2020-01-06T20:59:56Z",
+    "tags": [],
+    "bytes": 1450297,
+    "type": "upload",
+    "etag": "5701674fde5e0589f19a9102ff302cbd",
+    "placeholder": false,
+    "url": "http://res.cloudinary.com/dxhescd0s/image/upload/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg",
+    "secure_url": "https://res.cloudinary.com/dxhescd0s/image/upload/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg",
+    "access_mode": "public",
+    "original_filename": "alexander-mils-nesUgwNX3u4-unsplash",
+    "eager": [
+      {
+        "transformation": "c_scale,w_500",
+        "width": 500,
+        "height": 331,
+        "bytes": 27291,
+        "format": "jpg",
+        "url": "http://res.cloudinary.com/dxhescd0s/image/upload/c_scale,w_500/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg",
+        "secure_url": "https://res.cloudinary.com/dxhescd0s/image/upload/c_scale,w_500/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg"
+      }
+    ],
+    "path": "v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dxhescd0s/image/upload/c_limit,h_60,w_90/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg"
+  },
+  {
+    "vendor": "5e0e7cf57aafb30017030e38",
+    "product": "5e0f6803a81643001752e995",
+    "public_id": "quickstreet/jeffc5kd69qe27jrlfxl",
+    "version": 1578344396,
+    "signature": "71b3e81f901705208b0e487f3586b488808fb014",
+    "width": 4928,
+    "height": 3264,
+    "format": "jpg",
+    "resource_type": "image",
+    "created_at": "2020-01-06T20:59:56Z",
+    "tags": [],
+    "bytes": 1450297,
+    "type": "upload",
+    "etag": "5701674fde5e0589f19a9102ff302cbd",
+    "placeholder": false,
+    "url": "http://res.cloudinary.com/dxhescd0s/image/upload/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg",
+    "secure_url": "https://res.cloudinary.com/dxhescd0s/image/upload/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg",
+    "access_mode": "public",
+    "original_filename": "alexander-mils-nesUgwNX3u4-unsplash",
+    "eager": [
+      {
+        "transformation": "c_scale,w_500",
+        "width": 500,
+        "height": 331,
+        "bytes": 27291,
+        "format": "jpg",
+        "url": "http://res.cloudinary.com/dxhescd0s/image/upload/c_scale,w_500/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg",
+        "secure_url": "https://res.cloudinary.com/dxhescd0s/image/upload/c_scale,w_500/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg"
+      }
+    ],
+    "path": "v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dxhescd0s/image/upload/c_limit,h_60,w_90/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg"
+  },
+  {
+    "vendor": "5e0e7cf57aafb30017030e38",
+    "product": "5e0f6803a81643001752e995",
+    "public_id": "quickstreet/jeffc5kd69qe27jrlfxl",
+    "version": 1578344396,
+    "signature": "71b3e81f901705208b0e487f3586b488808fb014",
+    "width": 4928,
+    "height": 3264,
+    "format": "jpg",
+    "resource_type": "image",
+    "created_at": "2020-01-06T20:59:56Z",
+    "tags": [],
+    "bytes": 1450297,
+    "type": "upload",
+    "etag": "5701674fde5e0589f19a9102ff302cbd",
+    "placeholder": false,
+    "url": "http://res.cloudinary.com/dxhescd0s/image/upload/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg",
+    "secure_url": "https://res.cloudinary.com/dxhescd0s/image/upload/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg",
+    "access_mode": "public",
+    "original_filename": "alexander-mils-nesUgwNX3u4-unsplash",
+    "eager": [
+      {
+        "transformation": "c_scale,w_500",
+        "width": 500,
+        "height": 331,
+        "bytes": 27291,
+        "format": "jpg",
+        "url": "http://res.cloudinary.com/dxhescd0s/image/upload/c_scale,w_500/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg",
+        "secure_url": "https://res.cloudinary.com/dxhescd0s/image/upload/c_scale,w_500/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg"
+      }
+    ],
+    "path": "v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dxhescd0s/image/upload/c_limit,h_60,w_90/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg"
+  },
+  {
+    "vendor": "5e0e7cf57aafb30017030e38",
+    "product": "5e0f6803a81643001752e995",
+    "public_id": "quickstreet/jeffc5kd69qe27jrlfxl",
+    "version": 1578344396,
+    "signature": "71b3e81f901705208b0e487f3586b488808fb014",
+    "width": 4928,
+    "height": 3264,
+    "format": "jpg",
+    "resource_type": "image",
+    "created_at": "2020-01-06T20:59:56Z",
+    "tags": [],
+    "bytes": 1450297,
+    "type": "upload",
+    "etag": "5701674fde5e0589f19a9102ff302cbd",
+    "placeholder": false,
+    "url": "http://res.cloudinary.com/dxhescd0s/image/upload/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg",
+    "secure_url": "https://res.cloudinary.com/dxhescd0s/image/upload/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg",
+    "access_mode": "public",
+    "original_filename": "alexander-mils-nesUgwNX3u4-unsplash",
+    "eager": [
+      {
+        "transformation": "c_scale,w_500",
+        "width": 500,
+        "height": 331,
+        "bytes": 27291,
+        "format": "jpg",
+        "url": "http://res.cloudinary.com/dxhescd0s/image/upload/c_scale,w_500/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg",
+        "secure_url": "https://res.cloudinary.com/dxhescd0s/image/upload/c_scale,w_500/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg"
+      }
+    ],
+    "path": "v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dxhescd0s/image/upload/c_limit,h_60,w_90/v1578344396/quickstreet/jeffc5kd69qe27jrlfxl.jpg"
+  }
+]

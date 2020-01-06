@@ -95,3 +95,23 @@ exports.updatePost = asyncHandler(async (req, res, next) => {
         data: post
     });
 });
+
+// @desc    Delete post
+// @route   DELETE /api/v1.0/vendors/:vendorId/posts
+// @access  Private
+exports.deletePost = asyncHandler(async (req, res, next) => {
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+        return next(new ErrorResponse(`No post with the id of ${req.params.id}`),
+            404
+        );
+    }
+
+    await post.remove()
+
+    res.status(200).json({
+        success: true,
+        data: {}
+    });
+});

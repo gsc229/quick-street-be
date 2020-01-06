@@ -2,4 +2,13 @@ const express = require('express');
 
 const {
   getAllImages,
-} = require('../controllers/products');
+} = require('../controllers/productImages');
+
+const ProductImages = require('../models/ProductImage');
+const advancedResults = require('../middleware/advancedResults');
+
+const router = express.Router();
+
+router.route('/').get(getAllImages);
+
+module.exports = router;

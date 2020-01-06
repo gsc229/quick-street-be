@@ -81,20 +81,11 @@ const Vendor_Schema = new mongoose.Schema(
       zipcode: String,
       country: String
     },
-
-    //Vendor bulletin
-    bulletin: String,
-    created_at: {
-      type: Date,
-      default: Date.now
-    }
-  },
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
   }
 );
-
 // ===== hooks ========
 
 // Encrypt password using bcrypt
@@ -176,7 +167,13 @@ Vendor_Schema.pre('remove', async function(next) {
   next();
 });
 
-// Reverse populate with virtuals
+Vendor_Schema.pre('remove', async function (next) {
+  console.log(`Posts being deleted from vendor ${this._id}`)
+  await this.model('Post').deleteMany({
+    vendor: this._id
+  })
+  next();
+})
 /* Vendor_Schema.virtual('products', {
   ref: 'Product',
   localField: '_id',

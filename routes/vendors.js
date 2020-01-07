@@ -14,6 +14,8 @@ const advancedResults = require('../middleware/advancedResults');
 
 // Include other resource routers
 const productRouter = require('./products');
+const postRouter = require('./posts');
+const productImageRouter = require('./productImages');
 
 const router = express.Router();
 
@@ -23,6 +25,8 @@ router.use(protect);
 
 // Re-route into other resource route
 router.use('/:vendorId/products', productRouter);
+router.use('/:vendorId/posts', postRouter);
+router.use('/:vendorId/product-images', productImageRouter);
 
 router.route('/radius/:zipcode/:distance').get(getVendorsInRadius);
 

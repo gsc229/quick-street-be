@@ -81,13 +81,6 @@ const Vendor_Schema = new mongoose.Schema(
       zipcode: String,
       country: String
     },
-
-    //Vendor bulletin
-    bulletin: String,
-    created_at: {
-      type: Date,
-      default: Date.now
-    }
   },
   {
     toJSON: { virtuals: true },
@@ -95,10 +88,11 @@ const Vendor_Schema = new mongoose.Schema(
   }
 );
 
+
 // ===== hooks ========
 
 // Encrypt password using bcrypt
-Vendor_Schema.pre('save', async function(next) {
+Vendor_Schema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     next();
   }
@@ -108,7 +102,7 @@ Vendor_Schema.pre('save', async function(next) {
 });
 
 // Sign JWT and return
-Vendor_Schema.methods.getSignedJwtToken = function() {
+Vendor_Schema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE
   });
@@ -120,7 +114,7 @@ Vendor_Schema.methods.matchPassword = async function(enteredPassword) {
 };
 
 // Create a 'slug' based on business_name for fontend to make routes
-Vendor_Schema.pre('save', function(next) {
+Vendor_Schema.pre('save', function (next) {
   this.slug = slugify(this.business_name, {
     lower: true,
     remove: /[*+~.()'"!:@]/g
@@ -128,7 +122,7 @@ Vendor_Schema.pre('save', function(next) {
   next();
 });
 
-Vendor_Schema.pre('validate', async function(next) {
+Vendor_Schema.pre('validate', async function (next) {
   if (!this.isModified('password')) {
     next();
   }
@@ -138,7 +132,7 @@ Vendor_Schema.pre('validate', async function(next) {
 });
 
 // Create a 'slug' based on business_name for fontend to make routes
-Vendor_Schema.pre('save', function(next) {
+Vendor_Schema.pre('save', function (next) {
   this.slug = slugify(this.business_name, {
     lower: true,
     remove: /[*+~.()'"!:@]/g
@@ -147,7 +141,7 @@ Vendor_Schema.pre('save', function(next) {
 });
 
 //Geocode & create location field
-Vendor_Schema.pre('save', async function(next) {
+Vendor_Schema.pre('save', async function (next) {
   const loc = await geocoder.geocode(this.address);
   this.location = {
     type: 'Point',
@@ -166,12 +160,12 @@ Vendor_Schema.pre('save', async function(next) {
 });
 
 // Match user entered password to hashed password in database
-Vendor_Schema.methods.matchPassword = async function(enteredPassword) {
+Vendor_Schema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
 // Cascade delete other objects related to vendor
-Vendor_Schema.pre('remove', async function(next) {
+Vendor_Schema.pre('remove', async function (next) {
   console.log(`Products being deleted from vendor ${this._id}`);
   await this.model('Product').deleteMany({
     vendor: this._id
@@ -179,7 +173,13 @@ Vendor_Schema.pre('remove', async function(next) {
   next();
 });
 
-// Reverse populate with virtuals
+Vendor_Schema.pre('remove', async function (next) {
+  console.log(`Posts being deleted from vendor ${this._id}`)
+  await this.model('Post').deleteMany({
+    vendor: this._id
+  })
+  next();
+});
 /* Vendor_Schema.virtual('products', {
   ref: 'Product',
   localField: '_id',

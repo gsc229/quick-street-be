@@ -44,24 +44,43 @@ exports.getAllImages = asyncHandler(async (req, res, next) => {
 })
 
 // @desc    Create a product-image object
-// @route   POST /api/v1.0/product-images/:productId
+// @route   POST /api/v1.0/products/:productId/product-images
 // @access  Private
-exports.addPost = asyncHandler(async (req, res, next) => {
-
-  req.body.productImage = req.params.vendorId;
-  console.log('Creating new post from vendorId:', req.body.vendor);
-  const vendor = await Vendor.findById(req.params.vendorId)
-  if (!vendor) {
+exports.addImage = asyncHandler(async (req, res, next) => {
+  req.body.product = req.params.productId;
+  console.log('Creating new productImage from productId:', req.body.product);
+  const product = await Product.findById(req.params.productId)
+  if (!product) {
     return next(
-      new ErrorResponse(`No vendor with the id of ${req.params.vendorId}`),
+      new ErrorResponse(`No product with the id of ${req.params.productId}`),
       404
     );
   }
 
-  const post = await Post.create(req.body);
+  const image = await ProductImage.create(req.body);
   res.status(200).json({
     success: true,
-    data: post
+    data: image
   })
 
+});
+
+// @desc    Delete post
+// @route   DELETE /api/v1.0/product-images/:imageId
+// @access  Private
+exports.deleteImage = asyncHandler(async (req, res, next) => {
+  const image = await ProductImage.findById(req.params.imageId);
+
+  if (!image) {
+    return next(new ErrorResponse(`No image with the id of ${req.params.imageId}`),
+      404
+    );
+  }
+
+  await image.remove()
+
+  res.status(200).json({
+    success: true,
+    data: {}
+  });
 });

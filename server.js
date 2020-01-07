@@ -22,7 +22,6 @@ const logger = require('./middleware/logger');
 const vendors = require('./routes/vendors');
 const products = require('./routes/products');
 const productImages = require('./routes/productImages');
-
 const posts = require('./routes/posts');
 
 const app = express();

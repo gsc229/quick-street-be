@@ -7,7 +7,7 @@ const {
 const ProductImages = require('../models/ProductImage');
 const advancedResults = require('../middleware/advancedResults');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.route('/').get(advancedResults(ProductImages), getAllImages);
 

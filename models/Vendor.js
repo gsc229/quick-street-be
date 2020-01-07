@@ -107,7 +107,6 @@ Vendor_Schema.pre('save', async function(next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-
 // Sign JWT and return
 Vendor_Schema.methods.getSignedJwtToken = function() {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
@@ -115,6 +114,10 @@ Vendor_Schema.methods.getSignedJwtToken = function() {
   });
 };
 
+// Match user entered password to hashed password in database
+Vendor_Schema.methods.matchPassword = async function(enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 // Create a 'slug' based on business_name for fontend to make routes
 Vendor_Schema.pre('save', function(next) {

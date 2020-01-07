@@ -9,7 +9,6 @@ const fileupload = require('express-fileupload');
 const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db');
 
-
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 
@@ -19,6 +18,7 @@ connectDB();
 const logger = require('./middleware/logger');
 
 // Route files
+const auth = require('./routes/auth');
 const vendors = require('./routes/vendors');
 const products = require('./routes/products');
 
@@ -40,11 +40,12 @@ app.use(cors());
 
 // File uploading
 
-app.use(fileupload())
+app.use(fileupload());
 
 // Mount Routers
 app.use('/api/v1.0/vendors', vendors);
 app.use('/api/v1.0/products', products);
+app.use('/api/v1.0/auth', auth);
 
 // Make public a static folder (you can access the photos through the URL in browser)
 app.use(express.static(path.join(__dirname, 'public')));

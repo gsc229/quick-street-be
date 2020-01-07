@@ -34,15 +34,15 @@ const Vendor_Schema = new mongoose.Schema(
       type: String,
       unique: true
     },
-    hours: String,
+    hours: {
+      type: String,
+      default: 'n/a'
+    },
     days_of_week: {
       type: String,
       default: 'n/a'
     },
-    slug: {
-      type: String,
-      default: 'n/a'
-    },
+    slug: String,
     description: {
       type: String
     },

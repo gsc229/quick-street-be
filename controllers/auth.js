@@ -41,7 +41,7 @@ exports.login = asyncHandler(async (req, res, next) => {
   const isMatch = await vendor.matchPassword(password);
 
   if (!isMatch) {
-    return next(new ErrorResponse('Invalid credentials', 401));
+    return next(new ErrorResponse('Invalid credentials for password', 401));
   }
 
   sendTokenResponse(vendor, 200, res);

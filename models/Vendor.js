@@ -127,22 +127,17 @@ Vendor_Schema.methods.getResetPasswordToken = function() {
   // Generate token
   const resetToken = crypto.randomBytes(20).toString('hex');
 
-  Vendor_Schema.pre('validate', async function(next) {
-    if (!this.isModified('password')) {
-      next();
-    }
+  // Hash token and set to resetPasswordToken field
+  this.resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
 
-    // Hash token and set to resetPasswordToken field
-    this.resetPasswordToken = crypto
-      .createHash('sha256')
-      .update(resetToken)
-      .digest('hex');
-
-    // Set expire
+  // Set expire
     this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
     return resetToken;
-  });
+  };
 
   // Create a 'slug' based on business_name for fontend to make routes
   Vendor_Schema.pre('save', function(next) {
@@ -195,5 +190,4 @@ Vendor_Schema.methods.getResetPasswordToken = function() {
   justOne: false
 }); */
 
-  module.exports = mongoose.model('Vendor', Vendor_Schema);
-};
+module.exports = mongoose.model('Vendor', Vendor_Schema);

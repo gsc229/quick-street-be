@@ -17,9 +17,9 @@ const productRouter = require('./products');
 
 const router = express.Router();
 
-const { protect } = require('../middleware/auth');
+//const { protect } = require('../middleware/auth');
 
-router.use(protect);
+//router.use(protect);
 
 // Re-route into other resource route
 router.use('/:vendorId/products', productRouter);

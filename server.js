@@ -46,7 +46,6 @@ app.use(fileupload());
 app.use('/api/v1.0/auth', auth);
 app.use('/api/v1.0/vendors', vendors);
 app.use('/api/v1.0/products', products);
-app.use('/api/v1.0/auth', auth);
 app.use('/api/v1.0/product-images', productImages);
 app.use('/api/v1.0/posts', posts);
 

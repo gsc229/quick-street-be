@@ -129,13 +129,6 @@ Vendor_Schema.methods.getResetPasswordToken = function() {
   // Generate token
   const resetToken = crypto.randomBytes(20).toString('hex');
 
-}
-
-Vendor_Schema.pre('validate', async function (next) {
-  if (!this.isModified('password')) {
-    next();
-  }
-
   // Hash token and set to resetPasswordToken field
   this.resetPasswordToken = crypto
     .createHash('sha256')
@@ -146,7 +139,7 @@ Vendor_Schema.pre('validate', async function (next) {
   this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
   return resetToken;
-});
+};
 
 // Create a 'slug' based on business_name for fontend to make routes
 Vendor_Schema.pre('save', function (next) {

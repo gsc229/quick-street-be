@@ -34,7 +34,15 @@ const Vendor_Schema = new mongoose.Schema(
       type: String,
       unique: true
     },
-    slug: String,
+    hours: String,
+    days_of_week: {
+      type: String,
+      default: 'n/a'
+    },
+    slug: {
+      type: String,
+      default: 'n/a'
+    },
     description: {
       type: String
     },
@@ -92,7 +100,7 @@ const Vendor_Schema = new mongoose.Schema(
 // ===== hooks ========
 
 // Encrypt password using bcrypt
-Vendor_Schema.pre('save', async function(next) {
+Vendor_Schema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     next();
   }
@@ -102,19 +110,19 @@ Vendor_Schema.pre('save', async function(next) {
 });
 
 // Sign JWT and return
-Vendor_Schema.methods.getSignedJwtToken = function() {
+Vendor_Schema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE
   });
 };
 
 // Match user entered password to hashed password in database
-Vendor_Schema.methods.matchPassword = async function(enteredPassword) {
+Vendor_Schema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
 // Create a 'slug' based on business_name for fontend to make routes
-Vendor_Schema.pre('save', function(next) {
+Vendor_Schema.pre('save', function (next) {
   this.slug = slugify(this.business_name, {
     lower: true,
     remove: /[*+~.()'"!:@]/g
@@ -123,7 +131,7 @@ Vendor_Schema.pre('save', function(next) {
 });
 
 // Generate and hash password token
-Vendor_Schema.methods.getResetPasswordToken = function() {
+Vendor_Schema.methods.getResetPasswordToken = function () {
   // Generate token
   const resetToken = crypto.randomBytes(20).toString('hex');
 
@@ -134,60 +142,60 @@ Vendor_Schema.methods.getResetPasswordToken = function() {
     .digest('hex');
 
   // Set expire
-    this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
-    return resetToken;
+  return resetToken;
+};
+
+// Create a 'slug' based on business_name for fontend to make routes
+Vendor_Schema.pre('save', function (next) {
+  this.slug = slugify(this.business_name, {
+    lower: true,
+    remove: /[*+~.()'"!:@]/g
+  });
+  next();
+});
+
+//Geocode & create location field
+Vendor_Schema.pre('save', async function (next) {
+  const loc = await geocoder.geocode(this.address);
+  this.location = {
+    type: 'Point',
+    coordinates: [loc[0].longitude, loc[0].latitude],
+    formattedAddress: loc[0].formattedAddress,
+    street: loc[0].streetName,
+    city: loc[0].city,
+    state: loc[0].stateCode,
+    zipcode: loc[0].zipcode,
+    country: loc[0].countryCode
   };
 
-  // Create a 'slug' based on business_name for fontend to make routes
-  Vendor_Schema.pre('save', function(next) {
-    this.slug = slugify(this.business_name, {
-      lower: true,
-      remove: /[*+~.()'"!:@]/g
-    });
-    next();
-  });
+  //Do not save address in the DB
+  this.address = undefined;
+  next();
+});
 
-  //Geocode & create location field
-  Vendor_Schema.pre('save', async function(next) {
-    const loc = await geocoder.geocode(this.address);
-    this.location = {
-      type: 'Point',
-      coordinates: [loc[0].longitude, loc[0].latitude],
-      formattedAddress: loc[0].formattedAddress,
-      street: loc[0].streetName,
-      city: loc[0].city,
-      state: loc[0].stateCode,
-      zipcode: loc[0].zipcode,
-      country: loc[0].countryCode
-    };
-
-    //Do not save address in the DB
-    this.address = undefined;
-    next();
+// Cascade delete other objects related to vendor
+Vendor_Schema.pre('remove', async function (next) {
+  console.log(`Products being deleted from vendor ${this._id}`);
+  await this.model('Product').deleteMany({
+    vendor: this._id
   });
+  next();
+});
 
-  // Cascade delete other objects related to vendor
-  Vendor_Schema.pre('remove', async function(next) {
-    console.log(`Products being deleted from vendor ${this._id}`);
-    await this.model('Product').deleteMany({
-      vendor: this._id
-    });
-    next();
+Vendor_Schema.pre('remove', async function (next) {
+  console.log(`Posts being deleted from vendor ${this._id}`);
+  await this.model('Post').deleteMany({
+    vendor: this._id
   });
-
-  Vendor_Schema.pre('remove', async function(next) {
-    console.log(`Posts being deleted from vendor ${this._id}`);
-    await this.model('Post').deleteMany({
-      vendor: this._id
-    });
-    next();
-  });
-  /* Vendor_Schema.virtual('products', {
-  ref: 'Product',
-  localField: '_id',
-  foreignField: 'vendor',
-  justOne: false
+  next();
+});
+/* Vendor_Schema.virtual('products', {
+ref: 'Product',
+localField: '_id',
+foreignField: 'vendor',
+justOne: false
 }); */
 
 module.exports = mongoose.model('Vendor', Vendor_Schema);

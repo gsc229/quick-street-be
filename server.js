@@ -15,8 +15,6 @@ dotenv.config({ path: './config/config.env' });
 // Connect to database
 connectDB();
 
-const logger = require('./middleware/logger');
-
 // Route files
 const auth = require('./routes/auth');
 const vendors = require('./routes/vendors');

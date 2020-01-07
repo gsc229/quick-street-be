@@ -20,11 +20,6 @@ const Product_Schema = new mongoose.Schema({
         type: Number,
         required: [true, 'Please add a price for this product']
     },
-    product_images: {
-        type: [String],
-        default: ['quickstreet/lpqqwjjk6w27ijiqseod']
-    }
-    ,
     createdAt: {
         type: Date,
         default: Date.now

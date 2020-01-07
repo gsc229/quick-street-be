@@ -15,8 +15,6 @@ dotenv.config({ path: './config/config.env' });
 // Connect to database
 connectDB();
 
-const logger = require('./middleware/logger');
-
 // Route files
 const auth = require('./routes/auth');
 const vendors = require('./routes/vendors');
@@ -45,6 +43,7 @@ app.use(cors());
 app.use(fileupload());
 
 // Mount Routers
+app.use('/api/v1.0/auth', auth);
 app.use('/api/v1.0/vendors', vendors);
 app.use('/api/v1.0/products', products);
 app.use('/api/v1.0/auth', auth);

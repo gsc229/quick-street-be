@@ -3,23 +3,35 @@ const asyncHandler = require('./async');
 const ErrorResponse = require('../utils/errorResponse');
 const Vendor = require('../models/Vendor');
 
-// vendor Auth handler
-const auth = asyncHandler(async (req, res, next) => {
-  const token = req.header('Authorization').replace('Bearer ', '');
-  const data = jwt.verify(token, process.env.JWT_KEY);
+/// Protect routes
+exports.protect = asyncHandler(async (req, res, next) => {
+  let token;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    // Set token from Bearer token in header
+    token = req.headers.authorization.split(' ')[1];
+    // Set token from cookie
+  }
+  // else if (req.cookies.token) {
+  //   token = req.cookies.token;
+  // }
+
+  // Make sure token exists
+  if (!token) {
+    return next(new ErrorResponse('Not authorized to access this route', 401));
+  }
+
   try {
-    const vendor = await Vendor.findOne({
-      _id: data._id,
-      'tokens.token': token
-    });
-    if (!vendor) {
-      throw new Error();
-    }
-    req.vendor = vendor;
-    req.token = token;
+    // Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    req.vendor = await Vendor.findById(decoded.id);
+
     next();
-  } catch (error) {
-    res.status(401).send({ error: 'Not authorized to access this resource' });
+  } catch (err) {
+    return next(new ErrorResponse('Not authorized to access this route', 401));
   }
 });
-module.exports = auth;

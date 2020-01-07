@@ -80,8 +80,12 @@ const Vendor_Schema = new mongoose.Schema(
       state: String,
       zipcode: String,
       country: String
+<<<<<<< HEAD
     }
 
+=======
+    },
+>>>>>>> ab6174f12e1625057c485975777e3f93b8028e07
   },
   {
     toJSON: { virtuals: true },
@@ -176,8 +180,11 @@ Vendor_Schema.pre('remove', async function (next) {
   })
   next();
 });
+<<<<<<< HEAD
 
 // Reverse populate with virtuals 
+=======
+>>>>>>> ab6174f12e1625057c485975777e3f93b8028e07
 /* Vendor_Schema.virtual('products', {
   ref: 'Product',
   localField: '_id',

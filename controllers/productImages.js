@@ -6,7 +6,7 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 
 
-// @desc    Get products
+// @desc    Get product images
 // @route   GET /api/v1.0/product-images/:productId
 // @route   GET /api/v1.0/vendors/:vendorId/products
 // @access  Public
@@ -41,5 +41,27 @@ exports.getAllImages = asyncHandler(async (req, res, next) => {
     res.status(200).json(res.advancedResults)
   }
 
-
 })
+
+// @desc    Create a product-image object
+// @route   POST /api/v1.0/product-images/:productId
+// @access  Private
+exports.addPost = asyncHandler(async (req, res, next) => {
+
+  req.body.productImage = req.params.vendorId;
+  console.log('Creating new post from vendorId:', req.body.vendor);
+  const vendor = await Vendor.findById(req.params.vendorId)
+  if (!vendor) {
+    return next(
+      new ErrorResponse(`No vendor with the id of ${req.params.vendorId}`),
+      404
+    );
+  }
+
+  const post = await Post.create(req.body);
+  res.status(200).json({
+    success: true,
+    data: post
+  })
+
+});

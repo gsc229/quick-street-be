@@ -181,6 +181,10 @@ Vendor_Schema.pre('remove', async function (next) {
   await this.model('Product').deleteMany({
     vendor: this._id
   });
+  console.log(`Product Images being deleted from vendor ${this._id}`);
+  await this.model('ProductImage').deleteMany({
+    vendor: this._id
+  });
   next();
 });
 

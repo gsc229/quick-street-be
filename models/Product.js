@@ -31,4 +31,13 @@ const Product_Schema = new mongoose.Schema({
     }
 });
 
+
+Product_Schema.pre('remove', async function (next) {
+    console.log(`Product images being deleted from product: ${this._id}`);
+    await this.model('ProductImage').deleteMany({
+        product: this._id
+    });
+    next();
+});
+
 module.exports = mongoose.model('Product', Product_Schema);

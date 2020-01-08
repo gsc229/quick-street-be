@@ -23,6 +23,9 @@ const Vendor_Schema = new mongoose.Schema(
       minlength: 6,
       select: false
     },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
+    
     phone: {
       type: String
     },
@@ -67,7 +70,8 @@ const Vendor_Schema = new mongoose.Schema(
       ]
     },
     created_at: {
-      type: Date
+      type: Date,
+      default: Date.now
     },
     address: {
       type: String

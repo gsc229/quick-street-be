@@ -84,10 +84,22 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
             404
         );
     }
-    product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true
-    })
+    // product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    //     new: true,
+    //     runValidators: true
+    // })
+
+    // Make sure vendor is product owner
+    // if(product.vendor.toString() !== req.vendor.id) {
+    //     return next(
+    //         new ErrorResponse(`Vendor ${req.params.id} is not authorized to update this product`)
+    //     );
+    // }
+
+    // product = await Product.findOneAndUpdate(req.params.id, req.body, {
+    //     new: true,
+    //     runValidators: true
+    // })
 
     res.status(200).json({
         success: true,

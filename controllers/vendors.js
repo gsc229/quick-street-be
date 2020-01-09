@@ -79,7 +79,7 @@ exports.deleteVendor = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Get vendors within a radius
-// @route   GET /api/v1.0/vendors/raduis/:zipcode/:distance
+// @route   GET /api/v1.0/vendors/radius/:zipcode/:distance
 // @access  Private
 exports.getVendorsInRadius = asyncHandler(async (req, res, next) => {
   console.log('req params', req.params);

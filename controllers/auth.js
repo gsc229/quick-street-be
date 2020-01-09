@@ -14,7 +14,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     email,
     password,
     business_name,
-    address
+    address,
   });
 
   sendTokenResponse(vendor, 200, res);
@@ -96,6 +96,7 @@ const sendTokenResponse = (vendor, statusCode, res) => {
     .cookie('token', token, options)
     .json({
       success: true,
+      id: vendor.id,
       token
     });
 };

@@ -1,4 +1,4 @@
-# Quickst App v1.0
+# Market avenue App v1.0
 
 ![](images/quickstlogo.png)
 

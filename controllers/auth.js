@@ -94,7 +94,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   console.log('reset token', resetToken);
 
   // Create reset URL
-  const resetUrl = `${req.protocol}://${req.get('host')}/api/v1.0/resetpassword/${resetToken}`;
+  const resetUrl = `${req.protocol}://${req.get('host')}/api/v1.0/auth/resetpassword/${resetToken}`;
 
   const message = `You are receiving this email because you or (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetUrl}`; //include the front end link here 
 
@@ -121,6 +121,31 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     data: vendor
   });
 
+});
+
+// @desc      Reset password
+// @route     PUT/api/v1/auth/resetpassword/:resettoken
+// @access    Public
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+  // Get hashed token
+  const resetPasswordToken = crypto.createHash('sha256').update(req.params.resettoken).digest('hex');
+
+  const vendor = await Vendor.findOne({
+    resetPasswordToken,
+    resetPasswordExpire: { $gt: Date.now() }
+  });
+
+  if(!vendor) {
+    return next(new ErrorResponse('Invalid token', 400));
+  }
+
+  // Set new password
+  vendor.password = req.body.password;
+  vendor.resetPasswordToken = undefined;
+  vendor.resetPasswordExpire = undefined;
+  await vendor.save();
+
+sendTokenResponse(vendor, 200, res)
 });
 
 // Get token from model, create cookie and send response

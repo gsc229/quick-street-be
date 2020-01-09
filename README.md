@@ -1,8 +1,8 @@
 Quickstlabs App v1.0
 
-#### 1️⃣ Backend delpoyed at https://quickstlabs.herokuapp.com/
+Backend delpoyed at https://quickstlabs.herokuapp.com/
 
-## 1️⃣ Getting started
+Getting started
 
 To get the server running locally:
 
@@ -12,7 +12,7 @@ To get the server running locally:
     npm run test to start server using testing environment
 
 
-### Backend framework Express
+Backend framework Express
 
 Using Express...
 

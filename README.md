@@ -1,36 +1,28 @@
-🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline. Feel free to add your own flare to it.
+Quickstlabs App v1.0
 
-🚫 The numbers 1️⃣ through 3️⃣ next to each item represent the week that part of the docs needs to be comepleted by.  Make sure to delete the numbers by the end of Labs.
-
-🚫 Each student has a required minimum number of meaningful PRs each week per the rubric.  Contributing to docs does NOT count as a PR to meet your weekly requirements.
-
-# API Documentation
-
-#### 1️⃣ Backend delpoyed at [🚫name service here](🚫add URL here) <br>
+#### 1️⃣ Backend delpoyed at https://quickstlabs.herokuapp.com/
 
 ## 1️⃣ Getting started
 
 To get the server running locally:
 
-🚫 adjust these scripts to match your project
+    Clone this repo
+    npm install to install all required dependencies
+    npm run server to start the local server
+    npm run test to start server using testing environment
 
-- Clone this repo
-- **yarn install** to install all required dependencies
-- **yarn server** to start the local server
-- **yarn test** to start server using testing environment
 
-### Backend framework goes here
+### Backend framework Express
 
-🚫 Why did you choose this framework?
+Using Express...
 
--    Point One
--    Point Two
--    Point Three
--    Point Four
+    made it fast and easy to set up
+    allowed us to create Restful API
+    made it easy to connect to mongooseDB
+    made it easy to incorporate middleware
+
 
 ## 2️⃣ Endpoints
-
-🚫This is a placeholder, replace the endpoints, access controll, and descriptioin to match your project
 
 #### Organization Routes
 

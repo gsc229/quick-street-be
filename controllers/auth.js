@@ -97,6 +97,7 @@ const sendTokenResponse = (vendor, statusCode, res) => {
     .cookie('token', token, options)
     .json({
       success: true,
+      id: vendor.id,
       token
     });
 };

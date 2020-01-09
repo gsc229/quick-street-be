@@ -14,7 +14,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     email,
     password,
     business_name,
-    address,
+    address
   });
 
   sendTokenResponse(vendor, 200, res);

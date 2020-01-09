@@ -55,6 +55,7 @@ exports.addProduct = asyncHandler(async (req, res, next) => {
 
     req.body.vendor = req.params.vendorId;
     console.log('Creating new product from vendorId:', req.body.vendor);
+
     const vendor = await Vendor.findById(req.params.vendorId)
     if (!vendor) {
         return next(
@@ -62,6 +63,13 @@ exports.addProduct = asyncHandler(async (req, res, next) => {
             404
         );
     }
+
+    // Make sure vendor is product owner -- need to change structure if we want to add ownership
+    // if(product.vendor.toString() !== req.vendor.id) {
+    //     return next(
+    //         new ErrorResponse(`Vendor ${req.vendor.id} is not authorized to add a product`)
+    //     );
+    // }
 
     const product = await Product.create(req.body);
     res.status(200).json({

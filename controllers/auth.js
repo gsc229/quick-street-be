@@ -95,6 +95,23 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc      Update vendor password
+// @route     PUT /api/v1/auth/updatepassword
+// @access    Private
+// exports.updatePassword = asyncHandler(async (req, res, next) => {
+//   const vendor = await (await Vendor.findById(req.vendor.id)).isSelected('+password');
+
+//   // Check current password
+//   if(!(await vendor.matchPassword(req.body.currentPassword)) {
+//     return next(new ErrorResponse('Password is incorrect'))
+//   })
+
+//   res.status(200).json({
+//     success: true,
+//     data: vendor
+//   });
+// });
+
 // @desc      Forgot password
 // @route     POST /api/v1/auth/forgotpassword
 // @access    Public

@@ -1,4 +1,4 @@
-# Quickstlabs App v1.0
+# Quickst App v1.0
 
 <p align="center">
     <img src="#"

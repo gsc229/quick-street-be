@@ -23,6 +23,8 @@ const Vendor_Schema = new mongoose.Schema(
       minlength: 6,
       select: false
     },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
     phone: {
       type: String
     },
@@ -67,7 +69,8 @@ const Vendor_Schema = new mongoose.Schema(
       ]
     },
     created_at: {
-      type: Date
+      type: Date,
+      default: Date.now
     },
     address: {
       type: String
@@ -105,13 +108,13 @@ Vendor_Schema.pre('save', async function (next) {
     next();
   }
 
-  const salt = await bcrypt.genSalt(10);
+  const salt = await bcrypt.genSalt(10); //takes in a number of rounds for protection
   this.password = await bcrypt.hash(this.password, salt);
 });
 
 // Sign JWT and return
 Vendor_Schema.methods.getSignedJwtToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, { 
     expiresIn: process.env.JWT_EXPIRE
   });
 };

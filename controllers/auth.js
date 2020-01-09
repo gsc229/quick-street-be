@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const Vendor = require('../models/Vendor');
@@ -25,7 +26,7 @@ exports.register = asyncHandler(async (req, res, next) => {
 exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
-  // Validate emil & password
+  // Validate email & password
   if (!email || !password) {
     return next(new ErrorResponse('Please provide an email and password', 400));
   }
@@ -34,14 +35,14 @@ exports.login = asyncHandler(async (req, res, next) => {
   const vendor = await Vendor.findOne({ email }).select('+password');
 
   if (!vendor) {
-    return next(new ErrorResponse('Invalid credentials', 401));
+    return next(new ErrorResponse('Invalid email credentials', 401)); //change back to "invalid credential once fully tested"
   }
 
   // Check if password matches
   const isMatch = await vendor.matchPassword(password);
 
   if (!isMatch) {
-    return next(new ErrorResponse('Invalid credentials for password', 401));
+    return next(new ErrorResponse('Invalid password credentials', 401)); //change back to "invalid credential once fully tested"
   }
 
   sendTokenResponse(vendor, 200, res);
@@ -83,8 +84,8 @@ const sendTokenResponse = (vendor, statusCode, res) => {
   const options = {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
-    ),
-    httpOnly: true
+    ), //expires in 30 days from this time
+    httpOnly: true //only availbale on client side script
   };
 
   if (process.env.NODE_ENV === 'production') {

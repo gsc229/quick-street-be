@@ -16,10 +16,7 @@ exports.getAllVendors = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1.0/vendors/:id
 // @access  Private
 exports.getVendor = asyncHandler(async (req, res, next) => {
-  const vendor = await Vendor.findById(req.params.id).populate({
-    path: 'products',
-    select: 'name price product_images'
-  });
+  const vendor = await Vendor.findById(req.params.id);
 
   if (!vendor) {
     return next(

@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const Vendor = require('../models/Vendor');
@@ -83,7 +84,7 @@ const sendTokenResponse = (vendor, statusCode, res) => {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
     ), //expires in 30 days from this time
-    httpOnly: true
+    httpOnly: true //only availbale on client side script
   };
 
   if (process.env.NODE_ENV === 'production') {

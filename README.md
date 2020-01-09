@@ -1,4 +1,4 @@
-# Quickstlabs App v1.0
+# Quickst App v1.0
 
 ![](images/quickstlogo.png)
 

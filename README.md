@@ -337,13 +337,15 @@ In order for the app to function correctly, the user must set up their own envir
 
 create a .env file that includes the following:
 
-🚫 These are just examples, replace them with the specifics for your app
+GEOCODER_PROVIDER=mapquest
+GEOCODER_API_KEY=some api key example 10934i230w9weorjwelk
+
+JWT_SECRET=come up with a secret
+JWT_EXPIRE=30d
 
 _ STAGING_DB - optional development db for using functionality not available in SQLite
 _ NODE\*ENV - set to "development" until ready for "production"
 
-- JWT*SECRET - you can generate this by using a python shell and running import random''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&amp;*(-_=+)') for i in range(50)])
-  _ SENDGRID_API_KEY - this is generated in your Sendgrid account \* stripe_secret - this is generated in the Stripe dashboard
 
 ## Contributing
 

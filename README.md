@@ -4,7 +4,29 @@
 
 ##### Backend delpoyed at https://quickstlabs.herokuapp.com/
 
-## Getting started
+
+#### Contents:
+#####  [Getting started](#getting-started)
+#####  [Backend Framework](#backend-framework)
+#####  [Endpoints](#endpoints)
+  - [Authentication Routes](#authentication-routes)
+  - [Vendor Routes](#vendor-routes)
+  - [Product Routes](#product-routes)
+  - [Product Images Routes](#product-images-routes)
+  - [Bulletin Post Routes](#bulletin-post-routes)
+  - [Advanced Filtering](#advanced-filtering)
+
+##### [Data Model](#data-model-mongoose-schemas)
+  - [Vendors](#vendors)
+  - [Products](#products)
+  - [Product Images](#product-images)
+  - [Bulletin Posts](#bulletin-posts)
+
+##### [Image Management](#image-management)
+
+
+## Getting started 
+[top](#contents)
 
 To get the server running locally:
 
@@ -14,7 +36,7 @@ To get the server running locally:
 - **npm run test** to start server using testing environment
 
 ### Backend Framework **Express**
-
+[top](#contents)
 Using Express...
 
 - made it fast and easy to set up
@@ -22,9 +44,9 @@ Using Express...
 - made it easy to connect to mongooseDB
 - made it easy to incorporate middleware
 
-## Endpoints
+## Endpoints 
 #### Online API documentation: https://quickstlabs.herokuapp.com/
-
+[top](#contents)
 #### Base URL for endpoints: https://quickstlabs.herokuapp.com/api/v1.0
 #### Token usage: 
  - If tokens are sent in headers, concatenate the word 'Bearer ' to the front
@@ -44,7 +66,7 @@ Using Express...
 | PUT    | `/auth/resetpassword/:token`| requires token |     Allows a vendor to reset passoword                                               |
 | PUT    | `/auth/updatedetails`| requires token | Allows a vendor to update details |
 | PUT    | `/auth/updatepassword`| requires token | Allows a vendor to update password |
-
+[top](#contents)
 
 #### Vendor Routes
 
@@ -57,7 +79,7 @@ Using Express...
 | GET    | `/vendors/:userId/posts` | public | Returns all posts of a single vendor |
 | PUT    | `/vendors/:vendorId`        | token | Update vendor's info    |
 | DELETE | `/vendors/:vendorId`        | token | Delete a vendor. Cascades to all of a vendor's products and images |
-
+[top](#contents)
 #### Product Routes
 
 | Method | Endpoint                | Access Control      | Description                                        |
@@ -68,7 +90,7 @@ Using Express...
 | POST   | `/vendors/:vendorId/products` | token | Creates a new product for a vendor|
 | PUT    | `/products/:productId` | token | Edits a product of a vendor|
 | DELETE | `/products/:userId`    | token |   Deletes a product of a vendor. Cascades to all images attached to a product | 
-
+[top](#contents)
 #### Product Images Routes
 
 | Method | Endpoint                | Access Control | Description                                  |
@@ -78,7 +100,7 @@ Using Express...
 | GET | `/vendors/:vendorId/product-images` | public | Returns all the images connected to a vendor |
 | POST    | `/products/:productId/product-images` | token | Creates a new image returned from a Cloudinary upload widget (see image management for more details |
 | DELETE | `/product-images/:imageId`    | token | Deletes an image |
-
+[top](#contents)
 #### Bulletin Post Routes
 
 | Method | Endpoint                | Access Control      | Description                                        |
@@ -89,11 +111,11 @@ Using Express...
 | POST   | `/vendors/:vendorId/posts` | token | Creates a new vendor post |
 | PUT    | `/posts/:postId`        | token | Edit a post |
 | DELETE | `/posts/:postId`        | token | Delete a post |   
-
+[top](#contents)
 #### Advanced Filtering
  Advanced filtering is available on GET /vendors, GET /products & GET /product-images endpoints. The examples below will mostly refer to the Vendor resource, however, the all filtering methods are availible on the Products and ProductImages resources as well. Refer to the **Data Model** section of this documentation to know which fileds you can filter on a resource.  
 
- | Method | Endpoint                | Access Control | Description                                  |
+| Method | Endpoint                | Access Control | Description                                  |
 | ------ | ----------------------- | -------------- | -------------------------------------------- |
 | GET    | `/vendors?location.state=PA` | public | Returns all vedors from Pennsylvania |
 | GET    | `/vendors?vendor_category[in]=Spreads` | public      | Some fileds in Mongoose Schema objects are 'enumerated', meaning the possible values of the field are predefined.If the field is an 'enum' field, you need to add field[in]=some-pre-defined-value Look at the Data Models to see which fields are 'enum'|
@@ -102,15 +124,15 @@ Using Express...
 | GET    | `/vendors?sort=business_name&select=business_name` | public | Return a query that is sorted by using the 'sort' method. By default, sorting is done in ascending (A-Z, 0-9) order. However, if you want to sort descending, simply prepend a '-' (minus sign) to the field--in this example _sort=-business\_name_  |
 | GET    | `/vendors?select=business_name&limit=5&page=2` | public | Queried responses are returned with a pagination object. You can specify the limit per page and the page number of the results. Retruns the five vendors' business names on page 2 (the 6th-10th result)  |
 | GET    | `/products?select=name,price&price[gt]=500` | public | Comparison operators: **[gt]** (greater than), **[gte]** (greater than or equal to), **[lt]** (less than), **[lte]** (less than or equal to). Returns products with prices greater than 500, selecting only name and price fields   |
-
+[top](#contents)
 
  
 
 # Data Model (Mongoose Schemas)
 
+[top](#contents)
 
-
-#### 2️⃣ VENDORS
+#### VENDORS
 
 ---
 
@@ -201,7 +223,7 @@ Using Express...
 }
 
 ```
-
+[top](#contents)
 #### PRODUCTS
 
 ---
@@ -238,8 +260,8 @@ Using Express...
     }
 }
 ```
-
-#### PRODUCT_IMAGES
+[top](#contents)
+#### PRODUCT IMAGES
 
 ---
 
@@ -277,8 +299,8 @@ Using Express...
 }
 
 ```
-
-#### POSTS
+[top](#contents)
+#### BULLETIN POSTS
 
 ---
 
@@ -304,7 +326,7 @@ Using Express...
 }
 
 ```
-
+[top](#contents)
 ## 2️⃣ Actions
 
 🚫 This is an example, replace this with the actions that pertain to your backend
@@ -330,7 +352,7 @@ Using Express...
 `updateUser(userId, changes object)` -> Updates a single user by ID.
 
 `deleteUser(userId)` -> deletes everything dependent on the user
-
+[top](#contents)
 ## 3️⃣ Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
@@ -346,13 +368,13 @@ JWT_EXPIRE=30d
 _ STAGING_DB - optional development db for using functionality not available in SQLite
 _ NODE\*ENV - set to "development" until ready for "production"
 
-
+[top](#contents)
 ## Contributing
 
 When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
 
 Please note we have a [code of conduct](./code_of_conduct.md). Please follow it in all your interactions with the project.
-
+[top](#contents)
 ### Issue/Bug Request
 
 **If you are having an issue with the existing project code, please submit a bug report under the following guidelines:**
@@ -361,17 +383,17 @@ Please note we have a [code of conduct](./code_of_conduct.md). Please follow it 
 - Check to see if the issue has recently been fixed by attempting to reproduce the issue using the latest master branch in the repository.
 - Create a live example of the problem.
 - Submit a detailed bug report including your environment & browser, steps to reproduce the issue, actual and expected outcomes, where you believe the issue is originating from, and any potential solutions you have considered.
-
+[top](#contents)
 ### Feature Requests
 
 We would love to hear from you about new features which would improve this app and further the aims of our project. Please provide as much detail and information as possible to show us why you think your new feature should be implemented.
-
+[top](#contents)
 ### Pull Requests
 
 If you have developed a patch, bug fix, or new feature that would improve this app, please submit a pull request. It is best to communicate your ideas with the developers first before investing a great deal of time into a pull request to ensure that it will mesh smoothly with the project.
 
 Remember that this project is licensed under the MIT license, and by submitting a pull request, you agree that your work will be, too.
-
+[top](#contents)
 #### Pull Request Guidelines
 
 - Ensure any install or build dependencies are removed before the end of the layer when doing a build.
@@ -379,11 +401,11 @@ Remember that this project is licensed under the MIT license, and by submitting 
 - Ensure that your code conforms to our existing code conventions and test coverage.
 - Include the relevant issue number, if applicable.
 - You may merge the Pull Request in once you have the sign-off of two other developers, or if you do not have permission to do that, you may request the second reviewer to merge it for you.
-
+[top](#contents)
 ### Attribution
 
 These contribution guidelines have been adapted from [this good-Contributing.md-template](https://gist.github.com/PurpleBooth/b24679402957c63ec426).
-
+[top](#contents)
 ## Documentation
 
 See [Frontend Documentation](https://github.com/Lambda-School-Labs/quick-street-fe/blob/master/README.md) for details on the fronend of our project.

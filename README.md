@@ -26,41 +26,201 @@ Using Express...
 
 # Data Model
 
-🚫This is just an example. Replace this with your data model
 
-#### 2️⃣ ORGANIZATIONS
 
----
-
-```
-{
-  id: UUID
-  name: STRING
-  industry: STRING
-  paid: BOOLEAN
-  customer_id: STRING
-  subscription_id: STRING
-}
-```
-
-#### USERS
+#### 2️⃣ VENDORS
 
 ---
 
 ```
 {
-  id: UUID
-  organization_id: UUID foreign key in ORGANIZATIONS table
-  first_name: STRING
-  last_name: STRING
-  role: STRING [ 'owner', 'supervisor', 'employee' ]
-  email: STRING
-  phone: STRING
-  cal_visit: BOOLEAN
-  emp_visit: BOOLEAN
-  emailpref: BOOLEAN
-  phonepref: BOOLEAN
+    email: {
+      type: String,
+      required: [true, 'Please add an email'],
+      unique: true,
+      lowercase: true,
+      match: [
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        'Please add a valid email'
+      ]
+    },
+    password: {
+      type: String,
+      required: [true, 'Please add a password'],
+      minlength: 6,
+      select: false
+    },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
+    phone: {
+      type: String
+    },
+    business_name: {
+      type: String,
+      unique: true
+    },
+    hours: {
+      type: String,
+      default: 'n/a'
+    },
+    days_of_week: {
+      type: String,
+      default: 'n/a'
+    },
+    slug: String,
+    description: {
+      type: String
+    },
+    avatar: {
+      type: String,
+      default: 'no-photo.jpg'
+    },
+    vendor_banner: {
+      type: String,
+      default: 'no-photo.jpg'
+    },
+    vendor_category: {
+      type: [String],
+      enum: [
+        'Vegetables',
+        'Fruits',
+        'Breads',
+        'Baked goods',
+        'Beverages',
+        'Spreads',
+        'Other'
+      ]
+    },
+    created_at: {
+      type: Date,
+      default: Date.now
+    },
+    address: {
+      type: String
+    },
+    //vendor location
+    location: {
+      // GeoJSON Point
+      type: {
+        type: String,
+        enum: ['Point']
+      },
+      coordinates: {
+        type: [Number],
+        index: '2dsphere'
+      },
+      formattedAddress: String,
+      street: String,
+      city: String,
+      state: String,
+      zipcode: String,
+      country: String
+    }
+  }
 }
+```
+
+#### PRODUCTS
+
+---
+
+```
+{
+    name: {
+        type: String,
+        trim: true,
+        required: [true, 'Please add a product name']
+    },
+    description: {
+        type: String,
+    },
+    category: {
+        type: String,
+    },
+    diet: {
+        type: [String],
+        enum: ['Gluten Free', 'Vegetarian', 'Vegan', 'Keto', 'Dairy Free']
+    },
+    price: {
+        type: Number,
+        required: [true, 'Please add a price for this product']
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    vendor: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Vendor',
+        required: true
+    }
+}
+```
+
+#### PRODUCT_IMAGES
+
+---
+
+```
+{
+  public_id: String,
+  version: Number,
+  signature: String,
+  width: Number,
+  height: Number,
+  format: String,
+  resource_type: String,
+  created_at: String,
+  tags: [String],
+  bytes: Number,
+  type: String,
+  etag: String,
+  placeholder: Boolean,
+  url: String,
+  secure_url: String,
+  access_mode: String,
+  original_filename: String,
+  path: String,
+  thumbnail_url: String,
+  product: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Product',
+    required: true
+  },
+  vendor: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Vendor',
+    required: true
+  }
+}
+
+```
+
+#### POSTS
+
+---
+
+```
+{
+    title: {
+        type: String,
+        trim: true,
+        required: [true, 'Please add a title to your post']
+    },
+    description: {
+        type: String,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    vendor: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Vendor',
+        required: true
+    }
+}
+
 ```
 
 ## 2️⃣ Actions

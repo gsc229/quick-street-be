@@ -25,17 +25,25 @@ Using Express...
 ## Endpoints
 
 #### Base URL: https://quickstlabs.herokuapp.com/api/v1.0
+#### Token usage: 
+ - If tokens are sent in headers, concatenate the word 'Bearer '
+    -> example:
+     Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTc3MWRmNzY1YTZiNmU1YTU4Mzc
+ - If tokens are sent in a url parameter don't concatentate 'Bearer '
+
 
 #### Authentication Routes
 
 | Method | Endpoint                | Access Control      | Description                                        |
 | ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| GET    | `/users/current`        | all users           | Returns info for the logged in user.               |
-| GET    | `/users/org/:userId`    | owners, supervisors | Returns all users for an organization.             |
-| GET    | `/users/:userId`        | owners, supervisors | Returns info for a single user.                    |
-| POST   | `/users/register/owner` | none                | Creates a new user as owner of a new organization. |
-| PUT    | `/users/:userId`        | owners, supervisors |                                                    |
-| DELETE | `/users/:userId`        | owners, supervisors |  
+| POST    | `/auth/register`        | public           | Register a vendor               |
+| POST    | `/auth/login`    | public| Vendor login             |
+| GET    | `/auth/me`        | token | Returns info for a single user.                    |
+| POST   | `/auth/forgotpassword` | registered email                | Sends password-reset token to a registered email |
+| PUT    | `/auth/resetpassword/:token`| requires token |     Allows a vendor to reset passoword                                               |
+| PUT    | `/auth/updatedetails`| requires token | Allows a vendor to reset update details |
+| PUT    | `/auth/updatepassword`| requires token | Allows a vendor to update password |
+
 
 #### Vendor Routes
 

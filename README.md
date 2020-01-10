@@ -27,7 +27,7 @@ Using Express...
 
 #### Base URL for endpoints: https://quickstlabs.herokuapp.com/api/v1.0
 #### Token usage: 
- - If tokens are sent in headers, concatenate the word 'Bearer '
+ - If tokens are sent in headers, concatenate the word 'Bearer ' to the front
     -> example:
      Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTc3MWRmNzY1YTZiNmU1YTU4Mzc
  - If tokens are sent in a url parameter don't concatentate 'Bearer '
@@ -42,7 +42,7 @@ Using Express...
 | GET    | `/auth/me`        | token | Returns info for a single user.                    |
 | POST   | `/auth/forgotpassword` | registered email                | Sends password-reset token to a registered email |
 | PUT    | `/auth/resetpassword/:token`| requires token |     Allows a vendor to reset passoword                                               |
-| PUT    | `/auth/updatedetails`| requires token | Allows a vendor to reset update details |
+| PUT    | `/auth/updatedetails`| requires token | Allows a vendor to update details |
 | PUT    | `/auth/updatepassword`| requires token | Allows a vendor to update password |
 
 
@@ -76,8 +76,8 @@ Using Express...
 | GET    | `/product-images` | public | Returns all product images of all vendors |
 | GET    | `/products/:productId/product-images` | public | Returns all the images connected to a product |
 | GET | `/vendors/:vendorId/product-images` | public | Returns all the images connected to a vendor |
-| POST    | `/products/:productId/product-images` | token | Creates a new image object for a particular product. Provide the vendor id in the body of the request |
-| DELETE | `/product-images/:imageId`    | token |   Deletes an image |
+| POST    | `/products/:productId/product-images` | token | Creates a new image returned from a Cloudinary upload widget (see image management for more details |
+| DELETE | `/product-images/:imageId`    | token | Deletes an image |
 
 #### Bulletin Post Routes
 
@@ -90,9 +90,23 @@ Using Express...
 | PUT    | `/posts/:postId`        | token | Edit a post |
 | DELETE | `/posts/:postId`        | token | Delete a post |   
 
+#### Advanced Filtering
+ Advanced filtering is available on GET /vendors, GET /products & GET /product-images endpoints. The examples below will mostly refer to the Vendor resource, however, the all filtering methods are availible on the Products and ProductImages resources as well. Refer to the **Data Model** section of this documentation to know which fileds you can filter on a resource.  
+
+ | Method | Endpoint                | Access Control | Description                                  |
+| ------ | ----------------------- | -------------- | -------------------------------------------- |
+| GET    | `/vendors?location.state=PA` | public | Returns all vedors from Pennsylvania |
+| GET    | `/vendors?vendor_category[in]=Spreads` | public      | Some fileds in Mongoose Schema objects are 'enumerated', meaning the possible values of the field are predefined.If the field is an 'enum' field, you need to add field[in]=some-pre-defined-value Look at the Data Models to see which fields are 'enum'|
+| GET    | `/vendors?location.state=PA&vendor_category[in]=Spreads` | public | Use the '&' operator to chain queries together. Returns all vedors from Pennsylvania who sell spreads |
+| GET    | `/vendors?vendor_category[in]=Spreads&location.state=PA&select=business_name,avatar` | public      | Rather than returning an entire object, 'select' alows you to specify which fields you want returned. This query returns only the business name and avatar of all vendors selling spreads in Pennsylvania |
+| GET    | `/vendors?sort=business_name&select=business_name` | public | Return a query that is sorted by using the 'sort' method. By default sorting is done in ascending (A-Z, 0-9). However, if you want to sort descending, simply prepend a '-' (minus sign) to the field--in this example _sort=-business\_name_  |
+| GET    | `/vendors?select=business_name&limit=5&page=2` | public | Queried responses are returned with a pagination object. You can specify the limit per page and the page number of the results. Retruns the five vendors' business names on page 2 (the 6th-10th result)  |
+| GET    | `/products?select=name,price&price[gt]=500` | public | Comparison operators: **[gt]** (greater than), **[gte]** (greater than or equal to), **[lt]** (less than), **[lte]** (less than or equal to). Returns products with prices greater than 500, selecting only name and price fields   |
 
 
-# Data Model
+ 
+
+# Data Model (Mongoose Schemas)
 
 
 
@@ -184,8 +198,8 @@ Using Express...
       zipcode: String,
       country: String
     }
-  }
 }
+
 ```
 
 #### PRODUCTS

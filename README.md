@@ -23,8 +23,9 @@ Using Express...
 - made it easy to incorporate middleware
 
 ## Endpoints
+#### Online API documentation: https://quickstlabs.herokuapp.com/
 
-#### Base URL: https://quickstlabs.herokuapp.com/api/v1.0
+#### Base URL for endpoints: https://quickstlabs.herokuapp.com/api/v1.0
 #### Token usage: 
  - If tokens are sent in headers, concatenate the word 'Bearer '
     -> example:
@@ -49,9 +50,12 @@ Using Express...
 
 | Method | Endpoint                | Access Control | Description                                  |
 | ------ | ----------------------- | -------------- | -------------------------------------------- |
-| GET    | `/organizations/:orgId` | all users      | Returns the information for an organization. |
-| PUT    | `/organizatoins/:orgId` | owners         | Modify an existing organization.             |
-| DELETE | `/organizations/:orgId` | owners         | Delete an organization.                      |
+| GET    | `/vendors` | public      | Returns the public information for a vendor |
+| GET    | `/vendors/:vendorId` | public       | Returns public info. of a single vendor|
+| GET | `/vendors/radius/:zipcode/:distance` | public | Returns public info. of vendors within a specified radius (in miles) of a specified zipcode |
+| GET    | `/vendors` | public      | Returns the public information for a vendor |
+| PUT    | `/vendors/:vendorId`        | token | Update vendor's info    |
+| DELETE | `/vendors/:vendorId`        | token | Delete a vendor   |
 
 #### Product Routes
 

@@ -53,39 +53,42 @@ Using Express...
 | GET    | `/vendors` | public      | Returns the public information for a vendor |
 | GET    | `/vendors/:vendorId` | public       | Returns public info. of a single vendor|
 | GET | `/vendors/radius/:zipcode/:distance` | public | Returns public info. of vendors within a specified radius (in miles) of a specified zipcode |
-| GET    | `/vendors` | public      | Returns the public information for a vendor |
+| GET    | `/vendors/:vendorId/products`| public | Returns product info of all of a single vendor's products |
+| GET    | `/vendors/:userId/posts` | public | Returns all posts of a single vendor |
 | PUT    | `/vendors/:vendorId`        | token | Update vendor's info    |
-| DELETE | `/vendors/:vendorId`        | token | Delete a vendor   |
+| DELETE | `/vendors/:vendorId`        | token | Delete a vendor. Cascades to all of a vendor's products and images |
 
 #### Product Routes
 
 | Method | Endpoint                | Access Control      | Description                                        |
 | ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| GET    | `/users/current`        | all users           | Returns info for the logged in user.               |
-| GET    | `/users/org/:userId`    | owners, supervisors | Returns all users for an organization.             |
-| GET    | `/users/:userId`        | owners, supervisors | Returns info for a single user.                    |
-| POST   | `/users/register/owner` | none                | Creates a new user as owner of a new organization. |
-| PUT    | `/users/:userId`        | owners, supervisors |                                                    |
-| DELETE | `/users/:userId`        | owners, supervisors |    
+| GET    | `/products`        | public | Returns info for all products |
+| GET    | `/products/:productId`    | public | Returns infor for a single product             |
+| GET    | `/vendors/:vendorId/products`| public | Returns product info of all of a single vendor's products |
+| POST   | `/vendors/:vendorId/products` | token | Creates a new product for a vendor|
+| PUT    | `/products/:productId` | token | Edits a product of a vendor|
+| DELETE | `/products/:userId`    | token |   Deletes a product of a vendor. Cascades to all images attached to a product | 
 
 #### Product Images Routes
 
 | Method | Endpoint                | Access Control | Description                                  |
 | ------ | ----------------------- | -------------- | -------------------------------------------- |
-| GET    | `/organizations/:orgId` | all users      | Returns the information for an organization. |
-| PUT    | `/organizatoins/:orgId` | owners         | Modify an existing organization.             |
-| DELETE | `/organizations/:orgId` | owners         | Delete an organization.                      |
+| GET    | `/product-images` | public | Returns all product images of all vendors |
+| GET    | `/products/:productId/product-images` | public | Returns all the images connected to a product |
+| GET | `/vendors/:vendorId/product-images` | public | Returns all the images connected to a vendor |
+| POST    | `/products/:productId/product-images` | token | Creates a new image object for a particular product. Provide the vendor id in the body of the request |
+| DELETE | `/product-images/:imageId`    | token |   Deletes an image |
 
-#### Post Routes
+#### Bulletin Post Routes
 
 | Method | Endpoint                | Access Control      | Description                                        |
 | ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| GET    | `/users/current`        | all users           | Returns info for the logged in user.               |
-| GET    | `/users/org/:userId`    | owners, supervisors | Returns all users for an organization.             |
-| GET    | `/users/:userId`        | owners, supervisors | Returns info for a single user.                    |
-| POST   | `/users/register/owner` | none                | Creates a new user as owner of a new organization. |
-| PUT    | `/users/:userId`        | owners, supervisors |                                                    |
-| DELETE | `/users/:userId`        | owners, supervisors |    
+| GET    | `/posts`        | public | Returns all posts |
+| GET    | `/posts/:postId` | public | Returns a post by its id |
+| GET    | `/vendors/:userId/posts` | public | Returns all posts of a single vendor |
+| POST   | `/vendors/:vendorId/posts` | token | Creates a new vendor post |
+| PUT    | `/posts/:postId`        | token | Edit a post |
+| DELETE | `/posts/:postId`        | token | Delete a post |   
 
 
 

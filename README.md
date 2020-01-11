@@ -386,7 +386,7 @@ Using Express...
   2. ``` npm install cloudinary-react ```
 
   3. ``` import {Image, CloudinaryContext, Transormations} from 'cloudinary-react' ```
-  4.  Use a CloudianryContext referencing your cloud name, and Image component referencing the publicId of the image, and, if desired, a Transormation 
+  4.  Use a CloudianryContext referencing your cloud name, Image component referencing the publicId of the image, and, if desired, a Transormation 
 
   ```
           
@@ -491,12 +491,15 @@ In order for the app to function correctly, the user must set up their own envir
 create a .env file that includes the following:
 
 GEOCODER_PROVIDER=mapquest
+
 GEOCODER_API_KEY=some api key example 10934i230w9weorjwelk
 
 JWT_SECRET=come up with a secret
+
 JWT_EXPIRE=30d
 
 _ STAGING_DB - optional development db for using functionality not available in SQLite
+
 _ NODE\*ENV - set to "development" until ready for "production"
 
 [top](#contents)

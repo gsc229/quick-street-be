@@ -373,13 +373,9 @@ Using Express...
   We are using a media management platform called Cloudinary:
   **https://cloudinary.com/**
 
-  The structure of our [Product Image schema](#Product-Images) is based on the results.info object recieved upon successfull upload to Cloudinary via the upload widget:
-
-  **https://cloudinary.com/documentation/upload_widget**
-
-  **https://demo.cloudinary.com/uw/#/**
-
-  The Market Avenue API only saves *references* to the images saved on our cloudinary account. Essentially, when you upload an image, you'll need to make two POST requests. The first is with the [upload widget](#the-upload-widget), the second is to the Market Avenue API, `/products/:productId/product-images`, with the body of the request being the results.info object from the Cloudinary POST.  
+  The structure of our [**Product Image schema**](#Product-Images) is based on the results.info object recieved upon successfull upload to Cloudinary via the [**upload widget**](#the-upload-widget):
+ 
+  The Market Avenue API only saves *references* to the images saved on our cloudinary account. Essentially, when you upload an image, you'll need to make two POST requests. The first is with the [**upload widget**](#the-upload-widget), the second is to the Market Avenue API, `/products/:productId/product-images`, with the body of the request being the results.info object from the Cloudinary POST.  
 
 
   There are four main steps to installing and using Cloudinary Image components in the front end React app:
@@ -410,7 +406,13 @@ Using Express...
 
   #### The Upload Widget
 
-  ***example***
+More more resources:
+
+https://cloudinary.com/documentation/upload_widget
+
+https://demo.cloudinary.com/uw/#/
+
+  ***example upload widget***
 
 ```
   const VendorAddProductForm = ({ modal, addProductformCancelHandler }) => {

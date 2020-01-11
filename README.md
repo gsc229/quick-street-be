@@ -6,9 +6,11 @@
 
 
 ### Contents:
-#####  [Getting started](#getting-started)
-#####  [Backend Framework](#backend-framework)
-#####  [Endpoints](#endpoints)
+  [**Getting started**](#getting-started)
+
+  [**Backend Framework**](#backend-framework-express)
+
+  [**Endpoints**](#endpoints)
   - [Authentication Routes](#authentication-routes)
   - [Vendor Routes](#vendor-routes)
   - [Product Routes](#product-routes)
@@ -16,15 +18,16 @@
   - [Bulletin Post Routes](#bulletin-post-routes)
   - [Advanced Filtering](#advanced-filtering)
 
-##### [Data Model](#data-model-mongoose-schemas)
+  [**Data Model**](#data-model-(mongoose-schemas))
   - [Vendors](#vendors)
   - [Products](#products)
   - [Product Images](#product-images)
   - [Bulletin Posts](#bulletin-posts)
 
-##### [Image Management](#image-management)
+  [**Image Management**](#image-management)
+
   - [Cloudinary](#cloudinary)
-  - [Upload Widget](#upload-widget)
+  - [Upload Widget](#the-upload-widget)
 
 
 ## Getting started 
@@ -101,9 +104,13 @@ Using Express...
 | GET    | `/product-images` | public | Returns all product images of all vendors |
 | GET    | `/products/:productId/product-images` | public | Returns all the images connected to a product |
 | GET | `/vendors/:vendorId/product-images` | public | Returns all the images connected to a vendor |
-| POST    | `/products/:productId/product-images` | token | Creates a new image returned from a Cloudinary upload widget (see image management for more details |
+| POST    | `/products/:productId/product-images` | token | Creates a new image from a Cloudinary upload widget results.info object (see image management for more details) |
 | DELETE | `/product-images/:imageId`    | token | Deletes an image |
+
+
 [top](#contents)
+
+
 #### Bulletin Post Routes
 
 | Method | Endpoint                | Access Control      | Description                                        |
@@ -115,7 +122,9 @@ Using Express...
 | PUT    | `/posts/:postId`        | token | Edit a post |
 | DELETE | `/posts/:postId`        | token | Delete a post |   
 
+
 [top](#contents)
+
 #### Advanced Filtering
  Advanced filtering is available on GET /vendors, GET /products & GET /product-images endpoints. The examples below will mostly refer to the Vendor resource, however, all filtering methods are availible on the Products and ProductImages resources as well. Refer to the **Data Model** section of this documentation to know which fileds you can filter on a resource.  
 
@@ -128,6 +137,7 @@ Using Express...
 | GET    | `/vendors?sort=business_name&select=business_name` | public | Return a query that is sorted by using the 'sort' method. By default, sorting is done in ascending (A-Z, 0-9) order. However, if you want to sort descending, simply prepend a '-' (minus sign) to the field--in this example _sort=-business\_name_  |
 | GET    | `/vendors?select=business_name&limit=5&page=2` | public | Queried responses are returned with a pagination object. You can specify the limit per page and the page number of the results. Retruns the five vendors' business names on page 2 (the 6th-10th result)  |
 | GET    | `/products?select=name,price&price[gt]=500` | public | Comparison operators: **[gt]** (greater than), **[gte]** (greater than or equal to), **[lt]** (less than), **[lte]** (less than or equal to). Returns products with prices greater than 500, selecting only name and price fields   |
+
 
 [top](#contents)
 
@@ -338,7 +348,7 @@ Using Express...
   We are using a media management platform called Cloudinary:
   **https://cloudinary.com/**
 
-  The structure of our Product Image schema is based on the results.info object recieved upon successfull upload to Cloudinary with the upload widget:
+  The structure of our Product Image schema is based on the results.info object recieved upon successfull upload to Cloudinary via the upload widget:
 
   **https://cloudinary.com/documentation/upload_widget**
 
@@ -369,7 +379,7 @@ Using Express...
    
   [top](#contents)
 
-  **The Upload Widget**
+  #### The Upload Widget
 
 ```
   const VendorAddProductForm = ({ modal, addProductformCancelHandler }) => {

@@ -18,7 +18,7 @@
   - [Bulletin Post Routes](#bulletin-post-routes)
   - [Advanced Filtering](#advanced-filtering)
 
-  [**Data Model**](#data-model-(mongoose-schemas))
+  [**Data Model**](#data-model-mongoose-schemas)
   - [Vendors](#vendors)
   - [Products](#products)
   - [Product Images](#product-images)
@@ -150,7 +150,7 @@ Using Express...
 [top](#contents)
 
 #### Advanced Filtering
- Advanced filtering is available on GET /vendors, GET /products & GET /product-images endpoints. The examples below will mostly refer to the Vendor resource, however, all filtering methods are availible on the Products and ProductImages resources as well. Refer to the [**Data Model**](#Data-Model-(Mongoose-Schemas)) section of this documentation to know which fileds you can filter on a resource.  
+ Advanced filtering is available on GET /vendors, GET /products & GET /product-images endpoints. The examples below will mostly refer to the Vendor resource, however, all filtering methods are availible on the Products and ProductImages resources as well. Refer to the [**Data Model**](#data-model-mongoose-schemas) section of this documentation to know which fileds you can filter on a resource.  
 
 | Method | Endpoint                | Access Control | Description                                  |
 | ------ | ----------------------- | -------------- | -------------------------------------------- |

@@ -85,6 +85,8 @@ Using Express...
 | PUT    | `/auth/resetpassword/:password-reset-token`|  password-reset token |     Allows a vendor to reset passoword                                               |
 | PUT    | `/auth/updatedetails`|  token | Allows a vendor to update details |
 | PUT    | `/auth/updatepassword`|  token | Allows a vendor to update password |
+
+
 [top](#contents)
 
 #### Vendor Routes
@@ -98,6 +100,7 @@ Using Express...
 | GET    | `/vendors/:userId/posts` | public | Returns all posts of a single vendor |
 | PUT    | `/vendors/:vendorId`        | token | Update vendor's info    |
 | DELETE | `/vendors/:vendorId`        | token | Delete a vendor. Cascades to all of a vendor's products and images |
+
 [top](#contents)
 #### Product Routes
 
@@ -109,6 +112,7 @@ Using Express...
 | POST   | `/vendors/:vendorId/products` | token | Creates a new product for a vendor|
 | PUT    | `/products/:productId` | token | Edits a product of a vendor|
 | DELETE | `/products/:userId`    | token |   Deletes a product of a vendor. Cascades to all images attached to a product | 
+
 [top](#contents)
 #### Product Images Routes
 

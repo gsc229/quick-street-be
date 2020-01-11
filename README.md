@@ -6,9 +6,11 @@
 
 
 ### Contents:
-#####  [Getting started](#getting-started)
-#####  [Backend Framework](#backend-framework)
-#####  [Endpoints](#endpoints)
+  [**Getting started**](#getting-started)
+
+  [**Backend Framework**](#backend-framework-express)
+
+  [**Endpoints**](#endpoints)
   - [Authentication Routes](#authentication-routes)
   - [Vendor Routes](#vendor-routes)
   - [Product Routes](#product-routes)
@@ -16,15 +18,29 @@
   - [Bulletin Post Routes](#bulletin-post-routes)
   - [Advanced Filtering](#advanced-filtering)
 
-##### [Data Model](#data-model-mongoose-schemas)
+  [**Data Model**](#data-model-mongoose-schemas)
   - [Vendors](#vendors)
   - [Products](#products)
   - [Product Images](#product-images)
   - [Bulletin Posts](#bulletin-posts)
 
-##### [Image Management](#image-management)
+  [**Image Management**](#image-management)
+
   - [Cloudinary](#cloudinary)
-  - [Upload Widget](#upload-widget)
+  - [Upload Widget](#the-upload-widget)
+
+  [**Environment Variables**](#environment-variables)
+
+  [**Contributing**](#contributing)
+
+  - [Issue/Bugs requests](#issue/bug-request)
+  - [Pull Requests](#pull-requests)
+  - [Pull Request Guidelines](#pull-request-guidelines)
+
+
+  [**Further Documentation**](#documentation)
+
+  
 
 
 ## Getting started 
@@ -34,7 +50,7 @@ To get the server running locally:
 
 - Clone this repo
 - **npm install** to install all required dependencies
-- **npm run server** to start the local server
+- **npm run dev** to start the local server
 - **npm run test** to start server using testing environment
 
 ### Backend Framework **Express**
@@ -48,27 +64,36 @@ Using Express...
 - made it easy to incorporate middleware
 
 ## Endpoints 
-#### Online API documentation: https://quickstlabs.herokuapp.com/
-[top](#contents)
-#### Base URL for endpoints: https://quickstlabs.herokuapp.com/api/v1.0
+#### Additional Online API documentation for the following enpoints can be found at: 
+**https://quickstlabs.herokuapp.com/**
+
+
+#### Base URL for all endpoints: 
+
+`https://quickstlabs.herokuapp.com/api/v1.0`
+
 #### Token usage: 
  - If tokens are sent in headers, concatenate the word 'Bearer ' to the front
     -> example:
-     Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTc3MWRmNzY1YTZiNmU1YTU4Mzc
- - If tokens are sent in a url parameter don't concatentate 'Bearer '
+    
+     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTc3MWRmNzY1YTZiNmU1YTU4Mzc"
+
+ - If tokens are sent in a url parameter ***don't*** concatentate 'Bearer '
 
 
 #### Authentication Routes
 
 | Method | Endpoint                | Access Control      | Description                                        |
 | ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| POST    | `/auth/register`        | public           | Register a vendor               |
-| POST    | `/auth/login`    | public| Vendor login             |
-| GET    | `/auth/me`        | token | Returns info for a single user.                    |
+| POST    | `/auth/register`        | public           | Registering a vendor returns a token|
+| POST    | `/auth/login`    | public| Logging in a vendor returns a token            |
+| GET    | `/auth/me`        | token | Returns private info for a single vendor                    |
 | POST   | `/auth/forgotpassword` | registered email                | Sends password-reset token to a registered email |
-| PUT    | `/auth/resetpassword/:token`| requires token |     Allows a vendor to reset passoword                                               |
-| PUT    | `/auth/updatedetails`| requires token | Allows a vendor to update details |
-| PUT    | `/auth/updatepassword`| requires token | Allows a vendor to update password |
+| PUT    | `/auth/resetpassword/:password-reset-token`|  password-reset token |     Allows a vendor to reset passoword                                               |
+| PUT    | `/auth/updatedetails`|  token | Allows a vendor to update details |
+| PUT    | `/auth/updatepassword`|  token | Allows a vendor to update password |
+
+
 [top](#contents)
 
 #### Vendor Routes
@@ -82,6 +107,7 @@ Using Express...
 | GET    | `/vendors/:userId/posts` | public | Returns all posts of a single vendor |
 | PUT    | `/vendors/:vendorId`        | token | Update vendor's info    |
 | DELETE | `/vendors/:vendorId`        | token | Delete a vendor. Cascades to all of a vendor's products and images |
+
 [top](#contents)
 #### Product Routes
 
@@ -93,6 +119,7 @@ Using Express...
 | POST   | `/vendors/:vendorId/products` | token | Creates a new product for a vendor|
 | PUT    | `/products/:productId` | token | Edits a product of a vendor|
 | DELETE | `/products/:userId`    | token |   Deletes a product of a vendor. Cascades to all images attached to a product | 
+
 [top](#contents)
 #### Product Images Routes
 
@@ -101,9 +128,13 @@ Using Express...
 | GET    | `/product-images` | public | Returns all product images of all vendors |
 | GET    | `/products/:productId/product-images` | public | Returns all the images connected to a product |
 | GET | `/vendors/:vendorId/product-images` | public | Returns all the images connected to a vendor |
-| POST    | `/products/:productId/product-images` | token | Creates a new image returned from a Cloudinary upload widget (see image management for more details |
+| POST    | `/products/:productId/product-images` | token | Creates a new image from a Cloudinary upload widget results.info object (see [image management section](#image-management) for more details) |
 | DELETE | `/product-images/:imageId`    | token | Deletes an image |
+
+
 [top](#contents)
+
+
 #### Bulletin Post Routes
 
 | Method | Endpoint                | Access Control      | Description                                        |
@@ -115,9 +146,11 @@ Using Express...
 | PUT    | `/posts/:postId`        | token | Edit a post |
 | DELETE | `/posts/:postId`        | token | Delete a post |   
 
+
 [top](#contents)
+
 #### Advanced Filtering
- Advanced filtering is available on GET /vendors, GET /products & GET /product-images endpoints. The examples below will mostly refer to the Vendor resource, however, all filtering methods are availible on the Products and ProductImages resources as well. Refer to the **Data Model** section of this documentation to know which fileds you can filter on a resource.  
+ Advanced filtering is available on GET /vendors, GET /products & GET /product-images endpoints. The examples below will mostly refer to the Vendor resource, however, all filtering methods are availible on the Products and ProductImages resources as well. Refer to the [**Data Model**](#data-model-mongoose-schemas) section of this documentation to know which fileds you can filter on a resource.  
 
 | Method | Endpoint                | Access Control | Description                                  |
 | ------ | ----------------------- | -------------- | -------------------------------------------- |
@@ -128,6 +161,7 @@ Using Express...
 | GET    | `/vendors?sort=business_name&select=business_name` | public | Return a query that is sorted by using the 'sort' method. By default, sorting is done in ascending (A-Z, 0-9) order. However, if you want to sort descending, simply prepend a '-' (minus sign) to the field--in this example _sort=-business\_name_  |
 | GET    | `/vendors?select=business_name&limit=5&page=2` | public | Queried responses are returned with a pagination object. You can specify the limit per page and the page number of the results. Retruns the five vendors' business names on page 2 (the 6th-10th result)  |
 | GET    | `/products?select=name,price&price[gt]=500` | public | Comparison operators: **[gt]** (greater than), **[gte]** (greater than or equal to), **[lt]** (less than), **[lte]** (less than or equal to). Returns products with prices greater than 500, selecting only name and price fields   |
+
 
 [top](#contents)
 
@@ -268,7 +302,8 @@ Using Express...
 [top](#contents)
 #### PRODUCT IMAGES
 
----
+[See Cloudinary Image Management for more details](#cloudinary)
+
 
 ```
 {
@@ -338,38 +373,46 @@ Using Express...
   We are using a media management platform called Cloudinary:
   **https://cloudinary.com/**
 
-  The structure of our Product Image schema is based on the results.info object recieved upon successfull upload to Cloudinary with the upload widget:
-
-  **https://cloudinary.com/documentation/upload_widget**
-
-  **https://demo.cloudinary.com/uw/#/**
-
-  The Market Avenue API only saves references to the images saved on our cloudinary account. Essentially, when you upload and image, you'll need to make two POST requests. The first is with the upload widget, the second is to the Market Avenue API, `/products/:productId/product-images`, with the body of the request being the results.info object from the Cloudinary POST.  
+  The structure of our [**Product Image schema**](#Product-Images) is based on the results.info object recieved upon successfull upload to Cloudinary via the [**upload widget**](#the-upload-widget):
+ 
+  The Market Avenue API only saves *references* to the images saved on our cloudinary account. Essentially, when you upload an image, you'll need to make two POST requests. The first is with the [**upload widget**](#the-upload-widget), the second is to the Market Avenue API, `/products/:productId/product-images`, with the body of the request being the results.info object from the Cloudinary POST.  
 
 
-  There are three main steps to installing and using Cloudinary Image components in the front end React app:
+  There are four main steps to installing and using Cloudinary Image components in the front end React app:
 
-  1. Use the put the Cloudinary cdn in the head tag in your applications /public/index.html 
+  1. Add the Cloudinary cdn inside the head tag in your applications /public/index.html 
     
+  ```
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+    
+  ```
 
-    <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+  2. ``` npm install cloudinary-react ```
 
-  2. npm install cloudinary-react
-  3. import {Image, CloudinaryContext, Transormations} from 'cloudinary-react'
-  4.  Use a CloudianryContext referencing your cloud name, and Image component referencing the publicId of the image, and, if desired, a Transormation 
+  3. ``` import {Image, CloudinaryContext, Transormations} from 'cloudinary-react' ```
+  4.  Use a CloudianryContext referencing your cloud name, Image component referencing the publicId of the image, and, if desired, a Transormation 
 
-           ```
-           <CloudinaryContext cloudName="your-cloudname" >
+  ```
+          
+     <CloudinaryContext cloudName="your-cloudname" >
               <Image publicId={img} >
                 <Transformation height="128" width="173" crop="fill" />
               </Image>
-            </CloudinaryContext>
+      </CloudinaryContext>
             
-          ```
+  ```      
    
   [top](#contents)
 
-  **The Upload Widget**
+  #### The Upload Widget
+
+More more resources:
+
+https://cloudinary.com/documentation/upload_widget
+
+https://demo.cloudinary.com/uw/#/
+
+  ***example upload widget***
 
 ```
   const VendorAddProductForm = ({ modal, addProductformCancelHandler }) => {
@@ -378,7 +421,9 @@ Using Express...
     name: "",
     price: ""
   });
-  const myWidget = window.cloudinary.createUploadWidget(
+
+
+ const myWidget = window.cloudinary.createUploadWidget(
     {
       cloudName: "your-cloudname",
       uploadPreset: "your-preset",
@@ -443,8 +488,6 @@ Using Express...
   };
 
   ```
-  
-
 
 
 [top](#contents)
@@ -455,13 +498,18 @@ In order for the app to function correctly, the user must set up their own envir
 
 create a .env file that includes the following:
 
+MONGO_URI=mongodb+srv://\<username>**:**\<passwrod>4@cluster0-wk8nu.mongodb.net/test?retryWrites=true&w=majority
+
 GEOCODER_PROVIDER=mapquest
+
 GEOCODER_API_KEY=some api key example 10934i230w9weorjwelk
 
 JWT_SECRET=come up with a secret
+
 JWT_EXPIRE=30d
 
 _ STAGING_DB - optional development db for using functionality not available in SQLite
+
 _ NODE\*ENV - set to "development" until ready for "production"
 
 [top](#contents)
@@ -470,6 +518,7 @@ _ NODE\*ENV - set to "development" until ready for "production"
 When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
 
 Please note we have a [code of conduct](./code_of_conduct.md). Please follow it in all your interactions with the project.
+
 [top](#contents)
 ### Issue/Bug Request
 
@@ -483,12 +532,14 @@ Please note we have a [code of conduct](./code_of_conduct.md). Please follow it 
 ### Feature Requests
 
 We would love to hear from you about new features which would improve this app and further the aims of our project. Please provide as much detail and information as possible to show us why you think your new feature should be implemented.
+
 [top](#contents)
 ### Pull Requests
 
 If you have developed a patch, bug fix, or new feature that would improve this app, please submit a pull request. It is best to communicate your ideas with the developers first before investing a great deal of time into a pull request to ensure that it will mesh smoothly with the project.
 
 Remember that this project is licensed under the MIT license, and by submitting a pull request, you agree that your work will be, too.
+
 [top](#contents)
 #### Pull Request Guidelines
 
@@ -501,6 +552,8 @@ Remember that this project is licensed under the MIT license, and by submitting 
 ### Attribution
 
 These contribution guidelines have been adapted from [this good-Contributing.md-template](https://gist.github.com/PurpleBooth/b24679402957c63ec426).
+
+
 [top](#contents)
 ## Documentation
 

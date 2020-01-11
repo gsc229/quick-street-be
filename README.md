@@ -23,6 +23,8 @@
   - [Bulletin Posts](#bulletin-posts)
 
 ##### [Image Management](#image-management)
+  - [Cloudinary](#cloudinary)
+  - [Upload Widget](#upload-widget)
 
 
 ## Getting started 
@@ -37,6 +39,7 @@ To get the server running locally:
 
 ### Backend Framework **Express**
 [top](#contents)
+
 Using Express...
 
 - made it fast and easy to set up
@@ -340,7 +343,7 @@ Using Express...
 
   **https://demo.cloudinary.com/uw/#/**
 
-  The Market Avenue API only saves references to the images saved on our cloudinary account. Essentially, when you upload and image, you'll need to make two POST requests. The first is with the upload widget, the second is to the Market Avenue API, `/products/:productId/product-images`, with the body of the request being the results from the Cloudinary POST.  
+  The Market Avenue API only saves references to the images saved on our cloudinary account. Essentially, when you upload and image, you'll need to make two POST requests. The first is with the upload widget, the second is to the Market Avenue API, `/products/:productId/product-images`, with the body of the request being the results.info object from the Cloudinary POST.  
 
 
   There are three main steps to installing and using Cloudinary Image components in the front end React app:
@@ -365,6 +368,78 @@ Using Express...
    
   **The Upload Widget**
 
+```
+  const VendorAddProductForm = ({ modal, addProductformCancelHandler }) => {
+  const [productPictureInfo, setProductPictureInfo] = useState("");
+  const [product, setProduct] = useState({
+    name: "",
+    price: ""
+  });
+  const myWidget = window.cloudinary.createUploadWidget(
+    {
+      cloudName: "quickstlabs",
+      uploadPreset: "product-images",
+      sources: [
+        "local",
+        "url",
+        "camera",
+        "image_search",
+        "facebook",
+        "dropbox",
+        "instagram"
+      ],
+      showAdvancedOptions: true,
+      cropping: true, // if true multiple must be false, set to false [set multiple to true] to upload multiple files
+      multiple: false,
+      defaultSource: "local",
+      styles: {
+        palette: {
+          window: "#FFFFFF",
+          sourceBg: "#00B2ED",
+          windowBorder: "#E1F6FA",
+          tabIcon: "#2B3335",
+          inactiveTabIcon: "#555a5f",
+          menuIcons: "#5B5F63",
+          link: "#00769D",
+          action: "#21B787",
+          inProgress: "#00769D",
+          complete: "#21B787",
+          error: "#E92323",
+          textDark: "#2B3335",
+          textLight: "#FFFFFF"
+        },
+        fonts: {
+          default: null,
+          "'Poppins', sans-serif": {
+            url: "https://fonts.googleapis.com/css?family=Poppins",
+            active: true
+          }
+        }
+      }
+    },
+    (error, result) => {
+      if (!error && result && result.event === "success") {
+        const info = result.info;
+        let newInfo = {};
+        Object.keys(info).forEach(k => {
+          if (k !== "eager") {
+            if (!newInfo[k]) {
+              newInfo[k] = info[k];
+            }
+          }
+        });
+        newInfo = { ...newInfo, vendor: "5e1887574321360017dbf6b3" };
+        setProductPictureInfo(newInfo);
+      }
+    }
+  );
+
+  const uploadProductPicture = e => {
+    e.preventDefault();
+    myWidget.open();
+  };
+
+  ```
   
 
 

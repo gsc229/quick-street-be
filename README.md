@@ -376,27 +376,33 @@ Using Express...
 
   There are three main steps to installing and using Cloudinary Image components in the front end React app:
 
-  1. Use the put the Cloudinary cdn in the head tag in your applications /public/index.html 
+  1. Add the Cloudinary cdn inside the head tag in your applications /public/index.html 
     
+  ```
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+    
+  ```
 
-    <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+  2. ``` npm install cloudinary-react ```
 
-  2. npm install cloudinary-react
-  3. import {Image, CloudinaryContext, Transormations} from 'cloudinary-react'
+  3. ``` import {Image, CloudinaryContext, Transormations} from 'cloudinary-react' ```
   4.  Use a CloudianryContext referencing your cloud name, and Image component referencing the publicId of the image, and, if desired, a Transormation 
 
-           ```
-           <CloudinaryContext cloudName="your-cloudname" >
+  ```
+          
+     <CloudinaryContext cloudName="your-cloudname" >
               <Image publicId={img} >
                 <Transformation height="128" width="173" crop="fill" />
               </Image>
-            </CloudinaryContext>
+      </CloudinaryContext>
             
-          ```
+  ```      
    
   [top](#contents)
 
   #### The Upload Widget
+
+  ***example***
 
 ```
   const VendorAddProductForm = ({ modal, addProductformCancelHandler }) => {

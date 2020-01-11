@@ -64,14 +64,21 @@ Using Express...
 - made it easy to incorporate middleware
 
 ## Endpoints 
-#### Online API documentation: https://quickstlabs.herokuapp.com/
-[top](#contents)
-#### Base URL for endpoints: https://quickstlabs.herokuapp.com/api/v1.0
+#### Additional Online API documentation for the following enpoints can be found at: 
+**https://quickstlabs.herokuapp.com/**
+
+
+#### Base URL for all endpoints: 
+
+`https://quickstlabs.herokuapp.com/api/v1.0`
+
 #### Token usage: 
  - If tokens are sent in headers, concatenate the word 'Bearer ' to the front
     -> example:
-     Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTc3MWRmNzY1YTZiNmU1YTU4Mzc
- - If tokens are sent in a url parameter don't concatentate 'Bearer '
+    
+     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTc3MWRmNzY1YTZiNmU1YTU4Mzc"
+
+ - If tokens are sent in a url parameter ***don't*** concatentate 'Bearer '
 
 
 #### Authentication Routes
@@ -143,7 +150,7 @@ Using Express...
 [top](#contents)
 
 #### Advanced Filtering
- Advanced filtering is available on GET /vendors, GET /products & GET /product-images endpoints. The examples below will mostly refer to the Vendor resource, however, all filtering methods are availible on the Products and ProductImages resources as well. Refer to the **Data Model** section of this documentation to know which fileds you can filter on a resource.  
+ Advanced filtering is available on GET /vendors, GET /products & GET /product-images endpoints. The examples below will mostly refer to the Vendor resource, however, all filtering methods are availible on the Products and ProductImages resources as well. Refer to the [**Data Model**](#Data-Model-(Mongoose-Schemas)) section of this documentation to know which fileds you can filter on a resource.  
 
 | Method | Endpoint                | Access Control | Description                                  |
 | ------ | ----------------------- | -------------- | -------------------------------------------- |
@@ -295,7 +302,8 @@ Using Express...
 [top](#contents)
 #### PRODUCT IMAGES
 
----
+[See Cloudinary Image Management for more details](#cloudinary)
+
 
 ```
 {
@@ -365,7 +373,7 @@ Using Express...
   We are using a media management platform called Cloudinary:
   **https://cloudinary.com/**
 
-  The structure of our Product Image schema is based on the results.info object recieved upon successfull upload to Cloudinary via the upload widget:
+  The structure of our [Product Image schema](#Product-Images) is based on the results.info object recieved upon successfull upload to Cloudinary via the upload widget:
 
   **https://cloudinary.com/documentation/upload_widget**
 
@@ -374,7 +382,7 @@ Using Express...
   The Market Avenue API only saves references to the images saved on our cloudinary account. Essentially, when you upload and image, you'll need to make two POST requests. The first is with the upload widget, the second is to the Market Avenue API, `/products/:productId/product-images`, with the body of the request being the results.info object from the Cloudinary POST.  
 
 
-  There are three main steps to installing and using Cloudinary Image components in the front end React app:
+  There are four main steps to installing and using Cloudinary Image components in the front end React app:
 
   1. Add the Cloudinary cdn inside the head tag in your applications /public/index.html 
     
@@ -478,8 +486,6 @@ Using Express...
   };
 
   ```
-  
-
 
 
 [top](#contents)
@@ -489,6 +495,8 @@ Using Express...
 In order for the app to function correctly, the user must set up their own environment variables.
 
 create a .env file that includes the following:
+
+MONGO_URI=mongodb+srv://\<username>**:**\<passwrod>4@cluster0-wk8nu.mongodb.net/test?retryWrites=true&w=majority
 
 GEOCODER_PROVIDER=mapquest
 

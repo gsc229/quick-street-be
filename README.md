@@ -50,7 +50,7 @@ To get the server running locally:
 
 - Clone this repo
 - **npm install** to install all required dependencies
-- **npm run server** to start the local server
+- **npm run dev** to start the local server
 - **npm run test** to start server using testing environment
 
 ### Backend Framework **Express**
@@ -121,7 +121,7 @@ Using Express...
 | GET    | `/product-images` | public | Returns all product images of all vendors |
 | GET    | `/products/:productId/product-images` | public | Returns all the images connected to a product |
 | GET | `/vendors/:vendorId/product-images` | public | Returns all the images connected to a vendor |
-| POST    | `/products/:productId/product-images` | token | Creates a new image from a Cloudinary upload widget results.info object (see image management for more details) |
+| POST    | `/products/:productId/product-images` | token | Creates a new image from a Cloudinary upload widget results.info object (see [image management section](#image-management) for more details) |
 | DELETE | `/product-images/:imageId`    | token | Deletes an image |
 
 

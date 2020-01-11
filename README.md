@@ -379,7 +379,7 @@ Using Express...
 
   **https://demo.cloudinary.com/uw/#/**
 
-  The Market Avenue API only saves references to the images saved on our cloudinary account. Essentially, when you upload and image, you'll need to make two POST requests. The first is with the upload widget, the second is to the Market Avenue API, `/products/:productId/product-images`, with the body of the request being the results.info object from the Cloudinary POST.  
+  The Market Avenue API only saves *references* to the images saved on our cloudinary account. Essentially, when you upload an image, you'll need to make two POST requests. The first is with the upload widget, the second is to the Market Avenue API, `/products/:productId/product-images`, with the body of the request being the results.info object from the Cloudinary POST.  
 
 
   There are four main steps to installing and using Cloudinary Image components in the front end React app:

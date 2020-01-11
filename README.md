@@ -342,6 +342,7 @@ Using Express...
 
   The Market Avenue API only saves references to the images saved on our cloudinary account. Essentially, when you upload and image, you'll need to make two POST requests. The first is with the upload widget, the second is to the Market Avenue API, `/products/:productId/product-images`, with the body of the request being the results from the Cloudinary POST.  
 
+
   There are three main steps to installing and using Cloudinary Image components in the front end React app:
 
   1. Use the put the Cloudinary cdn in the head tag in your applications /public/index.html 
@@ -353,42 +354,23 @@ Using Express...
   3. import {Image, CloudinaryContext, Transormations} from 'cloudinary-react'
   4.  Use a CloudianryContext referencing your cloud name, and Image component referencing the publicId of the image, and, if desired, a Transormation 
 
+           ```
            <CloudinaryContext cloudName="your-cloudname" >
               <Image publicId={img} >
                 <Transformation height="128" width="173" crop="fill" />
               </Image>
             </CloudinaryContext>
+            
+          ```
    
+  **The Upload Widget**
+
+  
 
 
 
 [top](#contents)
-## 2️⃣ Actions
 
-🚫 This is an example, replace this with the actions that pertain to your backend
-
-`getOrgs()` -> Returns all organizations
-
-`getOrg(orgId)` -> Returns a single organization by ID
-
-`addOrg(org)` -> Returns the created org
-
-`updateOrg(orgId)` -> Update an organization by ID
-
-`deleteOrg(orgId)` -> Delete an organization by ID
-<br>
-<br>
-<br>
-`getUsers(orgId)` -> if no param all users
-
-`getUser(userId)` -> Returns a single user by user ID
-
-`addUser(user object)` --> Creates a new user and returns that user. Also creates 7 availabilities defaulted to hours of operation for their organization.
-
-`updateUser(userId, changes object)` -> Updates a single user by ID.
-
-`deleteUser(userId)` -> deletes everything dependent on the user
-[top](#contents)
 ## 3️⃣ Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.

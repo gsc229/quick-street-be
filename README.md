@@ -332,6 +332,7 @@ Using Express...
 
 ```
 [top](#contents)
+
 ## Image Management
 ### Cloudinary
   We are using a media management platform called Cloudinary:
@@ -366,6 +367,8 @@ Using Express...
             
           ```
    
+  [top](#contents)
+
   **The Upload Widget**
 
 ```
@@ -377,8 +380,8 @@ Using Express...
   });
   const myWidget = window.cloudinary.createUploadWidget(
     {
-      cloudName: "quickstlabs",
-      uploadPreset: "product-images",
+      cloudName: "your-cloudname",
+      uploadPreset: "your-preset",
       sources: [
         "local",
         "url",
@@ -446,7 +449,7 @@ Using Express...
 
 [top](#contents)
 
-## 3️⃣ Environment Variables
+## Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
 
@@ -502,4 +505,4 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 ## Documentation
 
 See [Frontend Documentation](https://github.com/Lambda-School-Labs/quick-street-fe/blob/master/README.md) for details on the fronend of our project.
-🚫 Add DS iOS and/or Andriod links here if applicable.
+

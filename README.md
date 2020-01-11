@@ -29,6 +29,19 @@
   - [Cloudinary](#cloudinary)
   - [Upload Widget](#the-upload-widget)
 
+  [**Environment Variables**](#environment-variables)
+
+  [**Contributing**](#contributing)
+
+  - [Issue/Bugs requests](#issue/bug-request)
+  - [Pull Requests](#pull-requests)
+  - [Pull Request Guidelines](#pull-request-guidelines)
+
+
+  [**Further Documentation**](#documentation)
+
+  
+
 
 ## Getting started 
 [top](#contents)
@@ -65,13 +78,13 @@ Using Express...
 
 | Method | Endpoint                | Access Control      | Description                                        |
 | ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| POST    | `/auth/register`        | public           | Register a vendor               |
-| POST    | `/auth/login`    | public| Vendor login             |
-| GET    | `/auth/me`        | token | Returns info for a single user.                    |
+| POST    | `/auth/register`        | public           | Registering a vendor returns a token|
+| POST    | `/auth/login`    | public| Logging in a vendor returns a token            |
+| GET    | `/auth/me`        | token | Returns private info for a single vendor                    |
 | POST   | `/auth/forgotpassword` | registered email                | Sends password-reset token to a registered email |
-| PUT    | `/auth/resetpassword/:token`| requires token |     Allows a vendor to reset passoword                                               |
-| PUT    | `/auth/updatedetails`| requires token | Allows a vendor to update details |
-| PUT    | `/auth/updatepassword`| requires token | Allows a vendor to update password |
+| PUT    | `/auth/resetpassword/:password-reset-token`|  password-reset token |     Allows a vendor to reset passoword                                               |
+| PUT    | `/auth/updatedetails`|  token | Allows a vendor to update details |
+| PUT    | `/auth/updatepassword`|  token | Allows a vendor to update password |
 [top](#contents)
 
 #### Vendor Routes
@@ -388,7 +401,9 @@ Using Express...
     name: "",
     price: ""
   });
-  const myWidget = window.cloudinary.createUploadWidget(
+
+
+ const myWidget = window.cloudinary.createUploadWidget(
     {
       cloudName: "your-cloudname",
       uploadPreset: "your-preset",
@@ -480,6 +495,7 @@ _ NODE\*ENV - set to "development" until ready for "production"
 When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
 
 Please note we have a [code of conduct](./code_of_conduct.md). Please follow it in all your interactions with the project.
+
 [top](#contents)
 ### Issue/Bug Request
 
@@ -493,12 +509,14 @@ Please note we have a [code of conduct](./code_of_conduct.md). Please follow it 
 ### Feature Requests
 
 We would love to hear from you about new features which would improve this app and further the aims of our project. Please provide as much detail and information as possible to show us why you think your new feature should be implemented.
+
 [top](#contents)
 ### Pull Requests
 
 If you have developed a patch, bug fix, or new feature that would improve this app, please submit a pull request. It is best to communicate your ideas with the developers first before investing a great deal of time into a pull request to ensure that it will mesh smoothly with the project.
 
 Remember that this project is licensed under the MIT license, and by submitting a pull request, you agree that your work will be, too.
+
 [top](#contents)
 #### Pull Request Guidelines
 
@@ -511,6 +529,8 @@ Remember that this project is licensed under the MIT license, and by submitting 
 ### Attribution
 
 These contribution guidelines have been adapted from [this good-Contributing.md-template](https://gist.github.com/PurpleBooth/b24679402957c63ec426).
+
+
 [top](#contents)
 ## Documentation
 

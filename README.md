@@ -5,7 +5,7 @@
 ##### Backend delpoyed at https://quickstlabs.herokuapp.com/
 
 
-#### Contents:
+### Contents:
 #####  [Getting started](#getting-started)
 #####  [Backend Framework](#backend-framework)
 #####  [Endpoints](#endpoints)
@@ -111,9 +111,10 @@ Using Express...
 | POST   | `/vendors/:vendorId/posts` | token | Creates a new vendor post |
 | PUT    | `/posts/:postId`        | token | Edit a post |
 | DELETE | `/posts/:postId`        | token | Delete a post |   
+
 [top](#contents)
 #### Advanced Filtering
- Advanced filtering is available on GET /vendors, GET /products & GET /product-images endpoints. The examples below will mostly refer to the Vendor resource, however, the all filtering methods are availible on the Products and ProductImages resources as well. Refer to the **Data Model** section of this documentation to know which fileds you can filter on a resource.  
+ Advanced filtering is available on GET /vendors, GET /products & GET /product-images endpoints. The examples below will mostly refer to the Vendor resource, however, all filtering methods are availible on the Products and ProductImages resources as well. Refer to the **Data Model** section of this documentation to know which fileds you can filter on a resource.  
 
 | Method | Endpoint                | Access Control | Description                                  |
 | ------ | ----------------------- | -------------- | -------------------------------------------- |
@@ -124,6 +125,7 @@ Using Express...
 | GET    | `/vendors?sort=business_name&select=business_name` | public | Return a query that is sorted by using the 'sort' method. By default, sorting is done in ascending (A-Z, 0-9) order. However, if you want to sort descending, simply prepend a '-' (minus sign) to the field--in this example _sort=-business\_name_  |
 | GET    | `/vendors?select=business_name&limit=5&page=2` | public | Queried responses are returned with a pagination object. You can specify the limit per page and the page number of the results. Retruns the five vendors' business names on page 2 (the 6th-10th result)  |
 | GET    | `/products?select=name,price&price[gt]=500` | public | Comparison operators: **[gt]** (greater than), **[gte]** (greater than or equal to), **[lt]** (less than), **[lte]** (less than or equal to). Returns products with prices greater than 500, selecting only name and price fields   |
+
 [top](#contents)
 
  
@@ -326,6 +328,40 @@ Using Express...
 }
 
 ```
+[top](#contents)
+## Image Management
+### Cloudinary
+  We are using a media management platform called Cloudinary:
+  **https://cloudinary.com/**
+
+  The structure of our Product Image schema is based on the results.info object recieved upon successfull upload to Cloudinary with the upload widget:
+
+  **https://cloudinary.com/documentation/upload_widget**
+
+  **https://demo.cloudinary.com/uw/#/**
+
+  The Market Avenue API only saves references to the images saved on our cloudinary account. Essentially, when you upload and image, you'll need to make two POST requests. The first is with the upload widget, the second is to the Market Avenue API, `/products/:productId/product-images`, with the body of the request being the results from the Cloudinary POST.  
+
+  There are three main steps to installing and using Cloudinary Image components in the front end React app:
+
+  1. Use the put the Cloudinary cdn in the head tag in your applications /public/index.html 
+    
+
+    <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+
+  2. npm install cloudinary-react
+  3. import {Image, CloudinaryContext, Transormations} from 'cloudinary-react'
+  4.  Use a CloudianryContext referencing your cloud name, and Image component referencing the publicId of the image, and, if desired, a Transormation 
+
+           <CloudinaryContext cloudName="your-cloudname" >
+              <Image publicId={img} >
+                <Transformation height="128" width="173" crop="fill" />
+              </Image>
+            </CloudinaryContext>
+   
+
+
+
 [top](#contents)
 ## 2️⃣ Actions
 

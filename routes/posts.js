@@ -18,8 +18,8 @@ const router = express.Router({ mergeParams: true });
 router.route('/').get(advancedResults(Posts, {
     path: 'vendor',
     select: 'title description date'
-}), getAllPosts).post(protect, addPost);
+}), getAllPosts).post(addPost);
 
-router.route('/:id').get(getPost).put(protect, updatePost).delete(protect, deletePost);
+router.route('/:id').get(getPost).put(updatePost).delete(deletePost);
 
 module.exports = router;

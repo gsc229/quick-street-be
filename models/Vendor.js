@@ -125,7 +125,7 @@ Vendor_Schema.methods.getResetPasswordToken = function () {
   const resetToken = crypto.randomBytes(20).toString('hex'); //gives us the reset token
 
   // Hash token and set to resetPasswordToken field
-  this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+  this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex'); // reseting password to hashed version
 
   // Set expire
   this.resetPasswordToken = Date.now() + 10 * 60 * 1000;

@@ -10,6 +10,7 @@ const {
 const Products = require('../models/Product');
 const advancedResults = require('../middleware/advancedResults');
 
+const { protect } = require('../middleware/auth');
 
 // Include other resource routers
 const productImagesRouter = require('./productImages');
@@ -22,8 +23,8 @@ router.use('/:productId/product-images', productImagesRouter);
 router.route('/').get(advancedResults(Products, {
     path: 'vendor',
     select: 'business_name description'
-}), getAllProducts).post(addProduct);
+}), getAllProducts).post(protect, addProduct);
 
-router.route('/:id').get(getProduct).put(updateProduct).delete(deleteProduct);
+router.route('/:id').get(getProduct).put(protect, updateProduct).delete(protect, deleteProduct);
 
 module.exports = router;

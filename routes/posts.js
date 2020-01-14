@@ -10,13 +10,16 @@ const {
 const Posts = require('../models/Post');
 const advancedResults = require('../middleware/advancedResults');
 
+const { protect } = require('../middleware/auth');
+
+
 const router = express.Router({ mergeParams: true });
 
 router.route('/').get(advancedResults(Posts, {
     path: 'vendor',
     select: 'title description date'
-}), getAllPosts).post(addPost);
+}), getAllPosts).post(protect, addPost);
 
-router.route('/:id').get(getPost).put(updatePost).delete(deletePost);
+router.route('/:id').get(getPost).put(protect, updatePost).delete(protect, deletePost);
 
 module.exports = router;

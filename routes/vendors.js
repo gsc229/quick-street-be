@@ -21,7 +21,7 @@ const router = express.Router();
 
 const { protect } = require('../middleware/auth');
 
-router.use(protect);
+// router.use(protect);
 
 // Re-route into other resource route
 router.use('/:vendorId/products', productRouter);
@@ -33,12 +33,12 @@ router.route('/radius/:zipcode/:distance').get(getVendorsInRadius);
 router
   .route('/')
   .get(advancedResults(Vendor), getAllVendors)
-  .post(createVendor);
+  .post(protect, createVendor);
 
 router
   .route('/:id')
   .get(getVendor)
-  .put(updateVendor)
-  .delete(deleteVendor);
+  .put(protect, updateVendor)
+  .delete(protect, deleteVendor);
 
 module.exports = router;

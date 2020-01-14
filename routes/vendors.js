@@ -32,13 +32,13 @@ router.route('/radius/:zipcode/:distance').get(getVendorsInRadius);
 
 router
   .route('/')
-  .get(advancedResults(Vendor), getAllVendors)
-  .post(protect, createVendor);
+    .get(advancedResults(Vendor), getAllVendors)
+    .post(protect, createVendor); // POST /api/v1.0/vendors
 
 router
   .route('/:id')
-  .get(getVendor)
-  .put(protect, updateVendor)
-  .delete(protect, deleteVendor);
+    .get(getVendor)
+    .put(protect, updateVendor) // PUT /api/v1.0/vendors/:id
+    .delete(protect, deleteVendor); // DELETE /api/v1.0/vendors/:id
 
 module.exports = router;

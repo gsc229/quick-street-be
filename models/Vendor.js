@@ -44,6 +44,9 @@ const Vendor_Schema = new mongoose.Schema(
     description: {
       type: String
     },
+    order_details: {
+      type: String
+    },
     avatar: {
       type: String,
       default: 'no-photo.jpg'

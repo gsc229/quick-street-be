@@ -7,9 +7,7 @@ const Vendor = require('../models/Vendor');
 exports.protect = asyncHandler(async (req, res, next) => {
   let token;
 
-  if (
-    req.headers.authorization 
-  ) {
+  if (req.headers.authorization) {
     // Set token from Bearer token in header
     token = req.headers.authorization;
     // Set token from cookie
@@ -49,7 +47,12 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
     req.vendor = await Vendor.findById(decoded.id);
 
-    next();
+    if(req.params.vendorId === req.vendor.id) {
+      next();
+    } else {
+      return next(new ErrorResponse('Not authorized to access this route', 401));
+    }
+    
   } catch (err) {
     return next(new ErrorResponse('Not authorized to access this route', 401));
   }

@@ -8,14 +8,15 @@ const Vendor = require('../models/Vendor');
 // @route     POST /api/v1/auth/register
 // @access    Public
 exports.register = asyncHandler(async (req, res, next) => {
-  const { email, password, business_name, address } = req.body;
+  const { email, password, business_name, address, phone } = req.body;
 
   // Create vendor
   const vendor = await Vendor.create({
     email,
     password,
     business_name,
-    address
+    address,
+    phone
   });
 
   sendTokenResponse(vendor, 200, res);
@@ -103,7 +104,7 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
   const vendor = await Vendor.findById(req.vendor.id).select('+password');
 
   // Check current password
-  if(!(await vendor.matchPassword(req.body.currentPassword))) {
+  if (!(await vendor.matchPassword(req.body.currentPassword))) {
     return next(new ErrorResponse('Password is incorrect', 401));
   }
 
@@ -119,7 +120,7 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
   const vendor = await Vendor.findOne({ email: req.body.email });
 
-  if(!vendor) {
+  if (!vendor) {
     return next(new ErrorResponse('There is no Vendor with that email', 404));
   }
 
@@ -140,7 +141,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     await sendEmail({
       email: vendor.email,
       subject: 'Password reset token',
-      message 
+      message
     });
 
     res.status(200).json({ success: true, data: 'Email sent' })
@@ -172,7 +173,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     resetPasswordExpire: { $gt: Date.now() }
   });
 
-  if(!vendor) {
+  if (!vendor) {
     return next(new ErrorResponse('Invalid token', 400));
   }
 
@@ -182,7 +183,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   vendor.resetPasswordExpire = undefined;
   await vendor.save();
 
-sendTokenResponse(vendor, 200, res)
+  sendTokenResponse(vendor, 200, res)
 });
 
 // Get token from model, create cookie and send response

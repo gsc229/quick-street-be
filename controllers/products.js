@@ -88,7 +88,7 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
 
     if (!product) {
         return next(
-            new ErrorResponse(`No vendor with the id of ${req.params.id}`),
+            new ErrorResponse(`No product with the id of ${req.params.id}`),
             404
         );
     }

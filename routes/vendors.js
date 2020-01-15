@@ -36,7 +36,7 @@ router
     .post(protect, createVendor); // POST /api/v1.0/vendors
 
 router
-  .route('/:id')
+  .route('/:vendorId')
     .get(getVendor)
     .put(protect, updateVendor) // PUT /api/v1.0/vendors/:id
     .delete(protect, deleteVendor); // DELETE /api/v1.0/vendors/:id

@@ -19,9 +19,9 @@ const productImageRouter = require('./productImages');
 
 const router = express.Router();
 
-//const { protect } = require('../middleware/auth');
+const { protect } = require('../middleware/auth');
 
-//router.use(protect);
+// router.use(protect);
 
 // Re-route into other resource route
 router.use('/:vendorId/products', productRouter);
@@ -32,13 +32,13 @@ router.route('/radius/:zipcode/:distance').get(getVendorsInRadius);
 
 router
   .route('/')
-  .get(advancedResults(Vendor), getAllVendors)
-  .post(createVendor);
+    .get(advancedResults(Vendor), getAllVendors)
+    .post(protect, createVendor); // POST /api/v1.0/vendors
 
 router
-  .route('/:id')
-  .get(getVendor)
-  .put(updateVendor)
-  .delete(deleteVendor);
+  .route('/:vendorId')
+    .get(getVendor)
+    .put(protect, updateVendor) // PUT /api/v1.0/vendors/:id
+    .delete(protect, deleteVendor); // DELETE /api/v1.0/vendors/:id
 
 module.exports = router;

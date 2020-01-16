@@ -16,11 +16,11 @@ exports.getAllVendors = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1.0/vendors/:id
 // @access  Private
 exports.getVendor = asyncHandler(async (req, res, next) => {
-  const vendor = await Vendor.findById(req.params.id);
+  const vendor = await Vendor.findById(req.params.vendorId);
 
   if (!vendor) {
     return next(
-      new ErrorResponse(`Vendor not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(`Vendor not found with id of ${req.params.vendorId}`, 404)
     );
   }
   res.status(200).json({ success: true, data: vendor });
@@ -45,14 +45,14 @@ exports.createVendor = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/v1.0/vendors/:id
 // @access  Private
 exports.updateVendor = asyncHandler(async (req, res, next) => {
-  const vendor = await Vendor.findByIdAndUpdate(req.params.id, req.body, {
+  const vendor = await Vendor.findByIdAndUpdate(req.params.vendorId, req.body, {
     new: true,
     runValidators: true
   });
 
   if (!vendor) {
     return next(
-      new ErrorResponse(`Vendor not found with the id of ${req.params.id}`, 404)
+      new ErrorResponse(`Vendor not found with the id of ${req.params.vendorId}`, 404)
     );
   }
 
@@ -63,10 +63,10 @@ exports.updateVendor = asyncHandler(async (req, res, next) => {
 // @route   DELETE /api/v1.0/vendors/:id
 // @access  Private
 exports.deleteVendor = asyncHandler(async (req, res, next) => {
-  const vendor = await Vendor.findById(req.params.id);
+  const vendor = await Vendor.findById(req.params.vendorId);
   if (!vendor) {
     return next(
-      new ErrorResponse(`Vendor not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(`Vendor not found with id of ${req.params.vendorId}`, 404)
     );
   }
 

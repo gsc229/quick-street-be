@@ -11,6 +11,15 @@ const advancedResults = require('../middleware/advancedResults');
 
 const router = express.Router({ mergeParams: true });
 
-router.route('/').get(advancedResults(ProductImages), getAllImages).post(addImage);
-router.route('/:imageId').delete(deleteImage);
+const { protect } = require('../middleware/auth');
+
+router
+  .route('/')
+    .get(advancedResults(ProductImages), getAllImages)
+    .post( addImage); // POST /api/v1.0/products/:productId/product-images
+
+router
+  .route('/:imageId')
+    .delete(protect, deleteImage); // DELETE /api/v1.0/product-images/:imageId
+
 module.exports = router;

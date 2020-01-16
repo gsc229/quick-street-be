@@ -10,7 +10,6 @@ const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db');
 
-
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 
@@ -61,7 +60,7 @@ app.use(errorHandler);
 
 app.get('/test', (req, res) => {
   res.send(
-    '<h1>Server Status</h1><h2>Server running succesfully.</h2><p>Deployment is all good, continue working.. nothing to see here.</p>'
+    '<h1>Test auto deploy</h1><h2>Server running succesfully.</h2><p>Deployment is all good, continue working.. nothing to see here.</p>'
   );
 });
 

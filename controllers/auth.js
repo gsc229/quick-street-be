@@ -210,6 +210,7 @@ const sendTokenResponse = (vendor, statusCode, res) => {
     .json({
       success: true,
       id: vendor.id,
+      slug: vendor.slug,
       token
     });
 };

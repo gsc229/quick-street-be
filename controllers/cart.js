@@ -22,7 +22,7 @@ exports.getCart = asyncHandler(async (req, res, next) => {
     }
 });
 
-// @desc    Add cart
+// @desc    Create cart to customer
 // @route   POST /api/v1.0/customers/:customerId/cart
 // @access  Public
 exports.addCart = asyncHandler(async (req, res, next) => {
@@ -41,4 +41,22 @@ exports.addCart = asyncHandler(async (req, res, next) => {
     });
 })
 
+
+// @desc    Delete cart
+// @route   DELETE /api/v1.0/customers/:customerId/cart
+// @access  Private
+exports.deleteCart = asyncHandler(async (req, res, next) => {
+    const cart = await Cart.findOneAndDelete({ items })
+
+    if(!cart) {
+        return next(new ErrorResponse(`Cart not found`, 404))
+    }
+
+    cart.remove();
+
+    res.status(200).json({
+        success: true,
+        data: {}
+    })
+})
 

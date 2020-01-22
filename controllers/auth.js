@@ -12,10 +12,15 @@ exports.register = asyncHandler(async (req, res, next) => {
   const { email, password, business_name, address, phone, vendor } = req.body;
   const findVendor = await Vendor.find({ email });
   const findCustomer = await Customer.find({ email });
+  const findBusinessName = await Vendor.find({ business_name });
   console.log(findCustomer, findVendor);
 
+  if( findBusinessName.length > 0) {
+    return next(new ErrorResponse(`Vendor with that business name alread exists in our database.`, 400))
+  }
+
   if( findVendor.length > 0 || findCustomer.length > 0 ) {
-    return next(new ErrorResponse(`User with that email already exists in our database`, 400));
+    return next(new ErrorResponse(`User with that email already exists in our database.`, 400));
   } else {
       if(vendor) {
         // Create user

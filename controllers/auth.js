@@ -12,18 +12,28 @@ const Customer = require('../models/Customer');
 // *****   Create a condition statement based on user role *******
 
 exports.register = asyncHandler(async (req, res, next) => {
-  const { email, password, business_name, address, phone } = req.body;
+  const { email, password, business_name, address, phone, vendor } = req.body;
 
-  // Create vendor
-  const vendor = await Vendor.create({
-    email,
-    password,
-    business_name,
-    address,
-    phone
-  });
+  if(vendor) {
+    // Create vendor
+    const vendor = await Vendor.create({
+      email,
+      password,
+      business_name,
+      address,
+      phone
+    });
 
-  sendTokenResponse(vendor, 200, res);
+    sendTokenResponse(vendor, 200, res);
+  } else {
+    const customer = await Customer.create({
+      email,
+      password
+    });
+
+    sendTokenResponse(customer, 200, res);
+  }
+  
 });
 
 

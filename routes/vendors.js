@@ -28,7 +28,9 @@ router.use('/:vendorId/products', productRouter);
 router.use('/:vendorId/posts', postRouter);
 router.use('/:vendorId/product-images', productImageRouter);
 
-router.route('/radius/:zipcode/:distance').get(getVendorsInRadius);
+router
+  .route('/radius/:zipcode/:distance')
+    .get(getVendorsInRadius);
 
 router
   .route('/')

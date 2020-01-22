@@ -18,7 +18,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`User with that email already exists in our database`, 400));
   } else {
       if(vendor) {
-        // Create vendor
+        // Create user
         const vendor = await Vendor.create({
           email,
           password,
@@ -42,7 +42,7 @@ exports.register = asyncHandler(async (req, res, next) => {
 });
 
 
-// @desc      Login vendor
+// @desc      Login user
 // @route     POST /api/v1/auth/login
 // @access    Public
 exports.login = asyncHandler(async (req, res, next) => {
@@ -89,7 +89,7 @@ if(vendor) {
   
 });
 
-// @desc      Log vendor out / clear cookie
+// @desc      Log user out / clear cookie
 // @route     GET /api/v1/auth/logout
 // @access    Private
 exports.logout = asyncHandler(async (req, res, next) => {

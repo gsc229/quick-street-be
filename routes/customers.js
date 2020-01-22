@@ -10,7 +10,15 @@ const Customer = require('../models/Customer');
 
 const advancedResults = require('../middleware/advancedResults');
 
+// Include other resource routers
+const cartRouter = require('./cart');
+
 const router = express.Router();
+
+//Re-route into other resource route
+router.use('/:customerId/cart', cartRouter);
+
+
 
 router  
     .route('/')

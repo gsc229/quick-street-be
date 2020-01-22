@@ -46,7 +46,7 @@ exports.addCart = asyncHandler(async (req, res, next) => {
 // @route   DELETE /api/v1.0/customers/:customerId/cart
 // @access  Private
 exports.deleteCart = asyncHandler(async (req, res, next) => {
-    const cart = await Cart.findOneAndDelete({ items })
+    const cart = await Cart.findOneAndDelete(req.body.items)
 
     if(!cart) {
         return next(new ErrorResponse(`Cart not found`, 404))

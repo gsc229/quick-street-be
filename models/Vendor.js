@@ -145,15 +145,6 @@ Vendor_Schema.pre('save', function (next) {
   next();
 });
 
-// Create a 'slug' based on business_name for fontend to make routes
-Vendor_Schema.pre('save', function (next) {
-  this.slug = slugify(this.business_name, {
-    lower: true,
-    remove: /[*+~.()'"!:@]/g
-  });
-  next();
-});
-
 //Geocode & create location field
 Vendor_Schema.pre('save', async function (next) {
   if (!this.isModified('address')) {

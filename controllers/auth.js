@@ -3,51 +3,92 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const sendEmail = require('../utils/sendEmail');
 const Vendor = require('../models/Vendor');
+const Customer = require('../models/Customer');
 
 // @desc      Register vendor
 // @route     POST /api/v1/auth/register
 // @access    Public
 exports.register = asyncHandler(async (req, res, next) => {
-  const { email, password, business_name, address, phone } = req.body;
+  const { email, password, business_name, address, phone, vendor } = req.body;
+  const findVendor = await Vendor.find({ email });
+  const findCustomer = await Customer.find({ email });
+  console.log(findCustomer, findVendor);
 
-  // Create vendor
-  const vendor = await Vendor.create({
-    email,
-    password,
-    business_name,
-    address,
-    phone
-  });
+  if( findVendor.length > 0 || findCustomer.length > 0 ) {
+    return next(new ErrorResponse(`User with that email already exists in our database`, 400));
+  } else {
+      if(vendor) {
+        // Create vendor
+        const vendor = await Vendor.create({
+          email,
+          password,
+          business_name,
+          address,
+          phone
+        });
 
-  sendTokenResponse(vendor, 200, res);
+        sendTokenResponse(vendor, 200, res);
+
+      } else {
+        const customer = await Customer.create({
+          email,
+          password
+        });
+
+        sendTokenResponse(customer, 200, res);
+
+      }
+  }
+  
+  
 });
+
 
 // @desc      Login vendor
 // @route     POST /api/v1/auth/login
 // @access    Public
 exports.login = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, vendor } = req.body;
 
   // Validate email & password
   if (!email || !password) {
-    return next(new ErrorResponse('Please provide an email and password', 400));
-  }
+  return next(new ErrorResponse('Please provide an email and password', 400));
+}
 
-  // Check for vendor
-  const vendor = await Vendor.findOne({ email }).select('+password');
+if(vendor) {
+    // Check for vendor
+    const findVendor = await Vendor.findOne({ email }).select('+password');
 
-  if (!vendor) {
-    return next(new ErrorResponse('Invalid email credentials', 401)); //change back to "invalid credential once fully tested"
-  }
+    if (!findVendor) {
+      return next(new ErrorResponse('Invalid email credentials', 401)); //change back to "invalid credential once fully tested"
+    } 
 
-  // Check if password matches
-  const isMatch = await vendor.matchPassword(password);
+    // Check if password matches
+    const isMatch = await findVendor.matchPassword(password);
 
-  if (!isMatch) {
-    return next(new ErrorResponse('Invalid password credentials', 401)); //change back to "invalid credential once fully tested"
-  }
+    if (!isMatch) {
+      return next(new ErrorResponse('Invalid password credentials', 401)); //change back to "invalid credential once fully tested"
+    }
 
-  sendTokenResponse(vendor, 200, res);
+    sendTokenResponse(findVendor, 200, res, true);
+} else {
+    // Check for customer
+    const findCustomer = await Customer.findOne({ email }).select('+password');
+
+    if (!findCustomer) {
+      return next(new ErrorResponse('Invalid email credentials', 401)); //change back to "invalid credential once fully tested"
+    } 
+
+    // Check if password matches
+    const isMatch = await findCustomer.matchPassword(password);
+
+    if (!isMatch) {
+      return next(new ErrorResponse('Invalid password credentials', 401)); //change back to "invalid credential once fully tested"
+    }
+
+    sendTokenResponse(findCustomer, 200, res, false);
+}
+  
 });
 
 // @desc      Log vendor out / clear cookie
@@ -187,11 +228,11 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 });
 
 // Get token from model, create cookie and send response
-const sendTokenResponse = (vendor, statusCode, res) => {
+const sendTokenResponse = (user, statusCode, res, isVendor) => {
   // Create token
-  const token = vendor.getSignedJwtToken();
+  const token = user.getSignedJwtToken();
 
-  console.log('Vendor object', vendor)
+  console.log('User object', user)
 
   const options = {
     expires: new Date(
@@ -209,8 +250,9 @@ const sendTokenResponse = (vendor, statusCode, res) => {
     .cookie('token', token, options)
     .json({
       success: true,
-      id: vendor.id,
-      slug: vendor.slug,
-      token
+      id: user.id,
+      slug: user.slug,
+      token,
+      isVendor
     });
 };

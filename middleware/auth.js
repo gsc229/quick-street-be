@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const asyncHandler = require('./async');
 const ErrorResponse = require('../utils/errorResponse');
 const Vendor = require('../models/Vendor');
+const Customer = require('../models/Customer');
 
 /// Protect routes
 exports.protect = asyncHandler(async (req, res, next) => {
@@ -46,8 +47,9 @@ exports.protect = asyncHandler(async (req, res, next) => {
     console.log('decoded token', decoded);
 
     req.vendor = await Vendor.findById(decoded.id);
+    req.customer = await Customer.findById(decoded.id);
 
-    if(req.params.vendorId === req.vendor.id) {
+    if(req.params.vendorId === req.vendor.id || req.params.customerId === req.customer.id) {
       next();
     } else {
       return next(new ErrorResponse('Not authorized to access this route', 401));

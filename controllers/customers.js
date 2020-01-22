@@ -15,7 +15,7 @@ exports.getAllCustomers = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1.0/customers/:id
 // @access  Private
 exports.getCustomer = asyncHandler(async (req, res, next) => {
-    const customer = await Customer.findById(req.params.customId);
+    const customer = await Customer.findById(req.params.customerId);
 
     if(!customer) {
         return next(
@@ -37,7 +37,7 @@ exports.createCustomer = asyncHandler(async (req, res, next) => {
         first_name,
         last_name
     })
-    
+
     res.status(201).json({ customer })
 });
 
@@ -74,5 +74,5 @@ exports.deleteCustomer = asyncHandler(async (req, res, next) => {
 
     customer.remove();
 
-    res.status(200).json({ success: true, data: customer })
+    res.status(200).json({ success: true, data: {} })
 });

@@ -3,10 +3,14 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const sendEmail = require('../utils/sendEmail');
 const Vendor = require('../models/Vendor');
+const Customer = require('../models/Customer');
 
 // @desc      Register vendor
 // @route     POST /api/v1/auth/register
 // @access    Public
+
+// *****   Create a condition statement based on user role *******
+
 exports.register = asyncHandler(async (req, res, next) => {
   const { email, password, business_name, address, phone } = req.body;
 
@@ -21,6 +25,7 @@ exports.register = asyncHandler(async (req, res, next) => {
 
   sendTokenResponse(vendor, 200, res);
 });
+
 
 // @desc      Login vendor
 // @route     POST /api/v1/auth/login

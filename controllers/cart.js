@@ -47,7 +47,7 @@ exports.addCart = asyncHandler(async (req, res, next) => {
 })
 
 // @desc    Add products to cart
-// @route   POST /api/v1.0/:customerId/addtocart
+// @route   POST /api/v1.0/customers/:customerId/addtocart
 // @access  Public
 exports.addItem = (req, res, next) => {
 

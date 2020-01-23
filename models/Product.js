@@ -29,6 +29,9 @@ const Product_Schema = new mongoose.Schema({
         ref: 'Vendor',
         required: true
     },
+    quantity: {
+        type: Number
+    }
     // category: {
     //     type: mongoose.Schema.ObjectId,
     //     ref: 'Category'

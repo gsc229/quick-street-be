@@ -28,7 +28,14 @@ const Product_Schema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'Vendor',
         required: true
+    },
+    quantity: {
+        type: Number
     }
+    // category: {
+    //     type: mongoose.Schema.ObjectId,
+    //     ref: 'Category'
+    // }
 });
 
 

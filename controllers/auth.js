@@ -250,7 +250,7 @@ const sendTokenResponse = (user, statusCode, res, isVendor) => {
 
   res
     .status(statusCode)
-    //.cookie('token', token, options)
+    .cookie('token', token, options)
     .json({
       success: true,
       id: user.id,

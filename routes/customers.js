@@ -29,6 +29,6 @@ router
     .route('/:customerId')
     .get(getCustomer)
     .put(protect, updateCustomer)
-    .delete(deleteCustomer)
+    .delete(protect, deleteCustomer)
 
 module.exports = router;

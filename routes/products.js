@@ -29,7 +29,7 @@ router
         .post(protect, addProduct); // POST /api/v1.0/vendors/:vendorId/products
 
 router
-    .route('/:id')
+    .route('/:productId')
         .get(getProduct)
         .put(protect, updateProduct) // PUT /api/v1.0/products/:id
         .delete(protect, deleteProduct); // DELETE /api/v1.0/vendors/:vendorId/products

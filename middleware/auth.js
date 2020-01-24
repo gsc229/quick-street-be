@@ -3,6 +3,7 @@ const asyncHandler = require('./async');
 const ErrorResponse = require('../utils/errorResponse');
 const Vendor = require('../models/Vendor');
 const Customer = require('../models/Customer');
+const Product = require('../models/Product');
 
 /// Protect routes
 exports.protect = asyncHandler(async (req, res, next) => {
@@ -49,13 +50,28 @@ exports.protect = asyncHandler(async (req, res, next) => {
     req.vendor = await Vendor.findById(decoded.id);
     req.customer = await Customer.findById(decoded.id);
 
-    if(req.params.vendorId === req.vendor.id || req.params.customerId === req.customer.id) {
+    if(req.params.productId) {
+      req.product = await Product.findById(req.params.productId) //this checks the DB
+      console.log('decodedvendor id ', req.vendor.id)
+      console.log('vendor object', req.product.vendor.toString())
+
+      if(req.product.vendor.toString() === req.vendor.id) {
+        console.log('is true')
+        next()
+
+      } else {
+        return next(new ErrorResponse('Not authorized to edit this product', 401));
+      }
+    }
+
+    else if(req.params.vendorId === req.vendor.id || req.params.customerId === req.customer.id ) {
       next();
     } else {
-      return next(new ErrorResponse('Not authorized to access this route', 401));
+      return next(new ErrorResponse('Not authorized to access this route with vendor and customer check', 401));
     }
     
   } catch (err) {
+    console.log('error caught', err)
     return next(new ErrorResponse('Not authorized to access this route', 401));
   }
 });

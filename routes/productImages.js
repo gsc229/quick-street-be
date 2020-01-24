@@ -16,7 +16,7 @@ const { protect } = require('../middleware/auth');
 router
   .route('/')
     .get(advancedResults(ProductImages), getAllImages)
-    .post(addImage); // POST /api/v1.0/products/:productId/product-images
+    .post(protect, addImage); // POST /api/v1.0/products/:productId/product-images
 
 router
   .route('/:imageId')

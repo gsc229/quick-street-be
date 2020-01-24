@@ -80,15 +80,19 @@ exports.protect = asyncHandler(async (req, res, next) => {
   const vendor = await Vendor.findById(decoded.id);
   const vendorParamId = req.params.vendorId;
   const vendorBodyId = req.body.vendorId;
-  console.log(typeof vendor._id);
+
   console.log(vendorBodyId);
   const customer = await Customer.findById(decoded.id);
   const customerParamId = req.params.customerId;
   const customerBodyId = req.body.customerId;
 
+
+
+
   if (vendor) {
+    console.log('Vendor: '.blue, vendor)
     if (vendor._id.toString() === vendorParamId || vendor._id.toString() === vendorBodyId) {
-      console.log('HIT IF STATEMENT vendorParamId');
+
       req.vendor = vendor;
       next();
     } else return next(new ErrorResponse(`Not authorized to access this route with vendor. Token id and param or body id doesn't match`, 401));
@@ -96,8 +100,10 @@ exports.protect = asyncHandler(async (req, res, next) => {
   }
 
   if (customer) {
+    console.log("Customer: ".blue, customer);
     if (customer._id.toString() === customerParamId || customer._id.toString() === customerBodyId) {
       req.customer = customer;
+      next();
     } else return next(new ErrorResponse(`Not authorized to access this route with customer. Token id and param or body id doesn't match`, 401));
   }
 

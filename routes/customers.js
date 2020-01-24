@@ -7,7 +7,7 @@ const {
     deleteCustomer
 } = require('../controllers/customers');
 const Customer = require('../models/Customer');
-
+const { protect } = require('../middleware/auth');
 const advancedResults = require('../middleware/advancedResults');
 
 // Include other resource routers
@@ -20,15 +20,15 @@ router.use('/:customerId/cart', cartRouter);
 
 
 
-router  
+router
     .route('/')
-        .get(advancedResults(Customer), getAllCustomers)
-        .post(createCustomer)
-        
+    .get(advancedResults(Customer), getAllCustomers)
+    .post(createCustomer)
+
 router
     .route('/:customerId')
-        .get(getCustomer)
-        .put(updateCustomer)
-        .delete(deleteCustomer)
+    .get(getCustomer)
+    .put(protect, updateCustomer)
+    .delete(deleteCustomer)
 
 module.exports = router;

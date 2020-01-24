@@ -16,16 +16,6 @@ exports.register = asyncHandler(async (req, res, next) => {
   console.log(findCustomer, findVendor);
 
   if (findBusinessName.length > 0) {
-<<<<<<< HEAD
-    return next(new ErrorResponse(`Vendor with that business name alread exists in our database.`, 400))
-  }
-
-  if (findVendor.length > 0 || findCustomer.length > 0) {
-    return next(new ErrorResponse(`User with that email already exists in our database.`, 400));
-  } else {
-    if (vendor) {
-      // Create user
-=======
     return next(
       new ErrorResponse(
         `Vendor with that business name alread exists in our database.`,
@@ -45,7 +35,6 @@ exports.register = asyncHandler(async (req, res, next) => {
     if (vendor) {
       // Create user
       console.log(`called`);
->>>>>>> 1bf59cf4b1afcd75892c0d874edad532e851ce20
       const vendor = await Vendor.create({
         email,
         password,
@@ -55,10 +44,6 @@ exports.register = asyncHandler(async (req, res, next) => {
       });
 
       sendTokenResponse(vendor, 200, res);
-<<<<<<< HEAD
-
-=======
->>>>>>> 1bf59cf4b1afcd75892c0d874edad532e851ce20
     } else {
       const customer = await Customer.create({
         email,
@@ -66,10 +51,6 @@ exports.register = asyncHandler(async (req, res, next) => {
       });
 
       sendTokenResponse(customer, 200, res);
-<<<<<<< HEAD
-
-=======
->>>>>>> 1bf59cf4b1afcd75892c0d874edad532e851ce20
     }
   }
 });
@@ -82,11 +63,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 
   // Validate email & password
   if (!email || !password) {
-<<<<<<< HEAD
-    return next(new ErrorResponse('Please provide an email and password', 400));
-=======
     return next(new ErrorResponse("Please provide an email and password", 400));
->>>>>>> 1bf59cf4b1afcd75892c0d874edad532e851ce20
   }
 
   if (vendor) {
@@ -94,11 +71,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     const findVendor = await Vendor.findOne({ email }).select("+password");
 
     if (!findVendor) {
-<<<<<<< HEAD
-      return next(new ErrorResponse('Invalid email credentials', 401)); //change back to "invalid credential once fully tested"
-=======
       return next(new ErrorResponse("Invalid email credentials", 401)); //change back to "invalid credential once fully tested"
->>>>>>> 1bf59cf4b1afcd75892c0d874edad532e851ce20
     }
 
     // Check if password matches
@@ -114,11 +87,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     const findCustomer = await Customer.findOne({ email }).select("+password");
 
     if (!findCustomer) {
-<<<<<<< HEAD
-      return next(new ErrorResponse('Invalid email credentials', 401)); //change back to "invalid credential once fully tested"
-=======
       return next(new ErrorResponse("Invalid email credentials", 401)); //change back to "invalid credential once fully tested"
->>>>>>> 1bf59cf4b1afcd75892c0d874edad532e851ce20
     }
 
     // Check if password matches
@@ -130,10 +99,6 @@ exports.login = asyncHandler(async (req, res, next) => {
 
     sendTokenResponse(findCustomer, 200, res, false);
   }
-<<<<<<< HEAD
-
-=======
->>>>>>> 1bf59cf4b1afcd75892c0d874edad532e851ce20
 });
 
 // @desc      Log user out / clear cookie

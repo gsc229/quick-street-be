@@ -3,6 +3,7 @@ const asyncHandler = require('./async');
 const ErrorResponse = require('../utils/errorResponse');
 const Vendor = require('../models/Vendor');
 const Customer = require('../models/Customer');
+const Product = require('../models/Product');
 
 /// Protect routes
 exports.protect = asyncHandler(async (req, res, next) => {

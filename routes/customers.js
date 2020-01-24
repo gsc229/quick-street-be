@@ -16,7 +16,7 @@ const cartRouter = require('./cart');
 const router = express.Router();
 
 //Re-route into other resource route
-router.use('/:customerId', cartRouter);
+router.use('/:customerId/cart', cartRouter);
 
 
 

@@ -27,16 +27,16 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Get a single product
-// @route   GET /api/v1.0/products/:id
+// @route   GET /api/v1.0/products/:prdocutId
 // @access  Public
 exports.getProduct = asyncHandler(async (req, res, next) => {
-    const product = await Product.findById(req.params.id).populate({
+    const product = await Product.findById(req.params.productId).populate({
         path: 'vendor',
         select: 'business_name description'
     });
 
     if (!product) {
-        return next(new ErrorResponse(`No product with the id of ${req.params.id}`),
+        return next(new ErrorResponse(`No product with the id of ${req.params.productId}`),
             404
         );
     }
@@ -80,15 +80,16 @@ exports.addProduct = asyncHandler(async (req, res, next) => {
 })
 
 // @desc    Update product
-// @route   PUT /api/v1.0/products/:id
+// @route   PUT /api/v1.0/products/:productId
 // @access  Private
 exports.updateProduct = asyncHandler(async (req, res, next) => {
-    console.log('Updating product:', req.params.id);
-    let product = await Product.findById(req.params.id)
+    
+    console.log('Updating product:', req.params.productId);
+    let product = await Product.findById(req.params.productId)
 
     if (!product) {
         return next(
-            new ErrorResponse(`No product with the id of ${req.params.id}`),
+            new ErrorResponse(`No product with the id of ${req.params.productId}`),
             404
         );
     }
@@ -97,19 +98,20 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
         runValidators: true
     });
 
-    // Make sure vendor is product owner
+    //Make sure vendor is product owner
+    
     // if(product.vendor.toString() !== req.vendor.id) {
     //     return next(
-    //         new ErrorResponse(`Vendor ${req.params.id} is not authorized to update this product`)
+    //         new ErrorResponse(`Vendor ${req.params.vendorId} is not authorized to update this product`)
     //     );
     // }
 
-    // product = await Product.findOneAndUpdate(req.params.id, req.body, {
-    //     new: true,
-    //     runValidators: true
-    // })
-
-    res.status(200).json({
+    product = await Product.findOneAndUpdate(req.params.productId, req.body, {
+        new: true,
+        runValidators: true
+    })
+    console.log('did update run', product)
+    res.status(201).json({
         success: true,
         data: product
     });
@@ -120,10 +122,10 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
 // @route   DELETE /api/v1.0/vendors/:vendorId/products
 // @access  Private
 exports.deleteProduct = asyncHandler(async (req, res, next) => {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.productId);
 
     if (!product) {
-        return next(new ErrorResponse(`No product with the id of ${req.params.id}`),
+        return next(new ErrorResponse(`No product with the id of ${req.params.productId}`),
             404
         );
     }

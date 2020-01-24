@@ -3,6 +3,8 @@ const {
     getCart,
     addCart,
     addItem,
+    updateItem,
+    deleteItem,
     deleteCart
 } = require('../controllers/cart');
 const Cart = require('../models/Cart');
@@ -19,4 +21,9 @@ router
 router
     .route('/addtocart')
         .post(addItem)
+        .put(updateItem)
+        
+router
+    .route('/deleteitem/:productId')
+        .delete(deleteItem)
 module.exports = router;

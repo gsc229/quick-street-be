@@ -12,12 +12,13 @@ exports.getAllCustomers = asyncHandler(async (req, res, next) => {
 
 
 // @desc    Get customer by ID
-// @route   GET /api/v1.0/customers/:id
+// @route   GET /api/v1.0/customers/:customerId
 // @access  Private
 exports.getCustomer = asyncHandler(async (req, res, next) => {
+    console.log(`GET getCustomer`)
     const customer = await Customer.findById(req.params.customerId);
 
-    if(!customer) {
+    if (!customer) {
         return next(
             new ErrorResponse(`Customer with the id ${req.params.customerId} is not found`, 404)
         )
@@ -51,7 +52,7 @@ exports.updateCustomer = asyncHandler(async (req, res, next) => {
         runValidators: true
     });
 
-    if(!customer) {
+    if (!customer) {
         return next(
             new ErrorResponse(`Customer with the id ${req.params.customerId} is not found`, 404)
         )
@@ -66,7 +67,7 @@ exports.updateCustomer = asyncHandler(async (req, res, next) => {
 exports.deleteCustomer = asyncHandler(async (req, res, next) => {
     const customer = await Customer.findByIdAndDelete(req.params.customerId);
 
-    if(!customer) {
+    if (!customer) {
         return next(
             new ErrorResponse(`Customer with the id ${req.params.customerId} is not found`, 404)
         )

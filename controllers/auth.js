@@ -15,34 +15,34 @@ exports.register = asyncHandler(async (req, res, next) => {
   const findBusinessName = await Vendor.find({ business_name });
   console.log(findCustomer, findVendor);
 
-  if( findBusinessName.length > 0) {
+  if (findBusinessName.length > 0) {
     return next(new ErrorResponse(`Vendor with that business name alread exists in our database.`, 400))
   }
 
-  if( findVendor.length > 0 || findCustomer.length > 0 ) {
+  if (findVendor.length > 0 || findCustomer.length > 0) {
     return next(new ErrorResponse(`User with that email already exists in our database.`, 400));
   } else {
-      if(vendor) {
-        // Create user
-        const vendor = await Vendor.create({
-          email,
-          password,
-          business_name,
-          address,
-          phone
-        });
+    if (vendor) {
+      // Create user
+      const vendor = await Vendor.create({
+        email,
+        password,
+        business_name,
+        address,
+        phone
+      });
 
-        sendTokenResponse(vendor, 200, res);
+      sendTokenResponse(vendor, 200, res);
 
-      } else {
-        const customer = await Customer.create({
-          email,
-          password
-        });
+    } else {
+      const customer = await Customer.create({
+        email,
+        password
+      });
 
-        sendTokenResponse(customer, 200, res);
+      sendTokenResponse(customer, 200, res);
 
-      }
+    }
   }
 });
 
@@ -55,16 +55,16 @@ exports.login = asyncHandler(async (req, res, next) => {
 
   // Validate email & password
   if (!email || !password) {
-  return next(new ErrorResponse('Please provide an email and password', 400));
-}
+    return next(new ErrorResponse('Please provide an email and password', 400));
+  }
 
-if(vendor) {
+  if (vendor) {
     // Check for vendor
     const findVendor = await Vendor.findOne({ email }).select('+password');
 
     if (!findVendor) {
       return next(new ErrorResponse('Invalid email credentials', 401)); //change back to "invalid credential once fully tested"
-    } 
+    }
 
     // Check if password matches
     const isMatch = await findVendor.matchPassword(password);
@@ -74,13 +74,13 @@ if(vendor) {
     }
 
     sendTokenResponse(findVendor, 200, res, true);
-} else {
+  } else {
     // Check for customer
     const findCustomer = await Customer.findOne({ email }).select('+password');
 
     if (!findCustomer) {
       return next(new ErrorResponse('Invalid email credentials', 401)); //change back to "invalid credential once fully tested"
-    } 
+    }
 
     // Check if password matches
     const isMatch = await findCustomer.matchPassword(password);
@@ -90,8 +90,8 @@ if(vendor) {
     }
 
     sendTokenResponse(findCustomer, 200, res, false);
-}
-  
+  }
+
 });
 
 // @desc      Log user out / clear cookie

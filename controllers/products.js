@@ -93,10 +93,10 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
             404
         );
     }
-    // product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-    //     new: true,
-    //     runValidators: true
-    // })
+    product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+    });
 
     //Make sure vendor is product owner
     

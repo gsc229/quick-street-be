@@ -124,7 +124,7 @@ exports.updateItemAfterSwitchVendor = (req, res, next) => {
 };
 
 // @desc    Delete products from cart
-// @route   PUT /api/v1.0/customers/:customerId/cart/deleteitem/:productId
+// @route   DELETE /api/v1.0/customers/:customerId/cart/deleteitem/:productId
 // @access  Public
 exports.deleteItem = (req, res, next) => {
   const product = req.params.productId;

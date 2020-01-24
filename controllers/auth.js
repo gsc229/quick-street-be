@@ -59,14 +59,15 @@ exports.register = asyncHandler(async (req, res, next) => {
 // @route     POST /api/v1/auth/login
 // @access    Public
 exports.login = asyncHandler(async (req, res, next) => {
-  const { email, password, vendor } = req.body;
+  const { email, password } = req.body;
+  const checkVendor = await Vendor.findOne({ email });
 
   // Validate email & password
   if (!email || !password) {
     return next(new ErrorResponse("Please provide an email and password", 400));
   }
 
-  if (vendor) {
+  if (checkVendor) {
     // Check for vendor
     const findVendor = await Vendor.findOne({ email }).select("+password");
 

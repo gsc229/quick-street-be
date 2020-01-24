@@ -104,7 +104,7 @@ exports.addItem = async (req, res, next) => {
 // @desc    Update products to cart
 // @route   PUT /api/v1.0/customers/:customerId/cart/addtocart
 // @access  Public
-exports.updateItem = (req, res, next) => {
+exports.updateItemAfterSwitchVendor = (req, res, next) => {
   Cart.findOne({ owner: req.params.customerId }, function(err, cart) {
     cart.items = [];
     cart.items.push({

@@ -3,7 +3,7 @@ const {
   getCart,
   addCart,
   addItem,
-  updateItem,
+  updateItemAfterSwitchVendor,
   deleteItem,
   deleteCart
 } = require("../controllers/cart");
@@ -21,7 +21,7 @@ router
 router
   .route("/addtocart")
   .post(addItem)
-  .put(updateItem);
+  .put(updateItemAfterSwitchVendor);
 
 router.route("/deleteitem/:productId").delete(deleteItem);
 module.exports = router;

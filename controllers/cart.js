@@ -67,39 +67,43 @@ exports.addCart = asyncHandler(async (req, res, next) => {
 // @desc    Add products to cart
 // @route   POST /api/v1.0/customers/:customerId/cart/addtocart
 // @access  Public
-exports.addItem = async (req, res, next) => {
+exports.addItem = asyncHandler(async (req, res, next) => {
   //console.log('add item to cart customerId', req.params.customerId)
-  const cart = await Cart.findOne({ owner: req.params.customerId });
+  const cart = await Cart.findOne({ owner: req.params.customerId }).populate('items.item', "name price");
+  const product = await Product.findById( req.body.productId );
+  
   console.log("does cart exists", cart);
   // check if the item was added before
   if (cart) {
     const itemIndex = cart.items.findIndex(
-      i => i.item.toString() === req.body.productId
+      i => i.item.id === req.body.productId
     );
     console.log(itemIndex);
     if (itemIndex === -1) {
-      cart.items.push({
-        item: req.body.productId,
-        price: parseFloat(req.body.price),
-        quantity: parseInt(req.body.quantity)
-      });
+      cart.items.push(product);
     } else {
       cart.items[itemIndex].quantity += parseInt(req.body.quantity);
     }
 
-    cart.total = (
-      cart.total +
-      parseFloat(req.body.price) * parseInt(req.body.quantity)
-    ).toFixed(2);
+    cart.total = cart.items.reduce((acc, itemObj) => {
+        return acc + (parseFloat(itemObj.item.price) * parseInt(itemObj.quantity))
+        
+    }, 0)
+    console.log('cart total', cart.total)
+    // cart.total = (
+    //   cart.total +
+    //   parseFloat(cart.items[0].item.price) * parseInt(req.body.quantity)
+    // ).toFixed(2);
 
     cart.save();
+    console.log('cart object', cart)
     res
       .status(200)
-      .json({ success: true, message: "Product was added to your cart" });
+      .json({ success: true, message: `The Product with the ID ${req.body.productId} was added to your cart`, data: cart });
   } else {
-    return next(new ErrorResponse(`shopping car does not exist`, 400));
+    return next(new ErrorResponse(`shopping cart does not exist`, 400));
   }
-};
+});
 
 // @desc    Update products to cart
 // @route   PUT /api/v1.0/customers/:customerId/cart/addtocart
@@ -120,7 +124,7 @@ exports.updateItemAfterSwitchVendor = (req, res, next) => {
 
   res
     .status(200)
-    .json({ success: true, message: `The product was updated successfully` });
+    .json({ success: true, message: `The product was updated successfully`, data: cart });
 };
 
 // @desc    Delete products from cart

@@ -51,7 +51,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
     req.customer = await Customer.findById(decoded.id);
 
     if(req.params.productId) {
-      req.product = await Product.findById(req.params.productId)
+      req.product = await Product.findById(req.params.productId) //this checks the DB
       console.log('decodedvendor id ', req.vendor.id)
       console.log('vendor object', req.product.vendor.toString())
 

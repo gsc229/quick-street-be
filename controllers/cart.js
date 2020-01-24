@@ -3,6 +3,7 @@ const Customer = require("../models/Customer");
 const Product = require("../models/Product");
 const asyncHandler = require("../middleware/async");
 const ErrorResponse = require("../utils/errorResponse");
+const stripe = require('stripe') ('pk_test_h1PiAqFdpVJpFn9xYKA1JEX7008fXbJlqI');
 
 // @desc    Get cart
 // @route   GET /api/v1.0/customers/:customerId/cart
@@ -71,8 +72,9 @@ exports.addItem = asyncHandler(async (req, res, next) => {
   //console.log('add item to cart customerId', req.params.customerId)
   const cart = await Cart.findOne({ owner: req.params.customerId }).populate('items.item', "name price");
   const product = await Product.findById( req.body.productId );
-  
+  console.log('product object', product)
   console.log("does cart exists", cart);
+
   // check if the item was added before
   if (cart) {
     const itemIndex = cart.items.findIndex(
@@ -80,23 +82,35 @@ exports.addItem = asyncHandler(async (req, res, next) => {
     );
     console.log(itemIndex);
     if (itemIndex === -1) {
+        console.log('product object before pushing onto cart', product)
       cart.items.push(product);
+
     } else {
       cart.items[itemIndex].quantity += parseInt(req.body.quantity);
     }
 
-    cart.total = cart.items.reduce((acc, itemObj) => {
-        return acc + (parseFloat(itemObj.item.price) * parseInt(itemObj.quantity))
-        
-    }, 0)
-    console.log('cart total', cart.total)
-    // cart.total = (
-    //   cart.total +
-    //   parseFloat(cart.items[0].item.price) * parseInt(req.body.quantity)
-    // ).toFixed(2);
+    console.log('cart object before reduce function', cart)
+
+    // cart.total = cart.items.reduce((acc, itemObj) => {
+    //     console.log('itemObj', itemObj.item)
+    //     if(itemObj.item) {
+    //         return acc + (parseFloat(itemObj.item.price) * parseInt(itemObj.quantity))
+    //     } else {
+    //         return
+    //     }
+    // }, 0)
+   
+console.log('product price and quatity', product.price, req.body.quantity)
+    cart.total = (
+      cart.total +
+      parseFloat(product.price) * parseInt(req.body.quantity)
+    ).toFixed(2);
 
     cart.save();
     console.log('cart object', cart)
+
+    console.log('cart total', cart.total)
+
     res
       .status(200)
       .json({ success: true, message: `The Product with the ID ${req.body.productId} was added to your cart`, data: cart });
@@ -164,3 +178,9 @@ exports.deleteCart = asyncHandler(async (req, res, next) => {
     data: {}
   });
 });
+
+
+exports.payment = asyncHandler(async (req, res, next) => {
+    const stripeToken = req.body.stripeToken;
+    const cartTotal = (req.body.stipePayment * 100) // converting to dollars
+})

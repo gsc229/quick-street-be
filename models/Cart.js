@@ -20,7 +20,7 @@ const Cart_Schema = new mongoose.Schema({
         quantity: {
             type: Number,
             default: 1
-        }
+        },
         // price: {
         //     type: Number,
         //     default: 0

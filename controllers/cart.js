@@ -33,17 +33,25 @@ exports.addCart = asyncHandler(async (req, res, next) => {
     console.log('Creating new cart from customerId', req.body.owner);
 
     const customer = await Customer.findById(req.params.customerId);
+    console.log('what is customer', customer)
 
     if(!customer) {
         return next(new ErrorResponse(`No customer with the id of ${req.params.customerId}`, 404))
     }
 
-    const cart = await Cart.create(req.body);
+    const cart = await Cart.findOne({ owner: customer })
 
-    res.status(200).json({
-        success: true,
-        data: cart
-    });
+    if(!cart) {
+        const newCart = await Cart.create(req.body);
+
+        res.status(200).json({
+            success: true,
+            data: newCart
+        });
+    } else {
+        return next(new ErrorResponse(`You already have a cart with id ${cart.id} created`, 400))
+    }
+    
 })
 
 // @desc    Add products to cart

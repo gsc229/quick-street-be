@@ -16,12 +16,13 @@ const router = express.Router({ mergeParams: true }); //merging the URL files
 router
   .route("/")
   .get(getCart)
-  .post(addCart)
-  .delete(deleteCart);
+  .post(addCart);
+
 router
   .route("/addtocart")
   .post(addItem)
   .put(updateItemAfterSwitchVendor);
 
 router.route("/deleteitem/:productId").delete(deleteItem);
+router.route("/:cartId").delete(deleteCart);
 module.exports = router;

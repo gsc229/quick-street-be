@@ -13,7 +13,7 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
     if (req.params.vendorId) {
         query = Product.find({
             vendor: req.params.vendorId
-        }).select('-location')
+        })
         const products = await query;
 
         res.status(200).json({

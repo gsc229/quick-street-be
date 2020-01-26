@@ -16,7 +16,7 @@ exports.getAllVendors = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1.0/vendors/:id
 // @access  Private
 exports.getVendor = asyncHandler(async (req, res, next) => {
-  const vendor = await Vendor.findById(req.params.vendorId).select('-location');
+  const vendor = await Vendor.findById(req.params.vendorId);
 
   if (!vendor) {
     return next(

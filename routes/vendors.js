@@ -30,17 +30,17 @@ router.use('/:vendorId/product-images', productImageRouter);
 
 router
   .route('/radius/:zipcode/:distance')
-    .get(getVendorsInRadius);
+  .get(advancedResults(Vendor), getVendorsInRadius);
 
 router
   .route('/')
-    .get(advancedResults(Vendor), getAllVendors)
-    .post(protect, createVendor); // POST /api/v1.0/vendors
+  .get(advancedResults(Vendor), getAllVendors)
+  .post(protect, createVendor); // POST /api/v1.0/vendors
 
 router
   .route('/:vendorId')
-    .get(getVendor)
-    .put(protect, updateVendor) // PUT /api/v1.0/vendors/:id
-    .delete(protect, deleteVendor); // DELETE /api/v1.0/vendors/:id
+  .get(advancedResults(Vendor), getVendor)
+  .put(protect, updateVendor) // PUT /api/v1.0/vendors/:id
+  .delete(protect, deleteVendor); // DELETE /api/v1.0/vendors/:id
 
 module.exports = router;

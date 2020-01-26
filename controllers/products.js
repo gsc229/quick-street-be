@@ -143,26 +143,29 @@ exports.deleteProduct = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1.0/products/radius/:zipcode/:distance
 // @access  Public
 exports.getProductsInRadius = asyncHandler(async (req, res, next) => {
-    console.log('getProductInRadius req.params', req.params);
-    console.log('getProductsInRadius res.advancedResults'.red, res.advancedResults)
-    const { zipcode, distance } = req.params;
+    /*  console.log('getProductInRadius req.params', req.params);
+     console.log('getProductsInRadius res.advancedResults'.red, res.advancedResults)
+     const { zipcode, distance } = req.params;
+ 
+     // Get lat/lng from geocoder
+     const loc = await geocoder.geocode(zipcode);
+     const lat = loc[0].latitude;
+     const lng = loc[0].longitude;
+ 
+     // Calc radius using radians
+     // Divide dist by radius of Earth = 3,663 mi / 6,378.1
+     const radius = distance / 3963;
+ 
+     const products = await Product.find({
+         location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } }
+     });
+ 
+     res.status(200).json({
+         success: true,
+         count: products.length,
+         data: products
+     }); */
 
-    // Get lat/lng from geocoder
-    const loc = await geocoder.geocode(zipcode);
-    const lat = loc[0].latitude;
-    const lng = loc[0].longitude;
+    res.status(200).json(res.advancedResults)
 
-    // Calc radius using radians
-    // Divide dist by radius of Earth = 3,663 mi / 6,378.1
-    const radius = distance / 3963;
-
-    const products = await Product.find({
-        location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } }
-    });
-
-    res.status(200).json({
-        success: true,
-        count: products.length,
-        data: products
-    });
 });

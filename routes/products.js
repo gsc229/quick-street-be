@@ -25,7 +25,7 @@ router.use('/:productId/product-images', productImagesRouter);
 
 router
     .route('/radius/:zipcode/:distance')
-    .get(advancedResults(Products, { path: 'vendor', select: 'business_name description location' }), getProductsInRadius);
+    .get(advancedResults(Products), getProductsInRadius);
 
 router
     .route('/')

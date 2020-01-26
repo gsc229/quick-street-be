@@ -39,7 +39,7 @@ router
 
 router
   .route('/:vendorId')
-  .get(getVendor)
+  .get(advancedResults(Vendor), getVendor)
   .put(protect, updateVendor) // PUT /api/v1.0/vendors/:id
   .delete(protect, deleteVendor); // DELETE /api/v1.0/vendors/:id
 

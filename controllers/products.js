@@ -13,7 +13,7 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
     if (req.params.vendorId) {
         query = Product.find({
             vendor: req.params.vendorId
-        })
+        }).select('-location')
         const products = await query;
 
         res.status(200).json({
@@ -32,8 +32,8 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
 exports.getProduct = asyncHandler(async (req, res, next) => {
     const product = await Product.findById(req.params.productId).populate({
         path: 'vendor',
-        select: 'business_name description location'
-    });
+        select: 'business_name description'
+    })
 
     if (!product) {
         return next(new ErrorResponse(`No product with the id of ${req.params.productId}`),
@@ -166,6 +166,6 @@ exports.getProductsInRadius = asyncHandler(async (req, res, next) => {
          data: products
      }); */
 
-    res.status(200).json(res.advancedResults)
+    res.status(200).json(res.advancedResults);
 
 });

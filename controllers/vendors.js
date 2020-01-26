@@ -16,14 +16,19 @@ exports.getAllVendors = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1.0/vendors/:id
 // @access  Private
 exports.getVendor = asyncHandler(async (req, res, next) => {
-  const vendor = await Vendor.findById(req.params.vendorId);
+  const vendor = await Vendor.findById(req.params.vendorId).select('-location');
 
   if (!vendor) {
     return next(
       new ErrorResponse(`Vendor not found with id of ${req.params.vendorId}`, 404)
     );
   }
+
   res.status(200).json({ success: true, data: vendor });
+
+
+
+
 });
 // @desc    Create a new vendor
 // @route   POST /api/v1.0/vendors
@@ -77,7 +82,7 @@ exports.deleteVendor = asyncHandler(async (req, res, next) => {
 
 // @desc    Get vendors within a radius
 // @route   GET /api/v1.0/vendors/radius/:zipcode/:distance?query
-// @access  Private
+// @access  Public
 exports.getVendorsInRadius = asyncHandler(async (req, res, next) => {
 
 

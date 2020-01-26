@@ -61,6 +61,8 @@ const advancedResults = (model, populate) => async (req, res, next) => {
     // default sort. '-' means sort Z-A
     query = query.sort('-createdAt')
   }
+  // remove the location to protect vendor's info
+  query = query.select('-location');
 
   // Pagination
   const page = parseInt(req.query.page, 10) || 1;

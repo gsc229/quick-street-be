@@ -1,5 +1,9 @@
+const geocoder = require('../utils/geocoder');
+
 const advancedResults = (model, populate) => async (req, res, next) => {
   let query;
+
+
 
   // Making a copy of req.query 
   const reqQuery = { ...req.query };
@@ -10,6 +14,28 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   // Loop over removeFields and delete them from reqQuery if it has them
   removeFields.forEach(param => delete reqQuery[param]);
   console.log('select/sort/page/limit removed reqQuery: ', reqQuery);
+
+
+
+  // check for geocode parameters and add location query object: 
+  if (req.params.zipcode && req.params.distance) {
+    console.log('advancedResults.js, req.params.zipcode'.america, req.params.zipcode, 'req.params.distance: ', req.params.distance)
+    const { zipcode, distance } = req.params;
+
+    // Get lat/lng from geocoder
+    const loc = await geocoder.geocode(zipcode);
+    const lat = loc[0].latitude;
+    const lng = loc[0].longitude;
+
+    // Calc radius using radians
+    // Divide dist by radius of Earth = 3,663 mi / 6,378.1
+    const radius = distance / 3963;
+    reqQuery.location = { $geoWithin: { $centerSphere: [[lng, lat], radius] } }
+
+    console.log('advancedResults.js added location:  '.yellow.bg, reqQuery)
+
+  }
+
 
   let queryStr = JSON.stringify(reqQuery);
   console.log(`advancedResults queryStr: `.yellow, queryStr);
@@ -27,7 +53,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
     query = query.select(fields);
   }
 
-  // Sort. Something similar as the above select if statement.
+  // Sort. Something similar to the above select if statement.
   if (req.query.sort) {
     const sortBy = req.query.sort.split(',').join(' ');
     query = query.sort(sortBy);
@@ -68,7 +94,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
       limit
     }
   }
-
+  console.log('advancedMiddleWare.js Final Results', results)
   res.advancedResults = {
     success: true,
     count: results.length,

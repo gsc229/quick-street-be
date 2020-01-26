@@ -3,7 +3,7 @@ const ErrorResponse = require('../utils/errorResponse');
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
 
-  console.log("HERE'S err from error.js: ", err);
+  //console.log("HERE'S err from error.js: ", err);
   error.message = err.message;
 
   // Log to console for dev

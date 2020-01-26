@@ -31,11 +31,9 @@ const Product_Schema = new mongoose.Schema({
     },
     quantity: {
         type: Number
-    }
-    // category: {
-    //     type: mongoose.Schema.ObjectId,
-    //     ref: 'Category'
-    // }
+    },
+    location: Object
+
 });
 
 
@@ -46,5 +44,7 @@ Product_Schema.pre('remove', async function (next) {
     });
     next();
 });
+
+
 
 module.exports = mongoose.model('Product', Product_Schema);

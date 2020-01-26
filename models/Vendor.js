@@ -93,7 +93,7 @@ const Vendor_Schema = new mongoose.Schema(
       country: String
     }
   },
-  {
+  { //why are these here? See Note on Reverse Populate over function below.
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
   }
@@ -113,7 +113,7 @@ Vendor_Schema.pre('save', async function (next) {
 
 // Sign JWT and return
 Vendor_Schema.methods.getSignedJwtToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, { 
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE
   });
 };
@@ -188,6 +188,14 @@ Vendor_Schema.pre('remove', async function (next) {
   });
   next();
 });
+
+// Note on Reverse Populate:  with virtual. For every Vendor, this function will attach an array of objects of the Vendor's products. To activate this virtual, do Vendor.find('some query').poplulate('products') at the controller level, or do advancedFilter('Vendors', {path: products}) at the route level.
+Vendor_Schema.virtual('products', {
+  ref: 'Product',
+  localField: '_id',
+  foreignField: 'vendor',
+  justOne: false
+})
 
 
 module.exports = mongoose.model('Vendor', Vendor_Schema);

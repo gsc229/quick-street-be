@@ -76,28 +76,18 @@ exports.deleteVendor = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Get vendors within a radius
-// @route   GET /api/v1.0/vendors/radius/:zipcode/:distance
+// @route   GET /api/v1.0/vendors/radius/:zipcode/:distance?query
 // @access  Private
 exports.getVendorsInRadius = asyncHandler(async (req, res, next) => {
-  console.log('req params', req.params);
-  const { zipcode, distance } = req.params;
 
-  // Get lat/lng from geocoder
-  const loc = await geocoder.geocode(zipcode);
-  const lat = loc[0].latitude;
-  const lng = loc[0].longitude;
 
-  // Calc radius using radians
-  // Divide dist by radius of Earth = 3,663 mi / 6,378.1
-  const radius = distance / 3963;
 
-  const vendors = await Vendor.find({
-    location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } }
-  });
+  /*  res.status(200).json({
+     success: true,
+     count: vendors.length,
+     data: vendors
+   }); */
 
-  res.status(200).json({
-    success: true,
-    count: vendors.length,
-    data: vendors
-  });
+  res.status(200).json(res.advancedResults)
+
 });

@@ -68,37 +68,40 @@ exports.addCart = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1.0/customers/:customerId/cart/addtocart
 // @access  Public
 exports.addItem = async (req, res, next) => {
-    //console.log('add item to cart customerId', req.params.customerId)
-    const cart = await Cart.findOne({ owner: req.params.customerId });
-    console.log("does cart exists", cart);
-    // check if the item was added before
-    if (cart) {
-        const itemIndex = cart.items.findIndex(
-            i => i.item.toString() === req.body.productId
-        );
-        console.log(itemIndex);
-        if (itemIndex === -1) {
-            cart.items.push({
-                item: req.body.productId,
-                price: parseFloat(req.body.price),
-                quantity: parseInt(req.body.quantity)
-            });
-        } else {
-            cart.items[itemIndex].quantity += parseInt(req.body.quantity);
-        }
+  //console.log('add item to cart customerId', req.params.customerId)
+  const cart = await Cart.findOne({ owner: req.params.customerId }).populate(
+    "items.item",
+    "name price"
+  );
 
-        cart.total = (
-            cart.total +
-            parseFloat(req.body.price) * parseInt(req.body.quantity)
-        ).toFixed(2);
+  const product = await Product.findById(req.body.productId);
 
-        cart.save();
-        res
-            .status(200)
-            .json({ success: true, message: "Product was added to your cart" });
+  // check if the item was added before
+  if (cart) {
+    const itemInCart = cart.items.find(
+      i => i.item._id.toString() === product._id.toString()
+    );
+
+    if (!itemInCart) {
+      cart.items.push({ item: product, quantity: req.body.quantity });
     } else {
-        return next(new ErrorResponse(`shopping car does not exist`, 400));
+      itemInCart.quantity += parseInt(req.body.quantity);
     }
+
+    cart.total = (
+      cart.total +
+      parseFloat(product.price) * parseInt(req.body.quantity)
+    ).toFixed(2);
+
+    cart.save();
+    res.status(200).json({
+      success: true,
+      message: "Product was added to your cart",
+      cart
+    });
+  } else {
+    return next(new ErrorResponse(`shopping car does not exist`, 400));
+  }
 };
 
 // @desc    Update products to cart
@@ -144,19 +147,20 @@ exports.deleteItem = (req, res, next) => {
 };
 
 // @desc    Delete cart
-// @route   DELETE /api/v1.0/customers/:customerId/cart
+// @route   DELETE /api/v1.0/cart/:cartId
 // @access  Private
 exports.deleteCart = asyncHandler(async (req, res, next) => {
-    const cart = await Cart.findOneAndDelete(req.body.items);
+  console.log(`called`);
+  const cart = await Cart.findOneAndDelete({ _id: req.params.cartId });
+  console.log(req.params.cartId);
+  console.log(cart);
+
 
     if (!cart) {
         return next(new ErrorResponse(`Cart not found`, 404));
     }
-
-    cart.remove();
-
-    res.status(200).json({
-        success: true,
-        data: {}
-    });
+  res.status(200).json({
+    success: true,
+    data: {}
+  });
 });

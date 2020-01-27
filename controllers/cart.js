@@ -3,7 +3,7 @@ const Customer = require("../models/Customer");
 const Product = require("../models/Product");
 const asyncHandler = require("../middleware/async");
 const ErrorResponse = require("../utils/errorResponse");
-const stripe = require('stripe') ('pk_test_h1PiAqFdpVJpFn9xYKA1JEX7008fXbJlqI');
+const stripe = require('stripe') (process.env.STRIPE_PUBLISHABLE_KEY);
 
 // @desc    Get cart
 // @route   GET /api/v1.0/customers/:customerId/cart
@@ -168,6 +168,7 @@ exports.deleteCart = asyncHandler(async (req, res, next) => {
 
 
 exports.addPayment = asyncHandler(async (req, res, next) => {
+
     const stripeToken = req.body.stripeToken; //first we receive a stripe token 
     const currentCharges = Math.round(req.body.stipePayment * 100) // converting to dollars
 
@@ -176,10 +177,42 @@ exports.addPayment = asyncHandler(async (req, res, next) => {
     }).then(function(customer) { // then charge the customer
         return stripe.charges.create({
             amount: currentCharges,
-            currency: null,
+            currency: 'usd',
             customer: customer.id // make sure it's the right customer youre charging
+        }).then(function(charge) { 
+            async.waterfall([
+                function(cb) {
+                    Cart.findOne({ owner: req.params.customerId }, function(err, cart) {
+                        cb(err, cart)
+                    })
+                },
+                function(cart, cb) {
+                    Customer.findOne({ _id: req.params.customerId}, function(err, customer) {
+                        if(customer) {
+                            for (let i = 0; i < cart.items.length; i++) {
+                                customer.history.push({
+                                    item: cart.items[i].item,
+                                    paid: cart.items[i].item.price
+                                })
+                            }
+                            customer.save(function(err, customer) {
+                                if(err) return next(err);
+                                cb(err, customer)
+                            })
+                        }
+                    })
+                },
+                function(customer, cb) {
+                    Cart.update({ owner: customer.customerId}, {$set: { items: [], total: 0}}, function(err, updated) {
+                        if(updated) {
+                           res.send({message: 'success'})
+                        }
+                    })
+                }
+            ])
         })
     })
 
     // res.redirect('/')
 })
+

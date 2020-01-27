@@ -32,7 +32,11 @@ const Product_Schema = new mongoose.Schema({
     quantity: {
         type: Number
     },
-    location: Object
+    location: Object,
+    product_image : {
+        type: mongoose.Schema.ObjectId,
+        ref: 'ProductImage'
+    }
 
 });
 

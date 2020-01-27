@@ -58,10 +58,16 @@ exports.addImage = asyncHandler(async (req, res, next) => {
   }
 
   const image = await ProductImage.create(req.body);
+
+  product.product_image = image;
+  product.save();
+
   res.status(200).json({
     success: true,
     data: image
   })
+
+ 
 
 });
 

@@ -1,12 +1,13 @@
 const express = require("express");
-const {
-  getCart,
-  addCart,
-  addItem,
-  updateItemAfterSwitchVendor,
-  deleteItem,
-  deleteCart,
-  addPayment
+const {    
+    getAllCarts,
+    getCart,
+    addCart,
+    addItem,
+    updateItemAfterSwitchVendor,
+    deleteItem,
+    deleteCart,
+    addPayment
 } = require("../controllers/cart");
 const Cart = require("../models/Cart");
 
@@ -15,7 +16,7 @@ const advancedResults = require("../middleware/advancedResults");
 const router = express.Router({ mergeParams: true }); //merging the URL files
 
 router
-  .route("/")
+  .route("/") // /api/v1.0/customers/:customerId/cart
     .get(getCart)
     .post(addCart);
 

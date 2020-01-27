@@ -22,7 +22,7 @@ const Cart_Schema = new mongoose.Schema({
         default: 0
     },
     
-    }]
+  }]
        
 });
 

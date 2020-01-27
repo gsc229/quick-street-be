@@ -5,6 +5,15 @@ const asyncHandler = require("../middleware/async");
 const ErrorResponse = require("../utils/errorResponse");
 const stripe = require('stripe') (process.env.STRIPE_PUBLISHABLE_KEY);
 
+
+// @desc    Get cart
+// @route   GET /api/v1.0/customers/:customerId/cart
+// @access  Public
+exports.getAllCarts = asyncHandler(async (req, res, next) => {
+    res.status(200).json(res.advancedResults);
+})
+
+
 // @desc    Get cart
 // @route   GET /api/v1.0/customers/:customerId/cart
 // @access  Public
@@ -13,7 +22,7 @@ exports.getCart = asyncHandler(async (req, res, next) => {
 
     const cart = await Cart.findOne({
         owner: req.params.customerId
-    }).populate("items.item", "name price");
+    }).populate("items.item", "name price product_image");
 
     if (!cart) {
         return next(
@@ -72,7 +81,7 @@ exports.addItem = asyncHandler(async (req, res, next) => {
   //console.log('add item to cart customerId', req.params.customerId)
   const cart = await Cart.findOne({ owner: req.params.customerId }).populate(
     "items.item",
-    "name price diet description category vendor"
+    "name price diet description category vendor product_image"
   );
 
   const product = await Product.findById(req.body.productId);
@@ -212,7 +221,5 @@ exports.addPayment = asyncHandler(async (req, res, next) => {
             ])
         })
     })
-
-    // res.redirect('/')
-})
+});
 

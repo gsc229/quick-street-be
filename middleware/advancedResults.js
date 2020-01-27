@@ -49,8 +49,10 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   if (req.query.select) {
 
     let fields = req.query.select.split(',').join(' ');
-
+    console.log('advancedResults select fields'.blue, typeof fields);
+    // note: with select you cannot select and deselect fields at the same time. 
     query = query.select(fields);
+
   }
 
   // Sort. Something similar to the above select if statement.
@@ -62,7 +64,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
     query = query.sort('-createdAt')
   }
   // remove the location to protect vendor's info
-  query = query.select('-location');
+
 
   // Pagination
   const page = parseInt(req.query.page, 10) || 1;

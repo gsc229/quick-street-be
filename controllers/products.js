@@ -13,7 +13,7 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
     if (req.params.vendorId) {
         query = Product.find({
             vendor: req.params.vendorId
-        }).select('-location')
+        })
         const products = await query;
 
         res.status(200).json({
@@ -84,7 +84,11 @@ exports.addProduct = asyncHandler(async (req, res, next) => {
 // @access  Private
 exports.updateProduct = asyncHandler(async (req, res, next) => {
 
-    console.log('Updating product:', req.params.productId);
+    console.log('Updating product:'.green, req.params.productId.toString().red);
+    console.log('Products.js updateProd. req.vendor: '.green, req.vendor.toString().yellow)
+    console.log('Products.js updateProd. req.body: '.green, req.body.toString().blue)
+
+
     let product = await Product.findById(req.params.productId)
 
     if (!product) {
@@ -93,23 +97,11 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
             404
         );
     }
-    product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    product = await Product.findByIdAndUpdate(req.params.productId, req.body, {
         new: true,
         runValidators: true
     });
 
-    //Make sure vendor is product owner
-
-    // if(product.vendor.toString() !== req.vendor.id) {
-    //     return next(
-    //         new ErrorResponse(`Vendor ${req.params.vendorId} is not authorized to update this product`)
-    //     );
-    // }
-
-    product = await Product.findOneAndUpdate(req.params.productId, req.body, {
-        new: true,
-        runValidators: true
-    })
     console.log('did update run', product)
     res.status(201).json({
         success: true,

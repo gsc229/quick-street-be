@@ -95,7 +95,9 @@ const Vendor_Schema = new mongoose.Schema(
       state: String,
       zipcode: String,
       country: String
-    }
+    },
+    zipcode: String
+
   },
   { //why are these here? See Note on Reverse Populate over function below.
     toJSON: { virtuals: true },
@@ -169,6 +171,7 @@ Vendor_Schema.pre('save', async function (next) {
 
   //Do not save address in the DB
   this.address = undefined;
+  this.zipcode = loc[0].zipcode
   next();
 });
 

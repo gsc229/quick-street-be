@@ -3,6 +3,16 @@ const Customer = require("../models/Customer");
 const Product = require("../models/Product");
 const asyncHandler = require("../middleware/async");
 const ErrorResponse = require("../utils/errorResponse");
+const stripe = require('stripe') (process.env.STRIPE_PUBLISHABLE_KEY);
+
+
+// @desc    Get cart
+// @route   GET /api/v1.0/customers/:customerId/cart
+// @access  Public
+exports.getAllCarts = asyncHandler(async (req, res, next) => {
+    res.status(200).json(res.advancedResults);
+})
+
 
 // @desc    Get cart
 // @route   GET /api/v1.0/customers/:customerId/cart
@@ -12,7 +22,7 @@ exports.getCart = asyncHandler(async (req, res, next) => {
 
     const cart = await Cart.findOne({
         owner: req.params.customerId
-    }).populate("items.item", "name price");
+    }).populate("items.item", "name price product_image");
 
     if (!cart) {
         return next(
@@ -67,11 +77,11 @@ exports.addCart = asyncHandler(async (req, res, next) => {
 // @desc    Add products to cart
 // @route   POST /api/v1.0/customers/:customerId/cart/addtocart
 // @access  Public
-exports.addItem = async (req, res, next) => {
+exports.addItem = asyncHandler(async (req, res, next) => {
   //console.log('add item to cart customerId', req.params.customerId)
   const cart = await Cart.findOne({ owner: req.params.customerId }).populate(
     "items.item",
-    "name price"
+    "name price diet description category vendor product_image"
   );
 
   const product = await Product.findById(req.body.productId);
@@ -100,9 +110,9 @@ exports.addItem = async (req, res, next) => {
       cart
     });
   } else {
-    return next(new ErrorResponse(`shopping car does not exist`, 400));
+    return next(new ErrorResponse(`shopping cart does not exist`, 400));
   }
-};
+});
 
 // @desc    Update products to cart
 // @route   PUT /api/v1.0/customers/:customerId/cart/addtocart
@@ -121,9 +131,9 @@ exports.updateItemAfterSwitchVendor = (req, res, next) => {
         cart.save();
     });
 
-    res
-        .status(200)
-        .json({ success: true, message: `The product was updated successfully` });
+  res
+    .status(200)
+    .json({ success: true, message: `The product was updated successfully`, data: cart });
 };
 
 // @desc    Delete products from cart
@@ -164,3 +174,52 @@ exports.deleteCart = asyncHandler(async (req, res, next) => {
     data: {}
   });
 });
+
+
+exports.addPayment = asyncHandler(async (req, res, next) => {
+
+    const stripeToken = req.body.stripeToken; //first we receive a stripe token 
+    const currentCharges = Math.round(req.body.stipePayment * 100) // converting to dollars
+
+    stripe.customers.create({ //create a customer and view as admin
+        source: stripeToken,
+    }).then(function(customer) { // then charge the customer
+        return stripe.charges.create({
+            amount: currentCharges,
+            currency: 'usd',
+            customer: customer.id // make sure it's the right customer youre charging
+        }).then(function(charge) { 
+            async.waterfall([
+                function(cb) {
+                    Cart.findOne({ owner: req.params.customerId }, function(err, cart) {
+                        cb(err, cart)
+                    })
+                },
+                function(cart, cb) {
+                    Customer.findOne({ _id: req.params.customerId}, function(err, customer) {
+                        if(customer) {
+                            for (let i = 0; i < cart.items.length; i++) {
+                                customer.history.push({
+                                    item: cart.items[i].item,
+                                    paid: cart.items[i].item.price
+                                })
+                            }
+                            customer.save(function(err, customer) {
+                                if(err) return next(err);
+                                cb(err, customer)
+                            })
+                        }
+                    })
+                },
+                function(customer, cb) {
+                    Cart.update({ owner: customer.customerId}, {$set: { items: [], total: 0}}, function(err, updated) {
+                        if(updated) {
+                           res.send({message: 'success'})
+                        }
+                    })
+                }
+            ])
+        })
+    })
+});
+

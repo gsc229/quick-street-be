@@ -69,7 +69,13 @@ const Vendor_Schema = new mongoose.Schema(
     },
     diet_categories: {
       type: [String],
-      enum: ['Gluten Free', 'Vegetarian', 'Vegan', 'Keto', 'Dairy Free']
+      enum: [
+        'Gluten Free', 
+        'Vegetarian', 
+        'Vegan', 
+        'Keto', 
+        'Dairy Free'
+      ]
     },
     created_at: {
       type: Date,

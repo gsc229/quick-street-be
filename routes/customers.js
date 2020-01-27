@@ -4,7 +4,8 @@ const {
     getCustomer,
     createCustomer,
     updateCustomer,
-    deleteCustomer
+    deleteCustomer,
+    getHistory
 } = require('../controllers/customers');
 const Customer = require('../models/Customer');
 const { protect } = require('../middleware/auth');
@@ -30,5 +31,9 @@ router
     .get(getCustomer)
     .put(protect, updateCustomer)
     .delete(protect, deleteCustomer)
+
+router
+    .route("/getHistory")
+        .get(getHistory);
 
 module.exports = router;

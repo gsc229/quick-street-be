@@ -77,3 +77,15 @@ exports.deleteCustomer = asyncHandler(async (req, res, next) => {
 
     res.status(200).json({ success: true, data: {} })
 });
+
+exports.getHistory = asyncHandler(async (req, res, next) => {
+    const customer = (await Customer.findOne({ _id: req.params.customerId })).populate('history.item history.paid').exec(function(err, foundCustomer) {
+        if(err) return next(err);
+
+        res.send({ data: foundCustomer})
+    })
+
+    if(!customer) {
+        return next(new ErrorResponse(`Customer with the id ${req.params.customerId} is not found`, 404))
+    }
+})

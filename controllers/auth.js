@@ -18,7 +18,7 @@ exports.register = asyncHandler(async (req, res, next) => {
   if (findBusinessName.length > 0) {
     return next(
       new ErrorResponse(
-        `Vendor with that business name alread exists in our database.`,
+        `Vendor with that business name already exists in our database.`,
         400
       )
     );

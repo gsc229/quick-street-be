@@ -5,7 +5,8 @@ const {
   addItem,
   updateItemAfterSwitchVendor,
   deleteItem,
-  deleteCart
+  deleteCart,
+  addPayment
 } = require("../controllers/cart");
 const Cart = require("../models/Cart");
 
@@ -15,13 +16,25 @@ const router = express.Router({ mergeParams: true }); //merging the URL files
 
 router
   .route("/")
-  .get(getCart)
-  .post(addCart)
-  .delete(deleteCart);
+    .get(getCart)
+    .post(addCart);
+
 router
   .route("/addtocart")
-  .post(addItem)
-  .put(updateItemAfterSwitchVendor);
+    .post(addItem)
+    .put(updateItemAfterSwitchVendor);
 
-router.route("/deleteitem/:productId").delete(deleteItem);
+router
+    .route("/deleteitem/:productId")
+        .delete(deleteItem);
+
+router
+    .route("/:cartId")
+        .delete(deleteCart);
+
+router
+    .route("/payment")
+        .post(addPayment);
+
+
 module.exports = router;

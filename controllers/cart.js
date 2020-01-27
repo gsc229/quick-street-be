@@ -9,60 +9,60 @@ const stripe = require('stripe') ('pk_test_h1PiAqFdpVJpFn9xYKA1JEX7008fXbJlqI');
 // @route   GET /api/v1.0/customers/:customerId/cart
 // @access  Public
 exports.getCart = asyncHandler(async (req, res, next) => {
-  console.log("customerId cart controller, line 13", req.params.customerId);
+    console.log("customerId cart controller, line 13", req.params.customerId);
 
-  const cart = await Cart.findOne({
-    owner: req.params.customerId
-  }).populate("items.item", "name price");
+    const cart = await Cart.findOne({
+        owner: req.params.customerId
+    }).populate("items.item", "name price");
 
-  if (!cart) {
-    return next(
-      new ErrorResponse(
-        `No customer with id ${req.params.customerId} owns this cart`,
-        404
-      )
-    );
-  }
+    if (!cart) {
+        return next(
+            new ErrorResponse(
+                `No customer with id ${req.params.customerId} owns this cart`,
+                404
+            )
+        );
+    }
 
-  res.status(200).json({ success: true, data: cart });
+    res.status(200).json({ success: true, data: cart });
 });
 
 // @desc    Create cart to customer
 // @route   POST /api/v1.0/customers/:customerId/cart
 // @access  Public
 exports.addCart = asyncHandler(async (req, res, next) => {
-  req.body.owner = req.params.customerId;
-  console.log("Creating new cart from customerId", req.body.owner);
+    req.body.owner = req.params.customerId;
+    console.log("Creating new cart from customerId", req.body.owner);
 
-  const customer = await Customer.findById(req.params.customerId);
-  console.log("what is customer", customer);
+    const customer = await Customer.findById(req.params.customerId);
+    console.log("what is customer", customer);
 
-  if (!customer) {
-    return next(
-      new ErrorResponse(
-        `No customer with the id of ${req.params.customerId}`,
-        404
-      )
-    );
-  }
+    if (!customer) {
+        return next(
+            new ErrorResponse(
+                `No customer with the id of ${req.params.customerId}`,
+                404
+            )
+        );
+    }
 
-  const cart = await Cart.findOne({ owner: customer });
+    const cart = await Cart.findOne({ owner: customer });
 
-  if (!cart) {
-    const newCart = await Cart.create(req.body);
+    if (!cart) {
+        const newCart = await Cart.create(req.body);
 
-    res.status(200).json({
-      success: true,
-      data: newCart
-    });
-  } else {
-    return next(
-      new ErrorResponse(
-        `You already have a cart with id ${cart.id} created`,
-        400
-      )
-    );
-  }
+        res.status(200).json({
+            success: true,
+            data: newCart
+        });
+    } else {
+        return next(
+            new ErrorResponse(
+                `You already have a cart with id ${cart.id} created`,
+                400
+            )
+        );
+    }
 });
 
 // @desc    Add products to cart
@@ -70,53 +70,36 @@ exports.addCart = asyncHandler(async (req, res, next) => {
 // @access  Public
 exports.addItem = asyncHandler(async (req, res, next) => {
   //console.log('add item to cart customerId', req.params.customerId)
-  const cart = await Cart.findOne({ owner: req.params.customerId }).populate('items.item', "name price");
-  const product = await Product.findById( req.body.productId );
-  console.log('product object', product)
-  console.log("does cart exists", cart);
+  const cart = await Cart.findOne({ owner: req.params.customerId }).populate(
+    "items.item",
+    "name price diet description category vendor"
+  );
+
+  const product = await Product.findById(req.body.productId);
 
   // check if the item was added before
   if (cart) {
-    const itemIndex = cart.items.findIndex(
-      i => i.item === req.body.productId
-     
+    const itemInCart = cart.items.find(
+      i => i.item._id.toString() === product._id.toString()
     );
-    console.log('itemIndex', itemIndex);
-    if (itemIndex === -1) {
-        console.log('product object before pushing onto cart', product)
-      cart.items.push(product);
 
+    if (!itemInCart) {
+      cart.items.push({ item: product, quantity: req.body.quantity });
     } else {
-      cart.items[itemIndex].quantity += parseInt(req.body.quantity);
-
-      cart.total = cart.items.reduce((acc, itemObj) => {
-        console.log('itemObj', itemObj.item)
-        if(itemObj.item) {
-            return acc + (parseFloat(itemObj.item.price) * parseInt(itemObj.quantity))
-        } else {
-            return
-        }
-    }, 0)
+      itemInCart.quantity += parseInt(req.body.quantity);
     }
 
-    console.log('cart object before reduce function', cart)
-
-   
-   
-console.log('product price and quatity', product.price, req.body.quantity)
-    // cart.total = (
-    //   cart.total +
-    //   parseFloat(product.price) * parseInt(req.body.quantity)
-    // ).toFixed(2);
+    cart.total = (
+      cart.total +
+      parseFloat(product.price) * parseInt(req.body.quantity)
+    ).toFixed(2);
 
     cart.save();
-    console.log('cart object', cart)
-
-    console.log('cart total', cart.total)
-
-    res
-      .status(200)
-      .json({ success: true, message: `The Product with the ID ${req.body.productId} was added to your cart`, data: cart });
+    res.status(200).json({
+      success: true,
+      message: "Product was added to your cart",
+      cart
+    });
   } else {
     return next(new ErrorResponse(`shopping cart does not exist`, 400));
   }
@@ -126,18 +109,18 @@ console.log('product price and quatity', product.price, req.body.quantity)
 // @route   PUT /api/v1.0/customers/:customerId/cart/addtocart
 // @access  Public
 exports.updateItemAfterSwitchVendor = (req, res, next) => {
-  Cart.findOne({ owner: req.params.customerId }, function(err, cart) {
-    cart.items = [];
-    cart.items.push({
-      item: req.body.productId,
-      price: parseFloat(req.body.price),
-      quantity: parseInt(req.body.quantity)
+    Cart.findOne({ owner: req.params.customerId }, function (err, cart) {
+        cart.items = [];
+        cart.items.push({
+            item: req.body.productId,
+            price: parseFloat(req.body.price),
+            quantity: parseInt(req.body.quantity)
+        });
+
+        cart.total = (cart.total + parseFloat(req.body.price)).toFixed(2);
+
+        cart.save();
     });
-
-    cart.total = (cart.total + parseFloat(req.body.price)).toFixed(2);
-
-    cart.save();
-  });
 
   res
     .status(200)
@@ -148,34 +131,35 @@ exports.updateItemAfterSwitchVendor = (req, res, next) => {
 // @route   DELETE /api/v1.0/customers/:customerId/cart/deleteitem/:productId
 // @access  Public
 exports.deleteItem = (req, res, next) => {
-  const product = req.params.productId;
-  console.log("product id", product);
+    const product = req.params.productId;
+    console.log("product id", product);
 
-  Cart.findOne({ owner: req.params.customerId }, function(err, cart) {
-    cart.items = cart.items.filter(item => {
-      if (item.item.toString() !== product) {
-        return item;
-      }
+    Cart.findOne({ owner: req.params.customerId }, function (err, cart) {
+        cart.items = cart.items.filter(item => {
+            if (item.item.toString() !== product) {
+                return item;
+            }
+        });
+
+        cart.save();
     });
 
-    cart.save();
-  });
-
-  res.status(200).json({ success: true, data: {} });
+    res.status(200).json({ success: true, data: {} });
 };
 
 // @desc    Delete cart
-// @route   DELETE /api/v1.0/customers/:customerId/cart
+// @route   DELETE /api/v1.0/cart/:cartId
 // @access  Private
 exports.deleteCart = asyncHandler(async (req, res, next) => {
-  const cart = await Cart.findOneAndDelete(req.body.items);
+  console.log(`called`);
+  const cart = await Cart.findOneAndDelete({ _id: req.params.cartId });
+  console.log(req.params.cartId);
+  console.log(cart);
 
-  if (!cart) {
-    return next(new ErrorResponse(`Cart not found`, 404));
-  }
 
-  cart.remove();
-
+    if (!cart) {
+        return next(new ErrorResponse(`Cart not found`, 404));
+    }
   res.status(200).json({
     success: true,
     data: {}
@@ -183,7 +167,7 @@ exports.deleteCart = asyncHandler(async (req, res, next) => {
 });
 
 
-exports.payment = asyncHandler(async (req, res, next) => {
+exports.addPayment = asyncHandler(async (req, res, next) => {
     const stripeToken = req.body.stripeToken; //first we receive a stripe token 
     const currentCharges = Math.round(req.body.stipePayment * 100) // converting to dollars
 

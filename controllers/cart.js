@@ -78,33 +78,36 @@ exports.addItem = asyncHandler(async (req, res, next) => {
   // check if the item was added before
   if (cart) {
     const itemIndex = cart.items.findIndex(
-      i => i.item.id === req.body.productId
+      i => i.item === req.body.productId
+     
     );
-    console.log(itemIndex);
+    console.log('itemIndex', itemIndex);
     if (itemIndex === -1) {
         console.log('product object before pushing onto cart', product)
       cart.items.push(product);
 
     } else {
       cart.items[itemIndex].quantity += parseInt(req.body.quantity);
+
+      cart.total = cart.items.reduce((acc, itemObj) => {
+        console.log('itemObj', itemObj.item)
+        if(itemObj.item) {
+            return acc + (parseFloat(itemObj.item.price) * parseInt(itemObj.quantity))
+        } else {
+            return
+        }
+    }, 0)
     }
 
     console.log('cart object before reduce function', cart)
 
-    // cart.total = cart.items.reduce((acc, itemObj) => {
-    //     console.log('itemObj', itemObj.item)
-    //     if(itemObj.item) {
-    //         return acc + (parseFloat(itemObj.item.price) * parseInt(itemObj.quantity))
-    //     } else {
-    //         return
-    //     }
-    // }, 0)
+   
    
 console.log('product price and quatity', product.price, req.body.quantity)
-    cart.total = (
-      cart.total +
-      parseFloat(product.price) * parseInt(req.body.quantity)
-    ).toFixed(2);
+    // cart.total = (
+    //   cart.total +
+    //   parseFloat(product.price) * parseInt(req.body.quantity)
+    // ).toFixed(2);
 
     cart.save();
     console.log('cart object', cart)
@@ -181,6 +184,18 @@ exports.deleteCart = asyncHandler(async (req, res, next) => {
 
 
 exports.payment = asyncHandler(async (req, res, next) => {
-    const stripeToken = req.body.stripeToken;
-    const cartTotal = (req.body.stipePayment * 100) // converting to dollars
+    const stripeToken = req.body.stripeToken; //first we receive a stripe token 
+    const currentCharges = Math.round(req.body.stipePayment * 100) // converting to dollars
+
+    stripe.customers.create({ //create a customer and view as admin
+        source: stripeToken,
+    }).then(function(customer) { // then charge the customer
+        return stripe.charges.create({
+            amount: currentCharges,
+            currency: null,
+            customer: customer.id // make sure it's the right customer youre charging
+        })
+    })
+
+    // res.redirect('/')
 })

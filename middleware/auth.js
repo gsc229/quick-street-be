@@ -90,7 +90,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
 
   if (vendor) {
-    console.log('Vendor: '.blue, vendor)
+    console.log('auth.js 92 Vendor: '.green, vendor.toString().blue)
     if (vendor._id.toString() === vendorParamId || vendor._id.toString() === vendorBodyId) {
 
       req.vendor = vendor;

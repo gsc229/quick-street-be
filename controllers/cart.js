@@ -9,9 +9,25 @@ const stripe = require('stripe') (process.env.STRIPE_PUBLISHABLE_KEY);
 // @desc    Get cart
 // @route   GET /api/v1.0/customers/:customerId/cart
 // @access  Public
-exports.getAllCarts = asyncHandler(async (req, res, next) => {
-    res.status(200).json(res.advancedResults);
-})
+// exports.getAllCarts = asyncHandler(async (req, res, next) => {
+//     let query;
+
+//     if(req.params.customerId) {
+//         query = Cart.find({
+//             customer: req.params.customerId
+//         })
+//         const carts = await query;
+    
+
+//         res.status(200).json({
+//             success: true,
+//             count: carts.length,
+//             data: carts
+//         });
+//     } else {
+//         res.status(200).json(res.advancedResults)
+//     }
+// })
 
 
 // @desc    Get cart
@@ -22,12 +38,12 @@ exports.getCart = asyncHandler(async (req, res, next) => {
 
     const cart = await Cart.findOne({
         owner: req.params.customerId
-    }).populate("items.item", "name price product_image");
+    }).populate("items.item", "name price product_image quantity ");
 
     if (!cart) {
         return next(
             new ErrorResponse(
-                `No customer with id ${req.params.customerId} owns this cart`,
+                `The customer with ID ${req.params.customerId} has not created a cart`,
                 404
             )
         );
@@ -98,10 +114,15 @@ exports.addItem = asyncHandler(async (req, res, next) => {
       itemInCart.quantity += parseInt(req.body.quantity);
     }
 
-    cart.total = (
-      cart.total +
-      parseFloat(product.price) * parseInt(req.body.quantity)
-    ).toFixed(2);
+    cart.total = cart.items.reduce((acc, item) => {
+        console.log('item and acc', item, acc)
+        return acc + (item.quantity * item.item.price)
+    }, 0)
+
+    // cart.total = (
+    //   cart.total +
+    //   parseFloat(product.price) * parseInt(req.body.quantity)
+    // ).toFixed(2);
 
     cart.save();
     res.status(200).json({
@@ -117,44 +138,89 @@ exports.addItem = asyncHandler(async (req, res, next) => {
 // @desc    Update products to cart
 // @route   PUT /api/v1.0/customers/:customerId/cart/addtocart
 // @access  Public
-exports.updateItemAfterSwitchVendor = (req, res, next) => {
-    Cart.findOne({ owner: req.params.customerId }, function (err, cart) {
-        cart.items = [];
-        cart.items.push({
-            item: req.body.productId,
-            price: parseFloat(req.body.price),
-            quantity: parseInt(req.body.quantity)
-        });
-
-        cart.total = (cart.total + parseFloat(req.body.price)).toFixed(2);
-
+exports.updateQuantity = asyncHandler(async (req, res, next) => {
+    const cart = await Cart.findOne({ owner: req.params.customerId }).populate(
+        "items.item",
+        "name price diet description category vendor product_image"
+      );
+    
+      const product = await Product.findById(req.body.productId);
+    
+      // check if the item was added before
+      if (cart) {
+        const itemInCart = cart.items.find(
+          i => i.item._id.toString() === product._id.toString()
+        );
+    
+        if (!itemInCart) {
+          cart.items.push({ item: product, quantity: req.body.quantity });
+        } else {
+          itemInCart.quantity = parseInt(req.body.quantity);
+        }
+    
+        cart.total = cart.items.reduce((acc, item) => {
+            console.log('item and acc', item, acc)
+            return acc + (item.quantity * item.item.price)
+        }, 0)
+    
         cart.save();
-    });
+        res.status(200).json({
+          success: true,
+          message: "Product was added to your cart",
+          cart
+        });
+      } else {
+        return next(new ErrorResponse(`shopping cart does not exist`, 400));
+      }
 
-  res
-    .status(200)
-    .json({ success: true, message: `The product was updated successfully`, data: cart });
-};
+
+//    Cart.findOne({ owner: req.params.customerId }, function (err,       cart) {
+//         cart.items = [];
+//         cart.items.push({
+//             item: req.body.productId,
+//             quantity: parseInt(req.body.quantity)
+//         });
+
+//         cart.total = (cart.total + parseFloat(req.body.price)).toFixed(2);
+
+//         cart.save();
+//     });
+
+//   res
+//     .status(200)
+//     .json({ success: true, message: `The product was updated successfully`, data: cart});
+});
+
+
 
 // @desc    Delete products from cart
 // @route   DELETE /api/v1.0/customers/:customerId/cart/deleteitem/:productId
 // @access  Public
-exports.deleteItem = (req, res, next) => {
+exports.deleteItem = asyncHandler(async (req, res, next) => {
     const product = req.params.productId;
     console.log("product id", product);
 
-    Cart.findOne({ owner: req.params.customerId }, function (err, cart) {
-        cart.items = cart.items.filter(item => {
-            if (item.item.toString() !== product) {
-                return item;
-            }
-        });
+    const cart = await Cart.findOne({ owner: req.params.customerId }).populate('items.item', 'name price diet description category vendor product_image');
 
-        cart.save();
-    });
+    cart.items = cart.items.filter(item => {
+        if (item.item.id !== product) {
+            console.log('item id in filter', item.item.id)
+            return item;
+        }
+    })
 
-    res.status(200).json({ success: true, data: {} });
-};
+    cart.total = cart.items.reduce((acc, item) => {
+        console.log('item and acc', item, acc)
+        return acc + (item.quantity * item.item.price)
+    }, 0)
+
+    console.log('cart in delete item', cart)
+
+    cart.save();
+    
+
+    res.status(200).json({ success: true, data: cart });
+});
 
 // @desc    Delete cart
 // @route   DELETE /api/v1.0/cart/:cartId

@@ -95,7 +95,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
       req.vendor = vendor;
       next();
-    } else return next(new ErrorResponse(`Not authorized to access this route with vendor. Token id and param or body id doesn't match`, 401));
+    } else return next(new ErrorResponse(`Not authorized to access this route. The ID supplied doesn't match the token ID for this vendor`, 401));
 
   }
 
@@ -104,7 +104,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
     if (customer._id.toString() === customerParamId || customer._id.toString() === customerBodyId) {
       req.customer = customer;
       next();
-    } else return next(new ErrorResponse(`Not authorized to access this route with customer. Token id and param or body id doesn't match`, 401));
+    } else return next(new ErrorResponse(`Not authorized to access this route. The ID supplied doesn't match the token ID for this customer`, 401));
   }
 
 

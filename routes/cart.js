@@ -4,7 +4,7 @@ const {
     getCart,
     addCart,
     addItem,
-    updateItemAfterSwitchVendor,
+    updateQuantity,
     deleteItem,
     deleteCart,
     addPayment
@@ -17,13 +17,14 @@ const router = express.Router({ mergeParams: true }); //merging the URL files
 
 router
   .route("/") // /api/v1.0/customers/:customerId/cart
+    // .get(getAllCarts)
     .get(getCart)
     .post(addCart);
 
 router
   .route("/addtocart")
     .post(addItem)
-    .put(updateItemAfterSwitchVendor);
+    .put(updateQuantity);
 
 router
     .route("/deleteitem/:productId")

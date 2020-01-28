@@ -98,7 +98,12 @@ exports.addItem = asyncHandler(async (req, res, next) => {
   const cart = await Cart.findOne({ owner: req.params.customerId }).populate(
     "items.item",
     "name price diet description category vendor product_image"
-  );
+
+  ).populate({
+    path: 'items.item',
+    // Get friends of friends - populate the 'friends' array for every friend
+    populate: { path: 'product_image' }
+  });
 
   const product = await Product.findById(req.body.productId);
 
@@ -116,6 +121,7 @@ exports.addItem = asyncHandler(async (req, res, next) => {
 
     cart.total = cart.items.reduce((acc, item) => {
         console.log('item and acc', item, acc)
+        console.log('item.item.price', item.item.price)
         return acc + (item.quantity * item.item.price)
     }, 0)
 

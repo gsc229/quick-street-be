@@ -38,7 +38,11 @@ exports.getCart = asyncHandler(async (req, res, next) => {
 
     const cart = await Cart.findOne({
         owner: req.params.customerId
-    }).populate("items.item", "name price product_image quantity ");
+    }).populate("items.item", "name price product_image quantity ").populate({
+        path: 'items.item',
+        // Get friends of friends - populate the 'friends' array for every friend
+        populate: { path: 'product_image' }
+      });
 
     if (!cart) {
         return next(

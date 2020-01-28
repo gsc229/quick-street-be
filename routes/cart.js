@@ -4,7 +4,7 @@ const {
     getCart,
     addCart,
     addItem,
-    updateItemAfterSwitchVendor,
+    updateQuantity,
     deleteItem,
     deleteCart,
     addPayment
@@ -24,7 +24,7 @@ router
 router
   .route("/addtocart")
     .post(addItem)
-    .put(updateItemAfterSwitchVendor);
+    .put(updateQuantity);
 
 router
     .route("/deleteitem/:productId")

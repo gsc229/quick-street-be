@@ -14,7 +14,12 @@ const Product_Schema = new mongoose.Schema({
     },
     diet: {
         type: [String],
-        enum: ['Gluten Free', 'Vegetarian', 'Vegan', 'Keto', 'Dairy Free']
+        enum: [
+            'Gluten Free', 
+            'Vegetarian', 
+            'Vegan', 
+            'Keto', 
+            'Dairy Free']
     },
     price: {
         type: Number,

@@ -15,15 +15,19 @@ const Product_Schema = new mongoose.Schema({
     diet: {
         type: [String],
         enum: [
-            'Gluten Free', 
-            'Vegetarian', 
-            'Vegan', 
-            'Keto', 
+            'Gluten Free',
+            'Vegetarian',
+            'Vegan',
+            'Keto',
             'Dairy Free']
     },
     price: {
         type: Number,
         required: [true, 'Please add a price for this product']
+    },
+    unit: {
+        type: String,
+        default: ""
     },
     createdAt: {
         type: Date,
@@ -38,7 +42,7 @@ const Product_Schema = new mongoose.Schema({
         type: Number
     },
     location: Object,
-    product_image : {
+    product_image: {
         type: mongoose.Schema.ObjectId,
         ref: 'ProductImage'
     }

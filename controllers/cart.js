@@ -1,9 +1,12 @@
 const Cart = require("../models/Cart");
 const Customer = require("../models/Customer");
+const Order = require('../models/Order');
 const Product = require("../models/Product");
 const asyncHandler = require("../middleware/async");
 const ErrorResponse = require("../utils/errorResponse");
-const stripe = require('stripe') (process.env.STRIPE_PUBLISHABLE_KEY);
+const stripe = require('stripe');
+const verifyToken = require('../middlewares/auth');
+const moment = require('moment');
 
 
 // @desc    Get cart
@@ -40,7 +43,6 @@ exports.getCart = asyncHandler(async (req, res, next) => {
         owner: req.params.customerId
     }).populate("items.item", "name price product_image quantity ").populate({
         path: 'items.item',
-        // Get friends of friends - populate the 'friends' array for every friend
         populate: { path: 'product_image' }
       });
 
@@ -105,7 +107,6 @@ exports.addItem = asyncHandler(async (req, res, next) => {
 
   ).populate({
     path: 'items.item',
-    // Get friends of friends - populate the 'friends' array for every friend
     populate: { path: 'product_image' }
   });
 
@@ -254,48 +255,52 @@ exports.deleteCart = asyncHandler(async (req, res, next) => {
 
 exports.addPayment = asyncHandler(async (req, res, next) => {
 
-    const stripeToken = req.body.stripeToken; //first we receive a stripe token 
-    const currentCharges = Math.round(req.body.stipePayment * 100) // converting to dollars
+    let totalPrice = Math.round(req.body.totalPrice * 100); // we get this from total price which is sent from the front end
 
-    stripe.customers.create({ //create a customer and view as admin
-        source: stripeToken,
-    }).then(function(customer) { // then charge the customer
-        return stripe.charges.create({
-            amount: currentCharges,
-            currency: 'usd',
-            customer: customer.id // make sure it's the right customer youre charging
-        }).then(function(charge) { 
-            async.waterfall([
-                function(cb) {
-                    Cart.findOne({ owner: req.params.customerId }, function(err, cart) {
-                        cb(err, cart)
-                    })
-                },
-                function(cart, cb) {
-                    Customer.findOne({ _id: req.params.customerId}, function(err, customer) {
-                        if(customer) {
-                            for (let i = 0; i < cart.items.length; i++) {
-                                customer.history.push({
-                                    item: cart.items[i].item,
-                                    paid: cart.items[i].item.price
-                                })
-                            }
-                            customer.save(function(err, customer) {
-                                if(err) return next(err);
-                                cb(err, customer)
-                            })
-                        }
-                    })
-                },
-                function(customer, cb) {
-                    Cart.update({ owner: customer.customerId}, {$set: { items: [], total: 0}}, function(err, updated) {
-                        if(updated) {
-                           res.send({message: 'success'})
-                        }
-                    })
-                }
-            ])
+    stripe.customers // create the customer by passing the email of that ser
+        .create({
+            email: req.decoded.email
         })
-    })
+        .then(customer => { // once the customer is created, then we create a source of the customer, the source is the information of the users card information, which we get from the front end
+            return stripe.customers.createSource(customer.id, {
+                source: 'tok_visa' // token visa -- testing token --> will change when in production
+            });
+        })
+        .then(source => { // after we have created a source, we then want to charge the user, only if the card is valid
+            return stripe.charges.create({
+                amount: totalPrice, // passing in the amount which is the total price of the cart
+                currency: 'usd',
+                customer: source.customer // passing in the source object (the users card)
+            })
+        })
+        .then(async charge => { // once we have charged the card, we want to pass in any custom logic. We want to create a new order object and then get the cart data from the front end
+            let order = new Order(); // create new order object
+            let cart = req.body.cart; // get the cart object from the front end
+
+            cart.map(product => { // loop over all the products in the cart and push it to the order
+                order.product.push({
+                    productID: product._id,
+                    quantity: parseInt(product.quantity),
+                    price: product.price
+                })
+            })
+
+            order.owner = req.decoded._id; // then we set our owner to the users ID from the verified token
+
+            await order.save(); // then we save the order
+
+            res.status(200).json({
+                success: true,
+                message: 'You have successfully made a payment!'
+            })
+
+
+        })
+        .catch (err => {
+            res.status(500).json({
+                success: false,
+                message: err.message
+            })
+        })
 });
 

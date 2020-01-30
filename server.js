@@ -24,6 +24,7 @@ const products = require('./routes/products');
 const cart = require('./routes/cart');
 const productImages = require('./routes/productImages');
 const posts = require('./routes/posts');
+const orders = require('./routes/order');
 
 const app = express();
 
@@ -56,6 +57,7 @@ app.use('/api/v1.0/products', products);
 app.use('/api/v1.0/cart', cart);
 app.use('/api/v1.0/product-images', productImages);
 app.use('/api/v1.0/posts', posts);
+app.use('/api/v1.0/orders', orders);
 
 // Make public a static folder (you can access the photos through the URL in browser)
 app.use(express.static(path.join(__dirname, 'public')));

@@ -1,21 +1,26 @@
 const mongoose = require('mongoose');
+const deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 
 const OrderSchema = new mongoose.Schema({
     owner: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.ObjectId,
         ref: 'Customer'
     },
-    products: [
+    items: [
         {
-            productID: {
-                type: Schema.Types.ObjectId,
+            productId: {
+                type: mongoose.Schema.ObjectId,
                 ref: 'Product'
             },
             quantity: Number,
-            price: Number
+           
         }
-    ]
+    ],
+    total: Number
 });
+
+OrderSchema.plugin(deepPopulate); // now allows us to deep populate more than one level
+
 
 module.exports = mongoose.model('Order', OrderSchema);

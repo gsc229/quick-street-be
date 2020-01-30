@@ -11,6 +11,7 @@ const {
 } = require("../controllers/cart");
 const Cart = require("../models/Cart");
 
+//const verifyToken = require('../middleware/auth');
 const advancedResults = require("../middleware/advancedResults");
 
 const router = express.Router({ mergeParams: true }); //merging the URL files

@@ -19,7 +19,7 @@
 - [Bulletin Post Routes](#bulletin-post-routes)
 - [Advanced Filtering](#advanced-filtering)
 - [Populate Results](#populate-results)
-- [Populate +Nest](#populate+nest)
+- [Populate plus Nest](#populate-plus-nest)
 
 [**Data Model**](#data-model-mongoose-schemas)
 
@@ -225,7 +225,7 @@ Adding `populate=products` to the query will return an object, or an array of ob
 
 [top](#contents)
 
-#### Populate+Nest
+#### Populate plus Nest
 
 You can take populate a level deeper with nest. In relationships where there's a grandparent, a parent, and a child, you can nest the children in the parent, and all of the parents--with their children--insdie of the grandparent. The following example is a Vendor, with all of it's Products, in turn the each Product, with all of its ProductImages objects:
 

@@ -6,10 +6,16 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   // Making a copy of req.query 
   const reqQuery = { ...req.query };
   console.log('advancedResults reqQuery: '.red, reqQuery)
+
+  // looking for populates/nest in the query
+  console.log('adv.R.M.W. req.populate '.red, req.populate)
   if (req.query.populate) {
-    populate = { path: req.query.populate }
+    let fields = req.query.popselect.split(',').join(' ');
+    console.log('adv.R.M.W popselect -> fields'.yellow, fields)
+    populate = { path: req.query.populate, select: fields }
     console.log('adv.Mw populate', populate);
   }
+
 
   if (req.query.populate && req.query.nest) {
 
@@ -20,7 +26,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
       }
     }
   }
-  const removeFields = ['select', 'sort', 'limit', 'page', 'populate', 'nest'];
+  const removeFields = ['select', 'sort', 'limit', 'page', 'populate', 'nest', 'popselect'];
 
   // Loop over removeFields and delete them from reqQuery if it has them
   removeFields.forEach(param => delete reqQuery[param]);

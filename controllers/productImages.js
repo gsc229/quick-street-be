@@ -9,6 +9,7 @@ const asyncHandler = require('../middleware/async');
 // @desc    Get product images
 // @route   GET /api/v1.0/products/product-images/:productId
 // @route   GET /api/v1.0/vendors/:vendorId/product-images
+// @route   GET /api/v1.0/product-images
 // @access  Public
 exports.getAllImages = asyncHandler(async (req, res, next) => {
 
@@ -43,12 +44,15 @@ exports.getAllImages = asyncHandler(async (req, res, next) => {
       })
     }
 
+    if (!req.params.vendorId && !req.params.productId) {
+      res.status(200).json(res.advancedResults)
+    }
+
   }
   // if there is a query object return the response from the advanced results middlware.
   else {
     res.status(200).json(res.advancedResults)
   }
-
 })
 
 // @desc    Create a product-image object

@@ -19,6 +19,7 @@
 - [Bulletin Post Routes](#bulletin-post-routes)
 - [Advanced Filtering](#advanced-filtering)
 - [Populate Results](#populate-results)
+- [Populate + Nest](#populate-+-nest)
 
 [**Data Model**](#data-model-mongoose-schemas)
 

@@ -3,8 +3,6 @@ const geocoder = require('../utils/geocoder');
 const advancedResults = (model, populate) => async (req, res, next) => {
   let query;
 
-
-
   // Making a copy of req.query 
   const reqQuery = { ...req.query };
   console.log('advancedResults reqQuery: '.red, reqQuery)
@@ -21,11 +19,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
         path: req.query.nest
       }
     }
-
   }
-
-
-
   const removeFields = ['select', 'sort', 'limit', 'page', 'populate', 'nest'];
 
   // Loop over removeFields and delete them from reqQuery if it has them
@@ -52,6 +46,14 @@ const advancedResults = (model, populate) => async (req, res, next) => {
     console.log('advancedResults.js added location:  '.yellow.bg, reqQuery)
 
   }
+  // if client wants a single object either a vendor 
+  if (req.params.vendorId) {
+    reqQuery._id = req.params.vendorId;
+  }
+  if (req.params.productId) {
+    reqQuery._id = req.params.productId;
+  }
+
 
 
   let queryStr = JSON.stringify(reqQuery);

@@ -210,7 +210,11 @@ exports.deleteItem = asyncHandler(async (req, res, next) => {
   const product = req.params.productId;
   console.log("product id", product);
 
-  const cart = await Cart.findOne({ owner: req.params.customerId }).populate('items.item', 'name price diet description category vendor product_image');
+  const cart = await Cart.findOne({ owner: req.params.customerId }).populate("items.item", "name price product_image quantity vendor")
+  .populate({
+    path: 'items.item',
+    populate: { path: 'product_image' }
+  });
 
   cart.items = cart.items.filter(item => {
     if (item.item.id !== product) {

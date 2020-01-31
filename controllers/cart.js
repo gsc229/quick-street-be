@@ -8,29 +8,6 @@ const ErrorResponse = require("../utils/errorResponse");
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 //const moment = require('moment');
 
-// @desc    Get cart
-// @route   GET /api/v1.0/customers/:customerId/cart
-// @access  Public
-// exports.getAllCarts = asyncHandler(async (req, res, next) => {
-//     let query;
-
-//     if(req.params.customerId) {
-//         query = Cart.find({
-//             customer: req.params.customerId
-//         })
-//         const carts = await query;
-
-
-//         res.status(200).json({
-//             success: true,
-//             count: carts.length,
-//             data: carts
-//         });
-//     } else {
-//         res.status(200).json(res.advancedResults)
-//     }
-// })
-
 
 // @desc    Get cart
 // @route   GET /api/v1.0/customers/:customerId/cart
@@ -41,10 +18,12 @@ exports.getCart = asyncHandler(async (req, res, next) => {
 
     const cart = await Cart.findOne({
         owner: req.params.customerId
-    }).populate("items.item", "name price product_image quantity ").populate({
+    }).populate("items.item", "name price product_image quantity vendor").populate({
         path: 'items.item',
         populate: { path: 'product_image' }
       });
+
+      console.log('get customers cart 26', cart.items)
 
     if (!cart) {
         return next(
@@ -102,14 +81,12 @@ exports.addCart = asyncHandler(async (req, res, next) => {
 // @access  Public
 exports.addItem = asyncHandler(async (req, res, next) => {
   //console.log('add item to cart customerId', req.params.customerId)
-  const cart = await Cart.findOne({ owner: req.params.customerId })
-  .populate("items.item", "name price product_image quantity vendor")
-  .populate({
+  const cart = await Cart.findOne({ owner: req.params.customerId }).populate("items.item", "name price product_image quantity vendor").populate({
     path: 'items.item',
     populate: { path: 'product_image' }
   });
 
-  const product = await Product.findById(req.body.productId);
+  const product = await Product.findById(req.body.productId).populate('product_image');
 
   // check if the item was added before
   if (cart) {
@@ -129,12 +106,13 @@ exports.addItem = asyncHandler(async (req, res, next) => {
       return acc + (item.quantity * item.item.price)
     }, 0)
 
-    // cart.total = (
-    //   cart.total +
-    //   parseFloat(product.price) * parseInt(req.body.quantity)
-    // ).toFixed(2);
+    
+    console.log('cart before save 131', cart.items)
 
     cart.save();
+
+    console.log('cart object after save 135', cart.items[2].item)
+
     res.status(200).json({
       success: true,
       message: "Product was added to your cart",
@@ -178,28 +156,12 @@ exports.updateQuantity = asyncHandler(async (req, res, next) => {
     cart.save();
     res.status(200).json({
       success: true,
-      message: "Product was added to your cart",
+      message: "Product was updated to your cart",
       cart
     });
   } else {
     return next(new ErrorResponse(`shopping cart does not exist`, 400));
   }
-
-
-  //    Cart.findOne({ owner: req.params.customerId }, function (err,       cart) {
-  //         cart.items = [];
-  //         cart.items.push({
-  //             item: req.body.productId,
-  //             quantity: parseInt(req.body.quantity)
-  //         });
-
-  //         cart.total = (cart.total + parseFloat(req.body.price)).toFixed(2);
-  //         cart.save();
-  //     });
-
-  //   res
-  //     .status(200)
-  //     .json({ success: true, message: `The product was updated successfully`, data: cart});
 });
 
 
@@ -255,7 +217,9 @@ exports.deleteCart = asyncHandler(async (req, res, next) => {
   });
 });
 
-
+// @desc    Add payment
+// @route   POST /api/v1.0/customers/:customerId/cart/payment
+// @access  Private
 exports.addPayment = asyncHandler(async (req, res, next) => {
 
     let totalPrice = Math.round(req.body.totalPrice * 100); // we get this from total price which is sent from the front end

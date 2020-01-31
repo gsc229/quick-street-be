@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 const Cart_Schema = new mongoose.Schema({
   owner: {
@@ -25,5 +26,7 @@ const Cart_Schema = new mongoose.Schema({
   }]
        
 });
+
+Cart_Schema.plugin(deepPopulate);
 
 module.exports = mongoose.model("Cart", Cart_Schema);

@@ -1,6 +1,5 @@
 const express = require("express");
 const {    
-    getAllCarts,
     getCart,
     addCart,
     addItem,
@@ -20,7 +19,6 @@ const router = express.Router({ mergeParams: true }); //merging the URL files
 
 router
   .route("/") // /api/v1.0/customers/:customerId/cart
-    // .get(getAllCarts)
     .get(getCart)
     .post(addCart);
 

@@ -4,9 +4,9 @@ const Order = require('../models/Order');
 const Product = require("../models/Product");
 const asyncHandler = require("../middleware/async");
 const ErrorResponse = require("../utils/errorResponse");
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 //const moment = require('moment');
-
 
 // @desc    Get cart
 // @route   GET /api/v1.0/customers/:customerId/cart
@@ -36,6 +36,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 // @route   GET /api/v1.0/customers/:customerId/cart
 // @access  Public
 exports.getCart = asyncHandler(async (req, res, next) => {
+
     console.log("customerId cart controller, line 13", req.params.customerId);
 
     const cart = await Cart.findOne({
@@ -53,6 +54,7 @@ exports.getCart = asyncHandler(async (req, res, next) => {
             )
         );
     }
+
 
   res.status(200).json({ success: true, data: cart });
 });
@@ -192,7 +194,6 @@ exports.updateQuantity = asyncHandler(async (req, res, next) => {
   //         });
 
   //         cart.total = (cart.total + parseFloat(req.body.price)).toFixed(2);
-
   //         cart.save();
   //     });
 
@@ -210,11 +211,13 @@ exports.deleteItem = asyncHandler(async (req, res, next) => {
   const product = req.params.productId;
   console.log("product id", product);
 
+
   const cart = await Cart.findOne({ owner: req.params.customerId }).populate("items.item", "name price product_image quantity vendor")
   .populate({
     path: 'items.item',
     populate: { path: 'product_image' }
   });
+
 
   cart.items = cart.items.filter(item => {
     if (item.item.id !== product) {
@@ -229,10 +232,7 @@ exports.deleteItem = asyncHandler(async (req, res, next) => {
   }, 0)
 
   console.log('cart in delete item', cart)
-
   cart.save();
-
-
   res.status(200).json({ success: true, data: cart });
 });
 
@@ -309,5 +309,6 @@ exports.addPayment = asyncHandler(async (req, res, next) => {
                 message: err.message
             })
         })
+
 });
 

@@ -289,9 +289,6 @@ exports.addPayment = asyncHandler(async (req, res, next) => {
           } else {
                return next(new ErrorResponse('Could not create your order', 404))
           }
-           
-            // WHAT IS THIS?
-           // newOrder.owner = req.decoded._id; // then we set our owner to the users ID from the verified token
 
             await newOrder.save(); // then we save the order
 

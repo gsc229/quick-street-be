@@ -70,12 +70,16 @@ const Vendor_Schema = new mongoose.Schema(
     diet_categories: {
       type: [String],
       enum: [
-        'Gluten Free', 
-        'Vegetarian', 
-        'Vegan', 
-        'Keto', 
+        'Gluten Free',
+        'Vegetarian',
+        'Vegan',
+        'Keto',
         'Dairy Free'
       ]
+    },
+    average_price: {
+      type: Number,
+      default: 0
     },
     created_at: {
       type: Date,

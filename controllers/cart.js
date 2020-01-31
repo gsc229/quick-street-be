@@ -102,11 +102,9 @@ exports.addCart = asyncHandler(async (req, res, next) => {
 // @access  Public
 exports.addItem = asyncHandler(async (req, res, next) => {
   //console.log('add item to cart customerId', req.params.customerId)
-  const cart = await Cart.findOne({ owner: req.params.customerId }).populate(
-    "items.item",
-    "name price diet description category vendor product_image"
-
-  ).populate({
+  const cart = await Cart.findOne({ owner: req.params.customerId })
+  .populate("items.item", "name price product_image quantity vendor")
+  .populate({
     path: 'items.item',
     populate: { path: 'product_image' }
   });
@@ -151,10 +149,12 @@ exports.addItem = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/v1.0/customers/:customerId/cart/addtocart
 // @access  Public
 exports.updateQuantity = asyncHandler(async (req, res, next) => {
-  const cart = await Cart.findOne({ owner: req.params.customerId }).populate(
-    "items.item",
-    "name price diet description category vendor product_image"
-  );
+  const cart = await Cart.findOne({ owner: req.params.customerId })
+  .populate("items.item", "name price product_image quantity vendor")
+  .populate({
+    path: 'items.item',
+    populate: { path: 'product_image' }
+  });
 
   const product = await Product.findById(req.body.productId);
 
@@ -194,7 +194,6 @@ exports.updateQuantity = asyncHandler(async (req, res, next) => {
   //         });
 
   //         cart.total = (cart.total + parseFloat(req.body.price)).toFixed(2);
-
   //         cart.save();
   //     });
 
@@ -212,7 +211,13 @@ exports.deleteItem = asyncHandler(async (req, res, next) => {
   const product = req.params.productId;
   console.log("product id", product);
 
-  const cart = await Cart.findOne({ owner: req.params.customerId }).populate('items.item', 'name price diet description category vendor product_image');
+
+  const cart = await Cart.findOne({ owner: req.params.customerId }).populate("items.item", "name price product_image quantity vendor")
+  .populate({
+    path: 'items.item',
+    populate: { path: 'product_image' }
+  });
+
 
   cart.items = cart.items.filter(item => {
     if (item.item.id !== product) {
@@ -227,10 +232,7 @@ exports.deleteItem = asyncHandler(async (req, res, next) => {
   }, 0)
 
   console.log('cart in delete item', cart)
-
   cart.save();
-
-
   res.status(200).json({ success: true, data: cart });
 });
 

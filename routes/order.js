@@ -12,8 +12,6 @@ router
         .get(getOrder)
         .post(createOrder)
 
-// router
-//     .route('/createOrder')
         
 
 module.exports = router;

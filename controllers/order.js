@@ -3,7 +3,6 @@ const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const asyncHandler = require("../middleware/async");
 const ErrorResponse = require("../utils/errorResponse");
-//const verifyToken = require('../middlewares/verify-token');
 
 exports.getOrder = asyncHandler (async (req, res) => {
     console.log(req.params.customerId)

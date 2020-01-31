@@ -11,6 +11,9 @@ const {
 } = require("../controllers/cart");
 const Cart = require("../models/Cart");
 
+// need to import protect middleware
+
+
 const advancedResults = require("../middleware/advancedResults");
 
 const router = express.Router({ mergeParams: true }); //merging the URL files

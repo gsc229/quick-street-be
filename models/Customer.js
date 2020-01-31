@@ -39,17 +39,17 @@ const Customer_Schema = new mongoose.Schema(
         type: Date,
         default: Date.now
   },
-    history: [{
-        paid: {
-            type: Number,
-            default: 0
-        },
-        item: {
-            type: mongoose.Schema.ObjectId, 
-            ref: 'Product',
-            require: true
-        }
-  }],
+  //   history: [{
+  //       paid: {
+  //           type: Number,
+  //           default: 0
+  //       },
+  //       item: {
+  //           type: mongoose.Schema.ObjectId, 
+  //           ref: 'Product',
+  //           require: true
+  //       }
+  // }],
 
 }
 )

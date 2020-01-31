@@ -19,7 +19,7 @@
 - [Bulletin Post Routes](#bulletin-post-routes)
 - [Advanced Filtering](#advanced-filtering)
 - [Populate Results](#populate-results)
-- [Populate + Nest](#populate-+-nest)
+- [Populate +Nest](#populate-+nest)
 
 [**Data Model**](#data-model-mongoose-schemas)
 
@@ -158,7 +158,7 @@ Advanced filtering is available on GET requests of vendors, products and product
 | ------ | ------------------------------------------------------------------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | GET    | `/vendors?location.state=PA`                                                                | public         | **Key-Value:** Returns all vedors from Pennsylvania                                                                                                                                                                                                                        |
 | GET    | `/vendors?vendor_category[in]=Spreads`                                                      | public         | **enum fields:** Some fileds in Mongoose Schema objects are 'enumerated', meaning the possible values of the field are predefined.If the field is an 'enum' field, you need to add field[in]=some-pre-defined-value Look at the Data Models to see which fields are 'enum' |
-| GET    | `/vendors?location.state=PA&vendor_category[in]=Spreads`                                    | public         | **Chaining** Use the '&' operator to chain queries together. Returns all vedors from Pennsylvania who sell spreads                                                                                                                                                         |
+| GET    | `/vendors?location.state=PA&vendor_category[in]=Spreads`                                    | public         | **Chaining:** Use the '&' operator to chain queries together. Returns all vedors from Pennsylvania who sell spreads                                                                                                                                                        |
 | GET    | `/vendors?vendor_category[in]=Spreads` <br>`&location.state=PA&select=business_name,avatar` | public         | **Select:** Rather than returning an entire object, 'select' allows you to specify which fields you want returned. This query returns only the business name and avatar of all vendors selling spreads in Pennsylvania                                                     |
 | GET    | `/vendors?sort=business_name&select=business_name`                                          | public         | **Sorting:** Return a query that is sorted by using the 'sort' method. By default, sorting is done in ascending (A-Z, 0-9) order. However, if you want to sort descending, simply prepend a '-' (minus sign) to the field--in this example _sort=-business_name_           |
 | GET    | `/vendors?select=business_name&limit=5&page=2`                                              | public         | **Pagination:** Queried requests can be returned with a pagination object. You can specify the limit per page and the page number of the results. Retruns the five vendors' business names on page 2 (the 6th-10th result)                                                 |
@@ -225,7 +225,7 @@ Adding `populate=products` to the query will return an object, or an array of ob
 
 [top](#contents)
 
-#### Populate + Nest
+#### Populate +Nest
 
 You can take populate a level deeper with nest. In relationships where there's a grandparent, a parent, and a child, you can nest the children in the parent, and all of the parents--with their children--insdie of the grandparent. The following example is a Vendor, with all of it's Products, in turn the each Product, with all of its ProductImages objects:
 

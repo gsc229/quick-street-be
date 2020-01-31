@@ -47,7 +47,13 @@ const Product_Schema = new mongoose.Schema({
         ref: 'ProductImage'
     }
 
-});
+},
+    { //why are these here? See Note on Reverse Populate over function below.
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true }
+    }
+
+);
 
 
 Product_Schema.pre('remove', async function (next) {
@@ -57,6 +63,15 @@ Product_Schema.pre('remove', async function (next) {
     });
     next();
 });
+
+
+// Note on Reverse Populate:  with virtual. For every Product, this function will attach an array of objects of the Product's images. To activate this virtual, either 1. do Vendor.find('some query').poplulate('products') at the controller level, or 2. do advancedFilter('Vendors', {path: products}) at the route level or 3. attach a query paramer called populate in the req.query ex. /products?populate=images . With queries, you can even next. ex. /vendors?populate=products&nest=images
+Product_Schema.virtual('images', {
+    ref: 'ProductImage',
+    localField: '_id',
+    foreignField: 'product',
+    justOne: false
+})
 
 
 

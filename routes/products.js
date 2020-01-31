@@ -34,7 +34,7 @@ router
 
 router
     .route('/:productId')
-    .get(getProduct)
+    .get(advancedResults(Products), getProduct)
     .put(protect, updateProduct) // PUT /api/v1.0/products/:id
     .delete(protect, deleteProduct); // DELETE /api/v1.0/vendors/:vendorId/products
 

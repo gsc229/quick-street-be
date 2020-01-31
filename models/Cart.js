@@ -20,10 +20,10 @@ const Cart_Schema = new mongoose.Schema({
       quantity: {
         type: Number,
         default: 0
-    },
-    
-  }]
-       
+      },
+
+    }]
+
 });
 
 module.exports = mongoose.model("Cart", Cart_Schema);

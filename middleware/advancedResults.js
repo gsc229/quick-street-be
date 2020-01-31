@@ -8,8 +8,25 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   // Making a copy of req.query 
   const reqQuery = { ...req.query };
   console.log('advancedResults reqQuery: '.red, reqQuery)
+  if (req.query.populate) {
+    populate = { path: req.query.populate }
+    console.log('adv.Mw populate', populate);
+  }
 
-  const removeFields = ['select', 'sort', 'limit', 'page'];
+  if (req.query.populate && req.query.nest) {
+
+    populate = {
+      path: req.query.populate,
+      populate: {
+        path: req.query.nest
+      }
+    }
+
+  }
+
+
+
+  const removeFields = ['select', 'sort', 'limit', 'page', 'populate', 'nest'];
 
   // Loop over removeFields and delete them from reqQuery if it has them
   removeFields.forEach(param => delete reqQuery[param]);
@@ -79,6 +96,8 @@ const advancedResults = (model, populate) => async (req, res, next) => {
     query = query.populate(populate);
   }
 
+
+
   // Executing/awaiting the query
   const results = await query;
 
@@ -98,7 +117,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
       limit
     }
   }
-  console.log('advancedMiddleWare.js Final Results', results)
+  //console.log('advancedMiddleWare.js Final Results', results)
   res.advancedResults = {
     success: true,
     count: results.length,

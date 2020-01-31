@@ -7,37 +7,45 @@ const asyncHandler = require('../middleware/async');
 
 
 // @desc    Get product images
-// @route   GET /api/v1.0/product-images/:productId
-// @route   GET /api/v1.0/vendors/:vendorId/products
+// @route   GET /api/v1.0/products/product-images/:productId
+// @route   GET /api/v1.0/vendors/:vendorId/product-images
 // @access  Public
 exports.getAllImages = asyncHandler(async (req, res, next) => {
-  let query;
-  if (req.params.productId) {
-    query = ProductImage.find({
-      product: req.params.productId
-    })
-    const productImages = await query;
 
-    res.status(200).json({
-      success: true,
-      count: productImages.length,
-      data: productImages
-    });
-  } else if (req.params.vendorId) {
+  //if there's no query object i.e. /:vendorId/product-images?selecet=public_id ...
+  if (!Object.entries(req.query).length) {
+    console.log('productImages.js req.params'.red, req.params)
+    let query;
+    // check to see which parmas, productId or vendorId
+    if (req.params.productId) {
+      query = ProductImage.find({
+        product: req.params.productId
+      })
+      const productImages = await query;
+      res.status(200).json({
+        success: true,
+        count: productImages.length,
+        data: productImages
+      });
 
-    query = ProductImage.find({
-      vendor: req.params.vendorId
-    })
+    }
+    if (req.params.vendorId) {
+      console.log('productImages.js if(req.params.vendorId): '.red, req.params.vendorId)
+      query = ProductImage.find({
+        vendor: req.params.vendorId
+      })
+      const productImages = await query;
+      console.log(productImages)
+      res.status(200).json({
+        success: true,
+        count: productImages.length,
+        data: productImages
+      })
+    }
 
-    const productImages = await query;
-
-    res.status(200).json({
-      success: true,
-      count: productImages.length,
-      data: productImages
-    })
-
-  } else {
+  }
+  // if there is a query object return the response from the advanced results middlware.
+  else {
     res.status(200).json(res.advancedResults)
   }
 
@@ -47,7 +55,16 @@ exports.getAllImages = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1.0/products/:productId/product-images
 // @access  Private
 exports.addImage = asyncHandler(async (req, res, next) => {
+  // create and set a product property on the image object equal to the parameters
   req.body.product = req.params.productId;
+
+  if (req.body.vendorId !== req.body.vendor) {
+    return next(
+      new ErrorResponse(`Auth middlware requires a vendorId field in the image object. The ProductImage schema requires a vendor property (the same id) in the body of the image object. --> req.body.vendorId ${req.body.vendorId} !== ${req.body.vendor} req.body.vendor`),
+      401
+    );
+  }
+
   console.log('Creating new productImage from productId:', req.body.product);
   const product = await Product.findById(req.params.productId)
   if (!product) {
@@ -67,7 +84,7 @@ exports.addImage = asyncHandler(async (req, res, next) => {
     data: image
   })
 
- 
+
 
 });
 

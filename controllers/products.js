@@ -10,7 +10,13 @@ const geocoder = require('../utils/geocoder');
 // @access  Public
 exports.getAllProducts = asyncHandler(async (req, res, next) => {
     let query;
-    if (req.params.vendorId) {
+
+    //why Object.entries? An empty object still returns true
+    // if there's not a vendorId parameter or there is but, it has a query string...
+    if (!req.params.vendorId || Object.entries(req.query).length) {
+        // respond with the advanced results from adv.R middleware, else it is a normal query.
+        res.status(200).json(res.advancedResults)
+    } else {
         query = Product.find({
             vendor: req.params.vendorId
         })
@@ -21,8 +27,7 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
             count: products.length,
             data: products
         });
-    } else {
-        res.status(200).json(res.advancedResults)
+
     }
 });
 

@@ -1,7 +1,6 @@
 const ProductImage = require('../models/ProductImage');
 const Product = require('../models/Product');
 const Vendor = require('../models/Vendor');
-
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 
@@ -13,46 +12,8 @@ const asyncHandler = require('../middleware/async');
 // @access  Public
 exports.getAllImages = asyncHandler(async (req, res, next) => {
 
-  //if there's no query object i.e. /:vendorId/product-images?selecet=public_id ...
-  if (!Object.entries(req.query).length) {
-    console.log('productImages.js req.params'.red, req.params)
-    let query;
-    // check to see which parmas, productId or vendorId
-    if (req.params.productId) {
-      query = ProductImage.find({
-        product: req.params.productId
-      })
-      const productImages = await query;
-      res.status(200).json({
-        success: true,
-        count: productImages.length,
-        data: productImages
-      });
+  res.status(200).json(res.advancedResults)
 
-    }
-    if (req.params.vendorId) {
-      console.log('productImages.js if(req.params.vendorId): '.red, req.params.vendorId)
-      query = ProductImage.find({
-        vendor: req.params.vendorId
-      })
-      const productImages = await query;
-      console.log(productImages)
-      res.status(200).json({
-        success: true,
-        count: productImages.length,
-        data: productImages
-      })
-    }
-
-    if (!req.params.vendorId && !req.params.productId) {
-      res.status(200).json(res.advancedResults)
-    }
-
-  }
-  // if there is a query object return the response from the advanced results middlware.
-  else {
-    res.status(200).json(res.advancedResults)
-  }
 })
 
 // @desc    Create a product-image object

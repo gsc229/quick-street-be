@@ -17,7 +17,11 @@ const OrderSchema = new mongoose.Schema({
            
         }
     ],
-    total: Number
+    total: Number,
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 OrderSchema.plugin(deepPopulate); // now allows us to deep populate more than one level

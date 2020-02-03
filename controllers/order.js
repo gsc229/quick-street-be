@@ -23,7 +23,7 @@ exports.getOrder = asyncHandler (async (req, res) => {
             message: err.message
         })
     }
-})
+});
 
 exports.createOrder = asyncHandler(async (req, res) => {
     const cart = await (await Cart.findOne({ owner: req.params.customerId })).populate('items.item');

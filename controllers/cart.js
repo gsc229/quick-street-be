@@ -111,7 +111,7 @@ exports.addItem = asyncHandler(async (req, res, next) => {
 
     cart.save();
 
-    console.log('cart object after save 135', cart.items[2].item)
+   // console.log('cart object after save 135', cart.items[2].item)
 
     res.status(200).json({
       success: true,

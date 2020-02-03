@@ -222,21 +222,23 @@ exports.deleteCart = asyncHandler(async (req, res, next) => {
 // @access  Private
 exports.addPayment = asyncHandler(async (req, res, next) => {
 
-    let totalPrice = Math.round(req.body.totalPrice * 100); // we get this from total price which is sent from the front end
+    //let totalPrice = Math.round(req.body.totalPrice * 100); // we get this from total price which is sent from the front end
+
+    const customerObj = await Customer.findById(req.params.customerId)
 
     stripe.customers // create the customer by passing the email of that ser
         .create({
-            email: req.decoded.email
+            email: customerObj.email// emal
         })
         .then(customer => { // once the customer is created, then we create a source of the customer, the source is the information of the users card information, which we get from the front end
             return stripe.customers.createSource(customer.id, {
-                source: 'tok_visa' // token visa -- testing token --> will change when in production
+                source: req.body.token // token visa -- testing token --> will change when in production
             });
         })
         .then(source => { // after we have created a source, we then want to charge the user, only if the card is valid
             return stripe.charges.create({
-                amount: totalPrice, // passing in the amount which is the total price of the cart
-                currency: 'usd',
+                amount: req.body.totalPrice, // passing in the amount which is the total price of the cart
+                currency: req.body.currency,
                 customer: source.customer // passing in the source object (the users card)
             })
         })

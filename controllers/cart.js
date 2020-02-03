@@ -23,7 +23,7 @@ exports.getCart = asyncHandler(async (req, res, next) => {
         populate: { path: 'product_image' }
       });
 
-      console.log('get customers cart 26', cart.items)
+      console.log('get customers cart 26', cart)
 
     if (!cart) {
         return next(

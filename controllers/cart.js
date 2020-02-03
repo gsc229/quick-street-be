@@ -225,17 +225,23 @@ exports.addPayment = asyncHandler(async (req, res, next) => {
     //let totalPrice = Math.round(req.body.totalPrice * 100); // we get this from total price which is sent from the front end
 
     const customerObj = await Customer.findById(req.params.customerId)
+    console.log('customerObj and body 228', customerObj, req.body)
 
     stripe.customers // create the customer by passing the email of that ser
         .create({
             email: customerObj.email// emal
         })
         .then(customer => { // once the customer is created, then we create a source of the customer, the source is the information of the users card information, which we get from the front end
-            return stripe.customers.createSource(customer.id, {
-                source: req.body.token // token visa -- testing token --> will change when in production
+
+          console.log('customer 236', customer)
+          return stripe.customers.createSource(customer.id, {
+                source: req.body.token.id // token visa -- testing token --> will change when in production
             });
+            
         })
         .then(source => { // after we have created a source, we then want to charge the user, only if the card is valid
+
+          console.log('source 244', source)
             return stripe.charges.create({
                 amount: req.body.totalPrice, // passing in the amount which is the total price of the cart
                 currency: req.body.currency,
@@ -243,6 +249,8 @@ exports.addPayment = asyncHandler(async (req, res, next) => {
             })
         })
         .then(async charge => { // once we have charged the card, we want to pass in any custom logic. We want to create a new order object and then get the cart data from the front end
+
+          console.log('charge 248', charge)
           const cart = await (await Cart.findOne({ owner: req.params.customerId })).populate('items.item');
           let newOrder = new Order();
           newOrder.owner = req.params.customerId;
@@ -272,7 +280,7 @@ exports.addPayment = asyncHandler(async (req, res, next) => {
         .catch (err => {
             res.status(500).json({
                 success: false,
-                message: err.message
+                message: 'Payment Failed'
             })
         })
 

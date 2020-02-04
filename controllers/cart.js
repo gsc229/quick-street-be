@@ -1,49 +1,40 @@
 const Cart = require("../models/Cart");
 const Customer = require("../models/Customer");
+const Order = require('../models/Order');
 const Product = require("../models/Product");
 const asyncHandler = require("../middleware/async");
 const ErrorResponse = require("../utils/errorResponse");
-const stripe = require('stripe')(process.env.STRIPE_PUBLISHABLE_KEY);
 
-
-// @desc    Get cart
-// @route   GET /api/v1.0/customers/:customerId/cart
-// @access  Public
-// exports.getAllCarts = asyncHandler(async (req, res, next) => {
-//     let query;
-
-//     if(req.params.customerId) {
-//         query = Cart.find({
-//             customer: req.params.customerId
-//         })
-//         const carts = await query;
-
-
-//         res.status(200).json({
-//             success: true,
-//             count: carts.length,
-//             data: carts
-//         });
-//     } else {
-//         res.status(200).json(res.advancedResults)
-//     }
-// })
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+//const moment = require('moment');
 
 
 // @desc    Get cart
 // @route   GET /api/v1.0/customers/:customerId/cart
 // @access  Public
 exports.getCart = asyncHandler(async (req, res, next) => {
-  console.log("customerId cart controller, line 13", req.params.customerId);
 
-  const cart = await Cart.findOne({
-    owner: req.params.customerId
-  }).populate("items.item", "name price product_image quantity ").populate({
-    path: 'items.item',
-    // Get friends of friends - populate the 'friends' array for every friend
-    populate: { path: 'product_image' }
-  });
+    console.log("customerId cart controller, line 13", req.params.customerId);
 
+    const cart = await Cart.findOne({
+        owner: req.params.customerId
+    }).populate("items.item", "name price product_image quantity vendor").populate({
+        path: 'items.item',
+        populate: { path: 'product_image' }
+      });
+
+      console.log('get customers cart 26', cart)
+
+    if (!cart) {
+        return next(
+            new ErrorResponse(
+                `The customer with ID ${req.params.customerId} has not created a cart`,
+                404
+            )
+        );
+    }
+
+<<<<<<< HEAD
   if (!cart) {
     return next(
       new ErrorResponse(
@@ -52,6 +43,9 @@ exports.getCart = asyncHandler(async (req, res, next) => {
       )
     );
   }
+=======
+
+>>>>>>> 038e44afa4fb2ca19412f0f499d6652cf23c256d
   res.status(200).json({ success: true, data: cart });
 });
 
@@ -98,17 +92,12 @@ exports.addCart = asyncHandler(async (req, res, next) => {
 // @access  Public
 exports.addItem = asyncHandler(async (req, res, next) => {
   //console.log('add item to cart customerId', req.params.customerId)
-  const cart = await Cart.findOne({ owner: req.params.customerId }).populate(
-    "items.item",
-    "name price diet description category vendor product_image"
-
-  ).populate({
+  const cart = await Cart.findOne({ owner: req.params.customerId }).populate("items.item", "name price product_image quantity vendor").populate({
     path: 'items.item',
-    // Get friends of friends - populate the 'friends' array for every friend
     populate: { path: 'product_image' }
   });
 
-  const product = await Product.findById(req.body.productId);
+  const product = await Product.findById(req.body.productId).populate('product_image');
 
   // check if the item was added before
   if (cart) {
@@ -128,12 +117,13 @@ exports.addItem = asyncHandler(async (req, res, next) => {
       return acc + (item.quantity * item.item.price)
     }, 0)
 
-    // cart.total = (
-    //   cart.total +
-    //   parseFloat(product.price) * parseInt(req.body.quantity)
-    // ).toFixed(2);
+    
+    console.log('cart before save 131', cart.items)
 
     cart.save();
+
+   // console.log('cart object after save 135', cart.items[2].item)
+
     res.status(200).json({
       success: true,
       message: "Product was added to your cart",
@@ -148,10 +138,12 @@ exports.addItem = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/v1.0/customers/:customerId/cart/addtocart
 // @access  Public
 exports.updateQuantity = asyncHandler(async (req, res, next) => {
-  const cart = await Cart.findOne({ owner: req.params.customerId }).populate(
-    "items.item",
-    "name price diet description category vendor product_image"
-  );
+  const cart = await Cart.findOne({ owner: req.params.customerId })
+  .populate("items.item", "name price product_image quantity vendor")
+  .populate({
+    path: 'items.item',
+    populate: { path: 'product_image' }
+  });
 
   const product = await Product.findById(req.body.productId);
 
@@ -175,29 +167,12 @@ exports.updateQuantity = asyncHandler(async (req, res, next) => {
     cart.save();
     res.status(200).json({
       success: true,
-      message: "Product was added to your cart",
+      message: "Product was updated to your cart",
       cart
     });
   } else {
     return next(new ErrorResponse(`shopping cart does not exist`, 400));
   }
-
-
-  //    Cart.findOne({ owner: req.params.customerId }, function (err,       cart) {
-  //         cart.items = [];
-  //         cart.items.push({
-  //             item: req.body.productId,
-  //             quantity: parseInt(req.body.quantity)
-  //         });
-
-  //         cart.total = (cart.total + parseFloat(req.body.price)).toFixed(2);
-
-  //         cart.save();
-  //     });
-
-  //   res
-  //     .status(200)
-  //     .json({ success: true, message: `The product was updated successfully`, data: cart});
 });
 
 
@@ -209,7 +184,13 @@ exports.deleteItem = asyncHandler(async (req, res, next) => {
   const product = req.params.productId;
   console.log("product id", product);
 
-  const cart = await Cart.findOne({ owner: req.params.customerId }).populate('items.item', 'name price diet description category vendor product_image');
+
+  const cart = await Cart.findOne({ owner: req.params.customerId }).populate("items.item", "name price product_image quantity vendor")
+  .populate({
+    path: 'items.item',
+    populate: { path: 'product_image' }
+  });
+
 
   cart.items = cart.items.filter(item => {
     if (item.item.id !== product) {
@@ -224,10 +205,7 @@ exports.deleteItem = asyncHandler(async (req, res, next) => {
   }, 0)
 
   console.log('cart in delete item', cart)
-
   cart.save();
-
-
   res.status(200).json({ success: true, data: cart });
 });
 
@@ -250,51 +228,72 @@ exports.deleteCart = asyncHandler(async (req, res, next) => {
   });
 });
 
-
+// @desc    Add payment
+// @route   POST /api/v1.0/customers/:customerId/cart/payment
+// @access  Private
 exports.addPayment = asyncHandler(async (req, res, next) => {
 
-  const stripeToken = req.body.stripeToken; //first we receive a stripe token 
-  const currentCharges = Math.round(req.body.stipePayment * 100) // converting to dollars
+    //let totalPrice = Math.round(req.body.totalPrice * 100); // we get this from total price which is sent from the front end
 
-  stripe.customers.create({ //create a customer and view as admin
-    source: stripeToken,
-  }).then(function (customer) { // then charge the customer
-    return stripe.charges.create({
-      amount: currentCharges,
-      currency: 'usd',
-      customer: customer.id // make sure it's the right customer youre charging
-    }).then(function (charge) {
-      async.waterfall([
-        function (cb) {
-          Cart.findOne({ owner: req.params.customerId }, function (err, cart) {
-            cb(err, cart)
-          })
-        },
-        function (cart, cb) {
-          Customer.findOne({ _id: req.params.customerId }, function (err, customer) {
-            if (customer) {
-              for (let i = 0; i < cart.items.length; i++) {
-                customer.history.push({
-                  item: cart.items[i].item,
-                  paid: cart.items[i].item.price
-                })
-              }
-              customer.save(function (err, customer) {
-                if (err) return next(err);
-                cb(err, customer)
-              })
-            }
-          })
-        },
-        function (customer, cb) {
-          Cart.update({ owner: customer.customerId }, { $set: { items: [], total: 0 } }, function (err, updated) {
-            if (updated) {
-              res.send({ message: 'success' })
-            }
-          })
-        }
-      ])
-    })
-  })
+    const customerObj = await Customer.findById(req.params.customerId)
+    console.log('customerObj and body 228', customerObj, req.body)
+
+    stripe.customers // create the customer by passing the email of that ser
+        .create({
+            email: customerObj.email// emal
+        })
+        .then(customer => { // once the customer is created, then we create a source of the customer, the source is the information of the users card information, which we get from the front end
+
+          console.log('customer 236', customer)
+          return stripe.customers.createSource(customer.id, {
+                source: req.body.token.id // token visa -- testing token --> will change when in production
+            });
+            
+        })
+        .then(source => { // after we have created a source, we then want to charge the user, only if the card is valid
+
+          console.log('source 244', source)
+            return stripe.charges.create({
+                amount: req.body.totalPrice, // passing in the amount which is the total price of the cart
+                currency: req.body.currency,
+                customer: source.customer // passing in the source object (the users card)
+            })
+        })
+        .then(async charge => { // once we have charged the card, we want to pass in any custom logic. We want to create a new order object and then get the cart data from the front end
+
+          console.log('charge 248', charge)
+          const cart = await (await Cart.findOne({ owner: req.params.customerId })).populate('items.item');
+          let newOrder = new Order();
+          newOrder.owner = req.params.customerId;
+          newOrder.items = cart.items;
+          newOrder.total = cart.total;
+       
+          newOrder = await newOrder.save();
+       
+          if(newOrder) {
+           res.status(201).json({
+               success: true,
+               message: 'Order was successfully added'
+           })
+          } else {
+               return next(new ErrorResponse('Could not create your order', 404))
+          }
+
+            await newOrder.save(); // then we save the order
+
+            res.status(200).json({
+                success: true,
+                message: 'You have successfully made a payment!'
+            })
+
+
+        })
+        .catch (err => {
+            res.status(500).json({
+                success: false,
+                message: 'Payment Failed'
+            })
+        })
+
 });
 

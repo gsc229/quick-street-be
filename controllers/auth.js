@@ -43,7 +43,7 @@ exports.register = asyncHandler(async (req, res, next) => {
         phone
       });
 
-      sendTokenResponse(vendor, 200, res);
+      sendTokenResponse(vendor, 200, res, true);
     } else {
       const customer = await Customer.create({
         email,

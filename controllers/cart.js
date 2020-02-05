@@ -101,12 +101,15 @@ exports.addItem = asyncHandler(async (req, res, next) => {
     }
 
     cart.total = cart.items.reduce((acc, item) => {
+
       console.log('item and acc', item, acc)
       console.log('item.item.price', item.item.price)
       return acc + (item.quantity * item.item.price)
+       
     }, 0)
 
-    
+    cart.total= cart.total.toFixed(2)
+
     console.log('cart before save 131', cart.items)
 
     cart.save();
@@ -153,6 +156,8 @@ exports.updateQuantity = asyncHandler(async (req, res, next) => {
       return acc + (item.quantity * item.item.price)
     }, 0)
 
+    cart.total= cart.total.toFixed(2)
+
     cart.save();
     res.status(200).json({
       success: true,
@@ -193,6 +198,7 @@ exports.deleteItem = asyncHandler(async (req, res, next) => {
     return acc + (item.quantity * item.item.price)
   }, 0)
 
+  cart.total= cart.total.toFixed(2)
   console.log('cart in delete item', cart)
   cart.save();
   res.status(200).json({ success: true, data: cart });
@@ -229,7 +235,7 @@ exports.addPayment = asyncHandler(async (req, res, next) => {
 
     stripe.customers // create the customer by passing the email of that ser
         .create({
-            email: customerObj.email// emal
+            email: customerObj.email
         })
         .then(customer => { // once the customer is created, then we create a source of the customer, the source is the information of the users card information, which we get from the front end
 
@@ -252,29 +258,30 @@ exports.addPayment = asyncHandler(async (req, res, next) => {
 
           console.log('charge 248', charge)
           const cart = await (await Cart.findOne({ owner: req.params.customerId })).populate('items.item');
+
           let newOrder = new Order();
           newOrder.owner = req.params.customerId;
           newOrder.items = cart.items;
           newOrder.total = cart.total;
        
           newOrder = await newOrder.save();
+          cart.items = []
+          cart.total = 0 
+          await cart.save();
+
+          console.log('new order 262', newOrder)
+
+          console.log('cart obj after clear 262', cart)
        
           if(newOrder) {
            res.status(201).json({
                success: true,
-               message: 'Order was successfully added'
+               message: 'Order was successfully added',
+               order: newOrder
            })
           } else {
                return next(new ErrorResponse('Could not create your order', 404))
           }
-
-            await newOrder.save(); // then we save the order
-
-            res.status(200).json({
-                success: true,
-                message: 'You have successfully made a payment!'
-            })
-
 
         })
         .catch (err => {

@@ -100,11 +100,17 @@ exports.addItem = asyncHandler(async (req, res, next) => {
     }
 
     cart.total = cart.items.reduce((acc, item) => {
+
       console.log('item and acc', item, acc)
       console.log('item.item.price', item.item.price)
       return acc + (item.quantity * item.item.price)
+       
     }, 0)
 
+<<<<<<< HEAD
+=======
+    cart.total= cart.total.toFixed(2)
+>>>>>>> 08686204a5c142039d96b67d11ae69a31307cf16
 
     console.log('cart before save 131', cart.items)
 
@@ -152,6 +158,8 @@ exports.updateQuantity = asyncHandler(async (req, res, next) => {
       return acc + (item.quantity * item.item.price)
     }, 0)
 
+    cart.total= cart.total.toFixed(2)
+
     cart.save();
     res.status(200).json({
       success: true,
@@ -192,6 +200,7 @@ exports.deleteItem = asyncHandler(async (req, res, next) => {
     return acc + (item.quantity * item.item.price)
   }, 0)
 
+  cart.total= cart.total.toFixed(2)
   console.log('cart in delete item', cart)
   cart.save();
   res.status(200).json({ success: true, data: cart });
@@ -226,11 +235,19 @@ exports.addPayment = asyncHandler(async (req, res, next) => {
   const customerObj = await Customer.findById(req.params.customerId)
   console.log('customerObj and body 228', customerObj, req.body)
 
+<<<<<<< HEAD
   stripe.customers // create the customer by passing the email of that ser
     .create({
       email: customerObj.email// emal
     })
     .then(customer => { // once the customer is created, then we create a source of the customer, the source is the information of the users card information, which we get from the front end
+=======
+    stripe.customers // create the customer by passing the email of that ser
+        .create({
+            email: customerObj.email
+        })
+        .then(customer => { // once the customer is created, then we create a source of the customer, the source is the information of the users card information, which we get from the front end
+>>>>>>> 08686204a5c142039d96b67d11ae69a31307cf16
 
       console.log('customer 236', customer)
       return stripe.customers.createSource(customer.id, {
@@ -263,6 +280,7 @@ exports.addPayment = asyncHandler(async (req, res, next) => {
           success: true,
           message: 'Order was successfully added'
         })
+<<<<<<< HEAD
       } else {
         return next(new ErrorResponse('Could not create your order', 404))
       }
@@ -282,6 +300,44 @@ exports.addPayment = asyncHandler(async (req, res, next) => {
         message: 'Payment Failed'
       })
     })
+=======
+        .then(async charge => { // once we have charged the card, we want to pass in any custom logic. We want to create a new order object and then get the cart data from the front end
+
+          console.log('charge 248', charge)
+          const cart = await (await Cart.findOne({ owner: req.params.customerId })).populate('items.item');
+
+          let newOrder = new Order();
+          newOrder.owner = req.params.customerId;
+          newOrder.items = cart.items;
+          newOrder.total = cart.total;
+       
+          newOrder = await newOrder.save();
+          cart.items = []
+          cart.total = 0 
+          await cart.save();
+
+          console.log('new order 262', newOrder)
+
+          console.log('cart obj after clear 262', cart)
+       
+          if(newOrder) {
+           res.status(201).json({
+               success: true,
+               message: 'Order was successfully added',
+               order: newOrder
+           })
+          } else {
+               return next(new ErrorResponse('Could not create your order', 404))
+          }
+
+        })
+        .catch (err => {
+            res.status(500).json({
+                success: false,
+                message: 'Payment Failed'
+            })
+        })
+>>>>>>> 08686204a5c142039d96b67d11ae69a31307cf16
 
 });
 

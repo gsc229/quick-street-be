@@ -107,10 +107,7 @@ exports.addItem = asyncHandler(async (req, res, next) => {
 
     }, 0)
 
-
-
     cart.total = cart.total.toFixed(2)
-
 
     console.log('cart before save 131', cart.items)
 
@@ -309,8 +306,7 @@ exports.addPayment = asyncHandler(async (req, res, next) => {
             })
           })
 
-
-
-
-      });
+      }
+    })
+});
 

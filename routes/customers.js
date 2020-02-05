@@ -19,7 +19,7 @@ const router = express.Router();
 
 //Re-route into other resource route
 router.use('/:customerId/cart', cartRouter);
-router.use('/:customerId/order', orderRouter);
+router.use('/:customerId/orders', orderRouter);
 
 
 

@@ -50,7 +50,7 @@ exports.register = asyncHandler(async (req, res, next) => {
         password
       });
 
-      sendTokenResponse(customer, 200, res);
+      sendTokenResponse(customer, 200, res, false);
     }
   }
 });

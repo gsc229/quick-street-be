@@ -15,13 +15,10 @@ const { protect } = require('../middleware/auth');
 
 // Include other resource routers
 const productImagesRouter = require('./productImages');
-
-
 const router = express.Router({ mergeParams: true }); //merging the URL files
 
 // Re-route into other resource route
 router.use('/:productId/product-images', productImagesRouter);
-
 
 router
     .route('/radius/:zipcode/:distance')
@@ -34,7 +31,7 @@ router
 
 router
     .route('/:productId')
-    .get(getProduct)
+    .get(advancedResults(Products), getProduct)
     .put(protect, updateProduct) // PUT /api/v1.0/products/:id
     .delete(protect, deleteProduct); // DELETE /api/v1.0/vendors/:vendorId/products
 

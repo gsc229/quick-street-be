@@ -21,10 +21,10 @@ const Cart_Schema = new mongoose.Schema({
       quantity: {
         type: Number,
         default: 0
-    },
-    
-  }]
-       
+      },
+
+    }]
+
 });
 
 Cart_Schema.plugin(deepPopulate);

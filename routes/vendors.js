@@ -9,6 +9,7 @@ const {
 } = require('../controllers/vendors');
 
 const Vendor = require('../models/Vendor');
+const Product = require('../models/Product');
 
 const advancedResults = require('../middleware/advancedResults');
 
@@ -24,7 +25,7 @@ const { protect } = require('../middleware/auth');
 // router.use(protect);
 
 // Re-route into other resource route
-router.use('/:vendorId/products', productRouter);
+router.use('/:vendorId/products', advancedResults(Product), productRouter);
 router.use('/:vendorId/posts', postRouter);
 router.use('/:vendorId/product-images', productImageRouter);
 

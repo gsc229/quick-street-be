@@ -214,5 +214,13 @@ Vendor_Schema.virtual('products', {
   justOne: false
 })
 
+Vendor_Schema.virtual('images', {
+  ref: 'ProductImage',
+  localField: '_id',
+  foreignField: 'vendor',
+  justOne: false
+})
+
+
 
 module.exports = mongoose.model('Vendor', Vendor_Schema);

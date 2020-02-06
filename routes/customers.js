@@ -22,7 +22,6 @@ router.use('/:customerId/cart', cartRouter);
 router.use('/:customerId/order', orderRouter);
 
 
-
 router
     .route('/')
     .get(advancedResults(Customer), getAllCustomers)
@@ -36,6 +35,6 @@ router
 
 router
     .route("/getHistory")
-        .get(getHistory);
+    .get(getHistory);
 
 module.exports = router;

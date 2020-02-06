@@ -16,17 +16,18 @@ exports.getAllVendors = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1.0/vendors/:id
 // @access  Private
 exports.getVendor = asyncHandler(async (req, res, next) => {
-  const vendor = await Vendor.findById(req.params.vendorId);
 
-  if (!vendor) {
-    return next(
-      new ErrorResponse(`Vendor not found with id of ${req.params.vendorId}`, 404)
-    );
-  }
+  if (!Object.entries(req.query).length) {
+    const vendor = await Vendor.findById(req.params.vendorId);
 
-  res.status(200).json({ success: true, data: vendor });
+    if (!vendor) {
+      return next(
+        new ErrorResponse(`Vendor not found with id of ${req.params.vendorId}`, 404)
+      );
+    }
 
-
+    res.status(200).json({ success: true, data: vendor });
+  } else res.status(200).json(res.advancedResults);
 
 
 });

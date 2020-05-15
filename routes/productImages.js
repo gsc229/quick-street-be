@@ -20,6 +20,6 @@ router
 
 router
   .route('/:imageId')
-    .delete(protect, deleteImage); // DELETE /api/v1.0/product-images/:imageId
+    .delete(protect, deleteImage); // DELETE /api/v1.0/product-images/:imageId  -- replace protect if removed for dev.
 
 module.exports = router;

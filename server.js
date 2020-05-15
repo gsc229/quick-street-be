@@ -26,6 +26,7 @@ const productImages = require('./routes/productImages');
 const posts = require('./routes/posts');
 const orders = require('./routes/order');
 
+// app starts here
 const app = express();
 
 // Dev logging middleware
@@ -46,7 +47,6 @@ app.use(helmet());
 app.use(cors());
 
 // File uploading
-
 app.use(fileupload());
 
 // Mount Routers

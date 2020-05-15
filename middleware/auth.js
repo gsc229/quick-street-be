@@ -5,7 +5,7 @@ const Vendor = require('../models/Vendor');
 const Customer = require('../models/Customer');
 const Product = require('../models/Product');
 
-/// Protect routes
+// Protect routes
 exports.protect = asyncHandler(async (req, res, next) => {
   let token;
 
@@ -75,8 +75,9 @@ exports.protect = asyncHandler(async (req, res, next) => {
     console.log('error caught', err)
     return next(new ErrorResponse('Not authorized to access this route', 401));
   } */
-
+ 
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  
   const vendor = await Vendor.findById(decoded.id);
   const vendorParamId = req.params.vendorId;
   const vendorBodyId = req.body.vendorId;

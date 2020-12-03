@@ -51,8 +51,7 @@ const Customer_Schema = new mongoose.Schema(
   //       }
   // }],
 
-}
-)
+})
 
 // ===== hooks ========
 

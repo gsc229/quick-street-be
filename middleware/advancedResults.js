@@ -1,17 +1,20 @@
 const geocoder = require('../utils/geocoder');
 
-const advancedResults = (model, populate) => async (req, res, next) => {
 
+
+const advancedResults = (model, populate) => async (req, res, next) => {
+  
   // Check to see if a query exists with Object.entries  
   if (!Object.entries(req.query).length && (req.params.vendorId || req.params.productId) && model.modelName !== "ProductImage") {
     //console.log(`No query! Sending to controller`.red)
-    next();
-  } else {
+    return next();
+  } 
+    // /vendors?location.state=WA&select=business_name&populate=products&popselect=name
     //console.log(`After query check`.blue)
     //console.log(`model.modelName`.blue, model.modelName)
     let query;
 
-    // Making a copy of req.query 
+    // Making a copy of req.query to remove anything that is not actually a field in the model sechema (ex. select, sort, etc.) 
     const reqQuery = { ...req.query };
     //console.log('advancedResults reqQuery: '.red, reqQuery)
 
@@ -61,6 +64,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
         }
       }
     }
+
     const removeFields = ['select', 'sort', 'limit', 'page', 'populate', 'nest', 'popselect', 'nestselect'];
 
     // Loop over removeFields and delete them from reqQuery if it has them
@@ -106,12 +110,14 @@ const advancedResults = (model, populate) => async (req, res, next) => {
       reqQuery._id = req.params.productId;
     }
 
+    // stringify reqQuery in order to change any gt, gte, lt, lte, in to Mongoose-compatible $gt, $gte ... and so on.
     let queryStr = JSON.stringify(reqQuery);
     //console.log(`advancedResults queryStr: `.yellow, queryStr);
-    //console.log('model'.yellow, model.modelName)
+    console.log('model'.yellow, model.modelName) 
+    
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
     //console.log(`advancedResults queryStr.replace `.green, queryStr);
-    // Finding the resource. . 
+    // Finding the resource...don't forget. turn queryStr back into a json object.
     query = model.find(JSON.parse(queryStr));
 
     // Making use of our select field:
@@ -175,7 +181,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
       data: results
     }
     next();
-  }
+  
 };
 
 module.exports = advancedResults;

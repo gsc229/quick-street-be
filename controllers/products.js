@@ -9,6 +9,7 @@ const geocoder = require('../utils/geocoder');
 // @route   GET /api/v1.0/vendors/:vendorId/products
 // @access  Public
 exports.getAllProducts = asyncHandler(async (req, res, next) => {
+    
     let query;
     //why Object.entries? An empty object still returns true
     // if there's not a vendorId parameter or there is but it has a query string...

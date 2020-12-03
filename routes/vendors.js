@@ -34,7 +34,7 @@ router
   .get(advancedResults(Vendor), getVendorsInRadius);
 
 router
-  .route('/')
+  .route('/') 
   .get(advancedResults(Vendor), getAllVendors)
   .post(protect, createVendor); // POST /api/v1.0/vendors
 

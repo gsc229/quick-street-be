@@ -108,7 +108,7 @@ const Vendor_Schema = new mongoose.Schema(
     },
     zipcode: String
 
-  },
+  }, // end of schema
   { //why are these here? See Note on Reverse Populate over function below.
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
@@ -206,7 +206,11 @@ Vendor_Schema.pre('remove', async function (next) {
   next();
 });
 
-// Note on Reverse Populate:  with virtual. For every Vendor, this function will attach an array of objects of the Vendor's products. To activate this virtual, do Vendor.find('some query').poplulate('products') at the controller level, or do advancedFilter('Vendors', {path: products}) at the route level.
+// Note on Reverse Populate:  with virtual. For every Vendor, this function will attach an array of objects of the Vendor's products and/or images. 
+//To activate this virtual do any of the following:
+//1. do Vendor.find('some query').poplulate('products') at the controller level, or 
+//2. do advancedFilter('Vendors', {path: 'products'}) at the route level or 
+//3. attach a query parameter called populate in the req.query ex. /Vendors?populate=products . With queries, you can even nest. ex. /vendors?populate=products&nest=images
 Vendor_Schema.virtual('products', {
   ref: 'Product',
   localField: '_id',

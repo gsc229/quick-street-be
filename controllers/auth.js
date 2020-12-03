@@ -33,8 +33,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     );
   } else {
     if (vendor) {
-      // Create user
-      console.log(`called`);
+      // Create vendor
       const vendor = await Vendor.create({
         email,
         password,
@@ -42,14 +41,14 @@ exports.register = asyncHandler(async (req, res, next) => {
         address,
         phone
       });
-
       sendTokenResponse(vendor, 200, res, true);
+    
     } else {
+      // create customer
       const customer = await Customer.create({
         email,
         password
       });
-
 
       sendTokenResponse(customer, 200, res, false);
     }

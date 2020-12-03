@@ -57,11 +57,13 @@ exports.addImage = asyncHandler(async (req, res, next) => {
 // @route   DELETE /api/v1.0/product-images/:imageId
 // @access  Private
 exports.deleteImage = asyncHandler(async (req, res, next) => {
+  console.log("DELTE controllers/productImages",{"req.params": req.params})
   const image = await ProductImage.findById(req.params.imageId);
   const vendorId = req.vendor._id;
   
 
   if (!image) {
+    console.log("Error image not found")
     return next(new ErrorResponse(`No image with the id of ${req.params.imageId}`),
       404
     );
@@ -79,24 +81,24 @@ exports.deleteImage = asyncHandler(async (req, res, next) => {
   let deleteError;
   
 
-  await cloudinary.uploader.destroy(public_id, function(error, result){
+  /* await cloudinary.uploader.destroy(public_id, function(error, result){
     deleteResult = result
     deleteError = error
     
     console.log('cloudinary image destroy info: ')
     console.log(result, error)
 
-  })
+  }) */
 
 
   await image.remove()
   console.log(image)
 
-  if(deleteResult.result === 'not found'){
+  /* if(deleteResult.result === 'not found'){
     return next(new ErrorResponse(`Image info deleted from Market Ave. database, but returned with a result of 'not found' from the Cloudinary api.
     This probably means that the image was deleted from Cloudinary before the image information object was deleted from the Market Ave. database.`), 200)
   }
-
+ */
   
 
   res.status(200).json({

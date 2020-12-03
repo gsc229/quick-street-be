@@ -92,8 +92,9 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
   if (vendor) {
     console.log('auth.js 92 Vendor: '.green, vendor.toString().blue)
+    console.log({vendorParamId, vendorBodyId})
     if (vendor._id.toString() === vendorParamId || vendor._id.toString() === vendorBodyId) {
-
+      console.log({vendorParamId, vendorBodyId})
       req.vendor = vendor;
       next();
     } else return next(new ErrorResponse(`Not authorized to access this route. The ID supplied doesn't match the token ID for this vendor`, 401));
